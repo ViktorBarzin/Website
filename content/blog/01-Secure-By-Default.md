@@ -1,6 +1,6 @@
 ---
 title: "01 Secure by default - Why you shouldn't disable Django's CSRF middleware"
-date: 2018-09-02T13:44:49+01:00
+date: 2018-09-08T13:44:49+01:00
 draft: true
 ---
 
