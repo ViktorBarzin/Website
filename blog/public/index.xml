@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Viktor Barzin&#39;s Site</title>
+    <link>http://samitor.com/</link>
+    <description>Recent content on Viktor Barzin&#39;s Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Sep 2018 00:22:22 +0100</lastBuildDate>
+    
+	<atom:link href="http://samitor.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Welcome</title>
+      <link>http://samitor.com/about-me/</link>
+      <pubDate>Sun, 02 Sep 2018 00:22:22 +0100</pubDate>
+      
+      <guid>http://samitor.com/about-me/</guid>
+      <description>Hi there! I&amp;rsquo;m Viktor. I&amp;rsquo;m {{ current_year }} - 1998 years old and I&amp;rsquo;m currently doing my BSc in Computer Science at the University of Southampton.
+You can find me on facebook, twitter and github.
+I&amp;rsquo;m all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
+In my free time I watch Formula 1, play chess and soon I&amp;rsquo;ll be jumping out of planes</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,27 @@
+baseURL = "http://samitor.com/"
+languageCode = "en-us"
+title = "Viktor Barzin's Site"
+theme = "hugo-theme-nix"
+# disqusShortname = 1
+
+[params]
+Name = "Viktor Barzin"
+HeaderUsername = "viktor"
+HeaderHostname = "web"
+About = "My name is Viktor. I am a student who is interested in technology. My interests are mainly in network and endpoint security. I deeply enjoy automating stuff so ops and devops are close to my heart as well."
+ProfilePicture = "https://scontent.fsof3-1.fna.fbcdn.net/v/t1.0-9/18813162_1394825773937591_6301947579059643927_n.jpg?_nc_cat=0&oh=e6b47d5a24d800a7692eec52f2b9d8cf&oe=5C2C9005"
+GithubID = "viktorbarzin"
+GnuPGFingerprint = "8288D958"
+TwitterID = "viktorbarzin"
+LinkedInID = "viktor-barzin"
+FacebookID = "viktorbarzin"
+
+[menu]
+    [[menu.header]]
+        name = "about-me"
+        weight = 0
+        url = "/about-me/"
+    [[menu.header]]
+        name = "blog"
+        weight = 1
+        url = "/blog/"
