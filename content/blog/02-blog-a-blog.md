@@ -9,5 +9,4 @@ Keypoints:
 - busy around hackconf
 - simple blog about how this blog was made
 
-
 ![](/images/02-blog-a-blog-278df7d1.png)
