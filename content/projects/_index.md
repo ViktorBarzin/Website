@@ -4,6 +4,8 @@ date: 2018-09-19T01:33:52+03:00
 draft: true
 ---
 
+#### To be updated: This section is a draft and it will be updated
+
 Home Lab: Utilized a Dell R310 server to setup a virtual lab for learning purposes. Deployed and managed VMWare software, VPN server, mail server, file share server and multiple containers running databases and web servers.
 
 https://spge-bg.com:  Rebuilt my high school website and automated the data migration process.
