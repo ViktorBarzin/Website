@@ -6,29 +6,10 @@
     <description>Recent content on Viktor Barzin&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 17 Sep 2018 15:36:49 +0300</lastBuildDate>
+    <lastBuildDate>Sat, 08 Sep 2018 13:44:49 +0100</lastBuildDate>
     
 	<atom:link href="http://samitor.com/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>02 Blog a Blog</title>
-      <link>http://samitor.com/blog/02-blog-a-blog/</link>
-      <pubDate>Mon, 17 Sep 2018 15:36:49 +0300</pubDate>
-      
-      <guid>http://samitor.com/blog/02-blog-a-blog/</guid>
-      <description>Keypoints:
- busy around hackconf simple blog about how this blog was made  </description>
-    </item>
-    
-    <item>
-      <title>02 Do You Grok?</title>
-      <link>http://samitor.com/blog/02-do-you-grok/</link>
-      <pubDate>Thu, 13 Sep 2018 23:49:26 +0300</pubDate>
-      
-      <guid>http://samitor.com/blog/02-do-you-grok/</guid>
-      <description>ELK journey</description>
-    </item>
     
     <item>
       <title>01 Secure by default - Why you shouldn&#39;t disable Django&#39;s CSRF middleware</title>
