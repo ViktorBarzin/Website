@@ -1,7 +1,7 @@
 ---
 title: "Projects"
 date: 2018-09-19T01:33:52+03:00
-draft: true
+draft: false
 ---
 
 #### To be updated: This section is a draft and it will be updated
