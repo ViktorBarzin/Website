@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> 01 Secure by default - Why you shouldn&#39;t disable Django&#39;s CSRF middleware &middot; Viktor Barzin&#39;s Site </title>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.40.1" />
+
+
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="http://172.17.0.2/css/nix.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=http://172.17.0.2/>viktor@web ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="http://172.17.0.2/">/home/viktor</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/blog/">~/blog</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/about-me/">~/about-me</a>
+            		
+        		</li>
+        		
+
+			</ul>
+		</div>
+	</div>
+</nav>
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="http://172.17.0.2/blog/01-secure-by-default/">01 Secure by default - Why you shouldn&#39;t disable Django&#39;s CSRF middleware</a></h1>
+            <span class="post-date">Sep 8, 2018 </span>
+            <div class="post-content">
+                
+
+<h1 id="brief-intro">Brief intro</h1>
+
+<p>Recently I&rsquo;ve been messing around with various <strong>client-side</strong> web attacks. I&rsquo;ve noticed that most web devs&rsquo; knowledge goes as far as the framework their using requires and that&rsquo;s it.
+When asked <strong>what is the purpose of a csrf token</strong>, they would say - &ldquo;Oh, it&rsquo;s something for security and if I don&rsquo;t put it, my forms don&rsquo;t work so it must be there.&rdquo;</p>
+
+<p>If you find yourself having a similar answer, <strong>keep on reading.</strong></p>
+
+<h4 id="why-django">Why Django?</h4>
+
+<p>I really like the Django framework - it is really simple to use, the learning curve is quite lean, the code is reasonably clean, it is very well documented and last but not least is quite <a href="https://www.cvedetails.com/product/18211/Djangoproject-Django.html?vendor_id=10199">secure with almost no major security vulnerabilities</a>.</p>
+
+<p>So let&rsquo;s break it!</p>
+
+<h4 id="why-csrf">Why CSRF?</h4>
+
+<p>Well, like most devs, all I knew about the csrf token was that it is for security and it must be there. But that&rsquo;s not good enough for me.
+I wanted to know why? What would happen if it wasn&rsquo;t there?</p>
+
+<h1 id="what-is-cross-site-request-forgery-csrf-and-why-should-i-care">What is Cross-Site Request Forgery (CSRF) and why should I care?</h1>
+
+<p>According to the <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">OWASP page</a>, Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they&rsquo;re currently authenticated.
+The following picture illustrates the attack:</p>
+
+<p><img src="/images/01-Secure-By-Default-cf13175f.png" alt="" /></p>
+
+<p>This means that if your bank&rsquo;s website was vulnerable to CSRF, you could end up sending money to someone by just opening the wrong website.</p>
+
+<p>Doesn&rsquo;t sound good&hellip;</p>
+
+<h1 id="how-does-this-problem-get-resolved">How does this problem get resolved?</h1>
+
+<p>CSRF is a <strong>solved problem</strong>. There are multiple ways to prevent CSRF in your site and some of the most common and easy to implement ones are:</p>
+
+<ul>
+<li>CSRF tokens</li>
+<li>Check standard headers to verify the request is same origin</li>
+<li>Multiple cookies for sensitive operations</li>
+</ul>
+
+<p>If you&rsquo;d like to have a deeper insight, I <strong>strongly recommend</strong> familiarizing yourself with the <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet">OWASP CSRF prevention cheat sheet page</a></p>
+
+<h1 id="django-s-csrf-error-message">Django&rsquo;s CSRF error message</h1>
+
+<p>If you&rsquo;ve done any sort of Django development, at some point or another, surely you have seen the following error:</p>
+
+<p><img src="/images/01-Secure-By-Default-67265d50.png" alt="" /></p>
+
+<p>To be fair, the <strong>first thing that I see most people do is copy the error message and slam it into google</strong>.
+If only they read the <em>Help</em> segment of the page&hellip;</p>
+
+<p>The TL;DR is that there was an error with the <em>CSRF Token</em> sent to the backend.</p>
+
+<p><strong>Getting this error is GOOD</strong>. It means that our website <strong>is protected againts CSRF attacks</strong>.
+Unfortunately what some people do to <em>solve this problem</em> is disable the CsrfMiddleware which <em>does</em> fix the forms issue but it opens the site to CSRF attacks.</p>
+
+<p>Let&rsquo;s see what can this lead to.</p>
+
+<h1 id="the-target-app">The target app</h1>
+
+<h4 id="disclaimer">DISCLAIMER</h4>
+
+<p>The following demonstration is not recommended for use in any production site (obviously).
+I&rsquo;m too lazy to write a proper site that makes use of user sessions so I&rsquo;m using a <a href="https://github.com/egorsmkv/simple-django-login-and-register">sample site I found online</a>.</p>
+
+<p>It is a simple sort of &ldquo;template&rdquo; application the has registration, login, password reset functionalities and what not - perfect for simulating user sessions.
+Here are some screenshots to get a better feel:</p>
+
+<p><img src="/images/01-Secure-By-Default-d8c5535b.png" alt="" /></p>
+
+<p>Once logged in, this is the &ldquo;My profile&rdquo; page:</p>
+
+<p><img src="/images/01-Secure-By-Default-5e8795b1.png" alt="" /></p>
+
+<h1 id="let-s-shoot-ourselves-in-the-leg">Let&rsquo;s shoot ourselves in the leg</h1>
+
+<p>All we need to make this perfectly secure app susceptible to CSRF attacks is to comment out the CsrfMiddleware in settings.py:</p>
+
+<p><img src="/images/01-Secure-By-Default-e8df810a.png" alt="" /></p>
+
+<p>(Disabling the CsrfMiddleware in <strong>any</strong> Django app, would make it vulnerable to CSRF attacks so if you care about your users <strong>DON&rsquo;T DO IT</strong>)</p>
+
+<p>Now that we have the CSRF protection out of the way we can create a malicious website that exploits it.</p>
+
+<h1 id="the-malicious-website">The malicious website</h1>
+
+<p><img src="/images/01-Secure-By-Default-3d1d8ffb.png" alt="" /></p>
+
+<p>Apart from the really disturbing image we have, the site seems to be totally legit, right?
+Checking out the source of the page reveals its true intentions. Take your time to ponder on what is actually happening:</p>
+
+<p><img src="/images/01-Secure-By-Default-09a08e3b.png" alt="" /></p>
+
+<p>So this seamingly innocent page is doing way more than it seems initially - <strong>it creates a hidden form and upon loading it submits it</strong>.</p>
+
+<p>Now you can see that the form action parameter is localhost since my django app is hosted at this address. Obviously in a real attack this would be the target website&rsquo;s address.</p>
+
+<p>Now what&rsquo;s even more scary is the fact <strong>the victim won&rsquo;t even realise that something has happened</strong> - posting is done to a hidden iframe.</p>
+
+<h1 id="objective">Objective:</h1>
+
+<p>So what we are going to be doing is send a request to change the victim&rsquo;s email address.</p>
+
+<h1 id="let-s-go-csrf-ing-then">Let&rsquo;s go CSRF-ing then</h1>
+
+<p>Now this is how a legitimate request looks:</p>
+
+<pre><code>POST /accounts/change/email/ HTTP/1.1
+Host: 127.0.0.10:8000
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Referer: http://127.0.0.10:8000/accounts/change/email/
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 107
+Cookie: csrftoken=MFZLEFbXLWeJ6wOOehIBKNuaaTo4q7JhfvA1ST4pESPuaqG5J8dYjMcbJlQN7TL1; sessionid=e3rgs3j9lyax3cgtsxy6xrmuljoigmdp
+Connection: close
+Upgrade-Insecure-Requests: 1
+
+csrfmiddlewaretoken=as2NnTUPLCqyrj5SNjk6M0rGSWo5Cuw1FyNqbJayFkAHwBF5FRk4xpeTo9y2RKlm&amp;email=notkek%40kek.com
+</code></pre>
+
+<p>The important stuff to look in the above request are:</p>
+
+<ul>
+<li>The <em>Referer</em> and the <em>Host</em> fields point to the <strong>same host</strong> - where the Django app is hosted.</li>
+<li>The <em>sessionid</em> cookie - this is what we are after. Stealing this cookie <strong>allows an attacker to impersonate the owner</strong>. As far as the application is concerned - <strong>if you have the cookie, then you are the real one and only owner of that cookie</strong>.</li>
+<li>The csrf token is truly randomly generated, but <strong>not verified by the backend thus useless</strong>.</li>
+</ul>
+
+<p>Unfortunately, the <strong><a href="https://en.wikipedia.org/wiki/Same-origin_policy">Same origin policy</a> protects the cookie</strong> - it can only be accessed from the <em><a href="http://127.0.0.10:8000">http://127.0.0.10:8000</a></em> origin.</p>
+
+<h3 id="wouldn-t-it-be-neat-if-we-could-make-the-victim-s-browser-send-the-request-for-us-as-if-the-victim-has-submitted-the-change-email-form">Wouldn&rsquo;t it be neat if we could make the victim&rsquo;s browser send the request for us as if the victim has submitted the change email form?</h3>
+
+<p>Well guess what - <strong>we can!</strong> This is exactly what the hidden post form does in the malicious site. Let&rsquo;s have a second look at it to understand how exactly it tricks our browser to send the <em>sessionid</em> cookie.</p>
+
+<pre><code class="language-html">&lt;form id=&quot;form&quot; method=&quot;post&quot; action=&quot;http://127.0.0.10:8000/accounts/change/email/&quot; target=&quot;my_iframe&quot; style=&quot;display:none&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;csrfmiddlewaretoken&quot; value=&quot;mz4LR3Umv8hpB2Go4VLNmkRslgLIwdgc1zr7m7YYhiys8cGES7xZSOQVD0534fgt&quot;&gt;
+    &lt;div class=&quot;alert alert-danger alert-dismissable alert-link&quot; role=&quot;alert&quot;&gt;
+        &lt;button class=&quot;close&quot; type=&quot;button&quot; data-dismiss=&quot;alert&quot; aria-label=&quot;close&quot;&gt;&amp;#215;&lt;/button&gt;
+        Please enter another email.
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group is-invalid&quot;&gt;
+        &lt;label for=&quot;id_email&quot;&gt;Email&lt;/label&gt;
+        &lt;input type=&quot;email&quot; name=&quot;email&quot; value=&quot;attacker@attacker.com&quot;
+                    class=&quot;form-control is-invalid&quot; placeholder=&quot;Email&quot; title=&quot;&quot; required id=&quot;id_email&quot;&gt;
+     &lt;div class=&quot;invalid-feedback&quot;&gt;Please enter another
+         email.
+     &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;Change&lt;/button&gt;
+&lt;/form&gt;
+&lt;iframe style=&quot;display:none&quot; width=&quot;0&quot; height=&quot;0&quot; border=&quot;0&quot; name=&quot;my_iframe&quot; id=&quot;my_iframe&quot;&gt;&lt;/iframe&gt;
+</code></pre>
+
+<p>This form is a copy of the legitimate form from our Django app, with the only difference that the <strong>fields have set values</strong>.
+(The csrfmiddlewaretoken field&rsquo;s value is randomly set. It can even be omitted and it won&rsquo;t make a difference)</p>
+
+<p>We <strong>post the form to the iframe</strong> so that the page <strong>does not refresh</strong>. (tbh I could delete all the labels and css classes - it won&rsquo;t make any difference for the exploit).</p>
+
+<h4 id="basically-we-want-the-victim-to-change-their-email-address-to-attacker-attacker-com">Basically, we want the victim to change their email address to &ldquo;attacker@attacker.com&rdquo;.</h4>
+
+<p>Now since I haven&rsquo;t set up the mailing service, I&rsquo;ll use the backend database for a point of reference to whether a reset token was generated.
+Currently we have a single row containing the token used when registering the user:</p>
+
+<p><img src="/images/01-Secure-By-Default-66b257a1.png" alt="" /></p>
+
+<p>If the attack executes successfully, we would have a second generated token.</p>
+
+<p>Unfortunately, if a the site is susceptible to CSRF, <strong>the only thing a victim has to do is open a malicious website</strong> which we can do by simply opening the site in another tab. (Note that the victim needs to be currently signed in (or have a valid sessionid cookie set) in the Django app in order to carry out the attack).</p>
+
+<h3 id="django-tries-really-hard-to-protect-us-though">Django tries really hard to protect us though</h3>
+
+<p>Django has another trick upon its sleeve - it sets the <a href="https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet#Defending_with_X-Frame-Options_Response_Headers">X-Frame-Options</a> header. This header tells the browser whether it should <strong>render the site in an iframe</strong>.</p>
+
+<p>By setting this value to <strong>SAMEORIGIN</strong> the browser will render the website only if the iframe is on <strong>the same origin as our main application</strong>.</p>
+
+<p>Unfortunately <strong>the attack does not rely on rendering the website</strong>. It will only try to render the response after the malicious payload was already sent(which could not happen anyway because of the SOP).</p>
+
+<p>By inspecting the browser console we can see the <em>X-Frame-Options</em> in action.
+When the victim opens the malicious website, the form is submitted resulting in an additional row in our <em>accounts_activation</em> tables as well as the X-Frame-Options error in the console:</p>
+
+<p><img src="/images/01-Secure-By-Default-c8de4b93.png" alt="" /></p>
+
+<p><img src="/images/01-Secure-By-Default-817f8853.png" alt="" /></p>
+
+<p>Done. At this point the attacker just needs to open their email and confirm their new email. Now if the user who got compromised was the webmaster, well that&rsquo;s game over.</p>
+
+<h1 id="django-framework-is-quite-secure-though">Django framework is quite secure though</h1>
+
+<p>There is one caveat - as of <a href="https://docs.djangoproject.com/en/2.1/releases/2.1/#csrf">Django 2.1 the framework enforces the <em>SameSite</em> flag</a> when setting cookies.
+<a href="https://www.owasp.org/index.php/SameSite">The OWASP page</a> is a must read on this topic.</p>
+
+<p>The TL;DR is that <strong>the <em>SameSite</em> cookie flag prevents the browser from sending the cookie along with cross-site requests</strong>. <strong>This basically solves CSRF for good !</strong></p>
+
+<p>Have a look at the response from the Django app upon successful login:</p>
+
+<p><img src="/images/01-Secure-By-Default-11d76756.png" alt="" /></p>
+
+<p>The bad news? Well <strong><a href="https://caniuse.com/#search=samesite">apart from Chrome and Opera, almost nobody utilizes this cookie</a></strong>, meaning that even if you set it, client browsers will not understand it.</p>
+
+<p>The good news? Starting from <strong>version 60</strong> (released 9 May 2018), <strong>firefox</strong> will start enforcing the <strong><em>SameSite</em></strong> cookie.
+However, when I was testing this (September 2018), the latest firefox package in the Ubuntu (18.04) repositories was 59.</p>
+
+<p>Unless you&rsquo;ve hit this wall before I reckon you haven&rsquo;t come across this cookie flag. Neither had I.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Finding out about the <em>SameSite</em> cookie the <em>hard way</em> was quite fun - I spent quite some time in Burp and Wireshark pondering at requests and once I got it working, why the heck did it work only in firefox and not in chrome?&hellip;</p>
+
+<p>I had a good fun researching this topic and I hope you learnt something reading thie blog post!</p>
+
+<p>Till next time :P</p>
+
+            </div>
+            
+            <div class="post-comments">
+                
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2018 Viktor Barzin -
+<span class="credit">
+	Powered by
+	<a target="_blank" href="https://gohugo.io">Hugo</a>
+	
+	
+</span>
+</p>
+</footer>
+
+    </body>
