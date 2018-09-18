@@ -25,3 +25,7 @@ FacebookID = "viktorbarzin"
         name = "blog"
         weight = 1
         url = "/blog/"
+    [[menu.header]]
+        name = "projects"
+        weight = 1
+        url = "/projects/"
