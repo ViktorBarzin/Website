@@ -1,4 +1,4 @@
-baseURL = "http://samitor.com/"
+baseURL = "http://viktorbarzin.me/"
 languageCode = "en-us"
 title = "Viktor Barzin's Site"
 theme = "hugo-theme-nix"
