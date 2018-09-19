@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>02 Blog a Blog - The creation of this site</title>
+      <link>https://viktorbarzin.me/blog/02-blog-a-blog/</link>
+      <pubDate>Mon, 17 Sep 2018 15:36:49 +0300</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/02-blog-a-blog/</guid>
+      <description>Keypoints:
+ busy around hackconf simple blog about how this blog was made fuck @PARKED A record server_name in nginx config certbot is dodgy af  rate limits!  ansible the world deployment process:  markdown in atom hugo deploy command git bare repo git hooks post-receive hook  todo: add securityheaders to nginx  Intro Recently I&amp;rsquo;ve been quite busy. I was helping with the organisation of HackConf this weekend which was both awesome and exhausting.</description>
+    </item>
+    
+    <item>
       <title>01 Secure by default - Why you shouldn&#39;t disable Django&#39;s CSRF middleware</title>
       <link>https://viktorbarzin.me/blog/01-secure-by-default/</link>
       <pubDate>Sat, 08 Sep 2018 13:44:49 +0100</pubDate>
