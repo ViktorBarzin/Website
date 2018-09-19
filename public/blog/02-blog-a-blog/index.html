@@ -85,31 +85,6 @@
             <div class="post-content">
                 
 
-<p>Keypoints:</p>
-
-<ul>
-<li>busy around hackconf</li>
-<li>simple blog about how this blog was made</li>
-<li>fuck @PARKED A record</li>
-<li>server_name in nginx config</li>
-<li>certbot is dodgy af
-
-<ul>
-<li>rate limits!</li>
-</ul></li>
-<li>ansible the world</li>
-<li>deployment process:
-
-<ul>
-<li>markdown in atom</li>
-<li>hugo deploy command</li>
-<li>git bare repo</li>
-<li>git hooks</li>
-<li>post-receive hook</li>
-</ul></li>
-<li>todo: add securityheaders to nginx</li>
-</ul>
-
 <h1 id="intro">Intro</h1>
 
 <p>Recently I&rsquo;ve been quite busy. I was helping with the organisation of <a href="https://www.hackconf.bg/en/">HackConf</a> this weekend which was both awesome and exhausting.</p>
@@ -256,12 +231,79 @@ docker <span style="color:#24909d">exec</span> nginx-blog service nginx reload</
 <p>This would save me the pain of going through all the stuff I&rsquo;ve already gone through before and waste time not learning anythin new.
 I&rsquo;d rather spend this time tweaking a role that can be reused later on.</p>
 
-<p>Let me briefly describe my <em>&ldquo;production&rdquo;</em> vm. I&rsquo;d like to segregate my services - each thing in its own box.
-So instead of setting aside an entire vm just a single web server I run all the stuff in containers.</p>
+<p>I like to segregate my services - each thing in its own box.
+So instead of setting aside an entire vm just for a single web server I run all the stuff in containers on a dedicated container host vm.</p>
 
 <h2 id="ansible-docker">Ansible + Docker = ♥</h2>
 
-<p>echo &lsquo;deb <a href="http://ftp.debian.org/debian">http://ftp.debian.org/debian</a> stretch-backports main&rsquo; &gt;&gt; /etc/apt/sources.list &amp;&amp; apt update &amp;&amp; apt-get install -y python-certbot-nginx -t stretch-backports &amp;&amp; certbot &ndash;nginx -d viktorbarzin.me &ndash;webroot-path /usr/share/nginx/html &ndash;debug-challenges &ndash;staging</p>
+<p>Here is the <a href="https://www.ansible.com/">ansible</a> role I&rsquo;m using to build the container and set everything up:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---<span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Setup<span style="color:#666"> </span>nginx<span style="color:#666"> </span>data<span style="color:#666"> </span>dir<span style="color:#666">
+</span><span style="color:#666">  </span>file:<span style="color:#666">
+</span><span style="color:#666">      </span>path:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_data_dir_path }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">      </span>state:<span style="color:#666"> </span>directory<span style="color:#666">
+</span><span style="color:#666">      </span>mode:<span style="color:#666"> </span><span style="color:#3677a9">0755</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Setup<span style="color:#666"> </span>letsencrypt<span style="color:#666"> </span>data<span style="color:#666"> </span>dir<span style="color:#666">
+</span><span style="color:#666">  </span>file:<span style="color:#666">
+</span><span style="color:#666">      </span>path:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_letsencrypt_dir_path }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">      </span>state:<span style="color:#666"> </span>directory<span style="color:#666">
+</span><span style="color:#666">      </span>mode:<span style="color:#666"> </span><span style="color:#3677a9">0755</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Copy<span style="color:#666"> </span>config<span style="color:#666"> </span>files<span style="color:#666"> </span>over<span style="color:#666">
+</span><span style="color:#666">  </span>copy:<span style="color:#666">
+</span><span style="color:#666">    </span>src:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ item }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">    </span>dest:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">  </span>with_items:<span style="color:#666">
+</span><span style="color:#666">      </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ role_path }}/files/nginx.conf&#34;</span><span style="color:#666">
+</span><span style="color:#666">      </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ role_path }}/files/default.conf&#34;</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Copy<span style="color:#666"> </span>SSL<span style="color:#666"> </span>data<span style="color:#666"> </span>if<span style="color:#666"> </span>present<span style="color:#666">
+</span><span style="color:#666">  </span>when:<span style="color:#666"> </span>ssl_info_tar_name<span style="color:#666"> </span>is<span style="color:#666"> </span>defined<span style="color:#666">
+</span><span style="color:#666">  </span>register:<span style="color:#666"> </span>ssl_data<span style="color:#666">
+</span><span style="color:#666">  </span>copy:<span style="color:#666">
+</span><span style="color:#666">      </span>src:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ role_path }}/files/{{ ssl_info_tar_name }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">      </span>dest:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Extract<span style="color:#666"> </span>SSL<span style="color:#666"> </span>archive<span style="color:#666">
+</span><span style="color:#666">  </span>when:<span style="color:#666"> </span>ssl_data.changed<span style="color:#666">
+</span><span style="color:#666">  </span>unarchive:<span style="color:#666">
+</span><span style="color:#666">      </span>remote_src:<span style="color:#666"> </span>yes<span style="color:#666">
+</span><span style="color:#666">      </span>src:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}/{{ ssl_info_tar_name }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">      </span>dest:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}/&#34;</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Setup<span style="color:#666"> </span>nginx<span style="color:#666"> </span>container<span style="color:#666">
+</span><span style="color:#666">  </span>docker_container:<span style="color:#666">
+</span><span style="color:#666">    </span>name:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_container_name }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">    </span>image:<span style="color:#666"> </span>nginx<span style="color:#666">
+</span><span style="color:#666">    </span>volumes:<span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_data_dir_path }}:/usr/share/nginx/html&#34;</span><span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_letsencrypt_dir_path }}:/etc/letsencrypt&#34;</span><span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}/nginx.conf:/etc/nginx/nginx.conf&#34;</span><span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_root_dir }}/default.conf:/etc/nginx/conf.d/default.conf&#34;</span><span style="color:#666">
+</span><span style="color:#666">
+</span><span style="color:#666">    </span>published_ports:<span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ static_ip_net_gw }}:80:80/tcp&#34;</span><span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ static_ip_net_gw }}:443:443/tcp&#34;</span><span style="color:#666">
+</span><span style="color:#666">    </span>state:<span style="color:#666"> </span>started<span style="color:#666">
+</span><span style="color:#666">    </span>restart_policy:<span style="color:#666"> </span>unless-stopped<span style="color:#666">
+</span><span style="color:#666">    </span>networks:<span style="color:#666">
+</span><span style="color:#666">        </span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>container_network<span style="color:#666">
+</span><span style="color:#666">          </span>ipv4_address:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_ip }}&#34;</span><span style="color:#666">
+</span><span style="color:#666">    </span>purge_networks:<span style="color:#666"> </span>yes</code></pre></div>
+<p>The corresponding <em>vars</em> file can be found on my github. This role sets up the nginx container
+and, if present, will add the corresponding SSL certificate to the web server.</p>
+
+<p>The following one-liner can be run on a Debian system to setup certbot and request a new certificate for th provided domain.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#39;deb http://ftp.debian.org/debian stretch-backports main&#39;</span> &gt;&gt; /etc/apt/sources.list &amp;&amp; apt update &amp;&amp; apt-get install -y python-certbot-nginx -t stretch-backports &amp;&amp; certbot --nginx -d viktorbarzin.me --webroot-path /usr/share/nginx/html</code></pre></div>
+<p>I just don&rsquo;t feel like messing with files in containers with ansible since it&rsquo;s not as trivial and I don&rsquo;t really have the need for it yet.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>I hope you found this article useful. For me it was exhilarating messing around with Let&rsquo;s Encrypt and certbot.
+Writing playbooks is always fun so there&rsquo;s that.</p>
 
             </div>
             
