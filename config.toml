@@ -1,4 +1,4 @@
-baseURL = "http://viktorbarzin.me/"
+baseURL = "https://viktorbarzin.me/"
 languageCode = "en-us"
 title = "Viktor Barzin's Site"
 theme = "hugo-theme-nix"

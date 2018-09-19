@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Projects on Viktor Barzin&#39;s Site</title>
-    <link>http://viktorbarzin.me/projects/</link>
+    <link>https://viktorbarzin.me/projects/</link>
     <description>Recent content in Projects on Viktor Barzin&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 19 Sep 2018 01:33:52 +0300</lastBuildDate>
     
-	<atom:link href="http://viktorbarzin.me/projects/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://viktorbarzin.me/projects/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>
