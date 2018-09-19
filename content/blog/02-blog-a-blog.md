@@ -4,23 +4,6 @@ date: 2018-09-17T15:36:49+03:00
 draft: false
 ---
 
-Keypoints:
-
-- busy around hackconf
-- simple blog about how this blog was made
-- fuck @PARKED A record
-- server_name in nginx config
-- certbot is dodgy af
-    - rate limits!
-- ansible the world
-- deployment process:
-    - markdown in atom
-    - hugo deploy command
-    - git bare repo
-    - git hooks
-    - post-receive hook
-- todo: add securityheaders to nginx
-
 # Intro
 Recently I've been quite busy. I was helping with the organisation of [HackConf](https://www.hackconf.bg/en/) this weekend which was both awesome and exhausting.
 
@@ -170,9 +153,83 @@ I'd like to automate to setup process so if I were to set the entire thing again
 This would save me the pain of going through all the stuff I've already gone through before and waste time not learning anythin new.
 I'd rather spend this time tweaking a role that can be reused later on.
 
-Let me briefly describe my *"production"* vm. I'd like to segregate my services - each thing in its own box.
-So instead of setting aside an entire vm just a single web server I run all the stuff in containers.
+I like to segregate my services - each thing in its own box.
+So instead of setting aside an entire vm just for a single web server I run all the stuff in containers on a dedicated container host vm.
 
 ## Ansible + Docker = ♥
+Here is the [ansible](https://www.ansible.com/) role I'm using to build the container and set everything up:
 
-echo 'deb http://ftp.debian.org/debian stretch-backports main' >> /etc/apt/sources.list && apt update && apt-get install -y python-certbot-nginx -t stretch-backports && certbot --nginx -d viktorbarzin.me --webroot-path /usr/share/nginx/html --debug-challenges --staging
+```yaml
+---
+
+- name: Setup nginx data dir
+  file:
+      path: "{{ nginx_data_dir_path }}"
+      state: directory
+      mode: 0755
+
+- name: Setup letsencrypt data dir
+  file:
+      path: "{{ nginx_letsencrypt_dir_path }}"
+      state: directory
+      mode: 0755
+
+- name: Copy config files over
+  copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_root_dir }}"
+  with_items:
+      - "{{ role_path }}/files/nginx.conf"
+      - "{{ role_path }}/files/default.conf"
+
+- name: Copy SSL data if present
+  when: ssl_info_tar_name is defined
+  register: ssl_data
+  copy:
+      src: "{{ role_path }}/files/{{ ssl_info_tar_name }}"
+      dest: "{{ nginx_root_dir }}"
+
+- name: Extract SSL archive
+  when: ssl_data.changed
+  unarchive:
+      remote_src: yes
+      src: "{{ nginx_root_dir }}/{{ ssl_info_tar_name }}"
+      dest: "{{ nginx_root_dir }}/"
+
+
+- name: Setup nginx container
+  docker_container:
+    name: "{{ nginx_container_name }}"
+    image: nginx
+    volumes:
+        - "{{ nginx_data_dir_path }}:/usr/share/nginx/html"
+        - "{{ nginx_letsencrypt_dir_path }}:/etc/letsencrypt"
+        - "{{ nginx_root_dir }}/nginx.conf:/etc/nginx/nginx.conf"
+        - "{{ nginx_root_dir }}/default.conf:/etc/nginx/conf.d/default.conf"
+
+    published_ports:
+        - "{{ static_ip_net_gw }}:80:80/tcp"
+        - "{{ static_ip_net_gw }}:443:443/tcp"
+    state: started
+    restart_policy: unless-stopped
+    networks:
+        - name: container_network
+          ipv4_address: "{{ nginx_ip }}"
+    purge_networks: yes
+
+```
+
+The corresponding *vars* file can be found on my github. This role sets up the nginx container
+and, if present, will add the corresponding SSL certificate to the web server.
+
+The following one-liner can be run on a Debian system to setup certbot and request a new certificate for th provided domain.
+
+```bash
+echo 'deb http://ftp.debian.org/debian stretch-backports main' >> /etc/apt/sources.list && apt update && apt-get install -y python-certbot-nginx -t stretch-backports && certbot --nginx -d viktorbarzin.me --webroot-path /usr/share/nginx/html
+```
+
+I just don't feel like messing with files in containers with ansible since it's not as trivial and I don't really have the need for it yet.
+
+# Conclusion
+I hope you found this article useful. For me it was exhilarating messing around with Let's Encrypt and certbot.
+Writing playbooks is always fun so there's that.
