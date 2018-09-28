@@ -1,7 +1,7 @@
 ---
 title: "03 A Walk Down Infrastructure Lane - My Home Lab Setup"
 date: 2018-09-28T15:36:21+03:00
-draft: true
+draft: false
 ---
 
 # Intro
