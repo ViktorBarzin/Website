@@ -6,10 +6,22 @@
     <description>Recent content on Viktor Barzin&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 17 Sep 2018 15:36:49 +0300</lastBuildDate>
+    <lastBuildDate>Fri, 28 Sep 2018 15:36:21 +0300</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>03 A Walk Down Infrastructure Lane - My Home Lab Setup</title>
+      <link>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</link>
+      <pubDate>Fri, 28 Sep 2018 15:36:21 +0300</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</guid>
+      <description>Intro As the tittle suggests It&amp;rsquo;s time to go down infrastructure lane. In this blog post I&amp;rsquo;ll show my &amp;ldquo;home&amp;rdquo; lab and all the services I&amp;rsquo;ve built so far.
+Without further due let&amp;rsquo;s get started.
+Physical topology So the physical topology is rather simple. It can be best explained by this photo:
+Site 1 is where my main infrastructure is located. The catch there is that the public-facing router is not mine and I cannot manage it.</description>
+    </item>
     
     <item>
       <title>02 Blog a Blog - The creation of this site</title>
