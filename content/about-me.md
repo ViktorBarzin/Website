@@ -21,7 +21,9 @@ In my free time I watch Formula 1, play chess and soon I'll be jumping out of pl
 
 Occasionally I go [axe throwing](https://whistlepunks.com/)
 
-![](/images/index-cf7e7d2d.png)
+<!-- ![](/images/index-cf7e7d2d.png) -->
+![](https://github.com/ViktorBarzin/Website/blob/master/static/images/index-cf7e7d2d.png?raw=true)
+<!-- download from github because upload at home is shit -->
 
 <sup>(08-2018)</sup>
 
