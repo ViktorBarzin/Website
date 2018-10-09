@@ -6,10 +6,20 @@
     <description>Recent content on Viktor Barzin&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 28 Sep 2018 15:36:21 +0300</lastBuildDate>
+    <lastBuildDate>Mon, 08 Oct 2018 10:04:27 +0100</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>04 Down the Rabbit Hole - How a simple monitoring task lead me to compiling a custom version of OpenWRT</title>
+      <link>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</link>
+      <pubDate>Mon, 08 Oct 2018 10:04:27 +0100</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</guid>
+      <description>Introduction In this blogpost I&amp;rsquo;ll go through the journey I went when I was setting up monitoring with ELK for my website. The task seemed simple - install *beats and tell it to report to my elk stack vm. You&amp;rsquo;ll see why in my setup it wasn&amp;rsquo;t as easy as it sounds initially.
+The issue If you recall my network setup had a little issue - I do not own the public IP address where my infrastructure sits.</description>
+    </item>
     
     <item>
       <title>03 A Walk Down Infrastructure Lane - My Home Lab Setup</title>
