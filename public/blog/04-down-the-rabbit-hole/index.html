@@ -343,7 +343,8 @@ And that&rsquo;s when I&rsquo;m running the file it says it&rsquo;s missing &hel
 <h3 id="time-to-haproxy">Time to HAProxy!</h3>
 
 <p><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts">After spending some time getting familiar with this new application</a> it turned out that
-<strong>HAProxy&rsquo;s configuration is quite intuitive</strong> - the main parts being <code>frontend</code>, <code>backend</code> and <code>listen</code> block that combines the former 2 for brevity.</p>
+<strong>HAProxy&rsquo;s configuration is quite intuitive</strong> - the main parts being <code>frontend</code>, <code>backend</code> and <code>listen</code> block that combines the former 2 for brevity.
+I&rsquo;ve found <a href="https://cbonte.github.io/haproxy-dconv/1.7/configuration.html">haproxy options manual</a> really useful. Have a glimpse.</p>
 
 <p>As you&rsquo;d expect the <code>frontend</code> part is what is facing the world and accepts input traffic whereas the <code>backend</code> part is where traffic is being proxied to.</p>
 

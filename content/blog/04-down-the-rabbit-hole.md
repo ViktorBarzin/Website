@@ -252,6 +252,8 @@ And **it has SSL support** and that is quite important to me as it turned out.
 
 [After spending some time getting familiar with this new application](https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts) it turned out that
 **HAProxy's configuration is quite intuitive** - the main parts being `frontend`, `backend` and `listen` block that combines the former 2 for brevity.
+I've found [haproxy options manual](https://cbonte.github.io/haproxy-dconv/1.7/configuration.html) really useful. Have a glimpse.
+
 
 As you'd expect the `frontend` part is what is facing the world and accepts input traffic whereas the `backend` part is where traffic is being proxied to.
 
