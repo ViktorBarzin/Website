@@ -6,9 +6,9 @@ draft: true
 
 # Introduction
 
-In this blogpost I'll go through the journey I went when I was setting up monitoring with ELK for my infrastructure.
+In this blogpost I'll go through the journey I went when I was setting up monitoring with ELK for my website.
 The task was simple - install \*beats and tell it to report to my elk stack vm.
-You'll see why in my setup it wasn't as easy.
+You'll see why in my setup it wasn't as easy as it sounds initially.
 
 # The issue
 

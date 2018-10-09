@@ -49,5 +49,3 @@ I also enjoy programming so I often find myself at various Hackatons winning stu
 
 ### <h3>What information can you find on this site?</h3>
 The website will mostly be me sharing my experience with various technologies. I will try to post new articles every week with the technologies I've come across.
-
-#### PS: The site is currently in development so new sections are to be added (e.g projects)
