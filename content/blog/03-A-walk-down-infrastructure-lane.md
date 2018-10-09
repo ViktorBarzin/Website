@@ -132,7 +132,7 @@ The zabbix instance also has privileges to access anything on the network theref
 
 # The public part
 
-Now in the begining I said I have 2 sites - one that hosts my ESXi hosts and another one which I labeled *home*. What has *home* to do with my main infrastructure site?
+Now in the beginning I said I have 2 sites - one that hosts my ESXi hosts and another one which I labeled *home*. What has *home* to do with my main infrastructure site?
 
 Well the catch is that at my main site I **do not own and manage the public IP address**.
 The **only open port I have is 1194** and this is quite insufficient for my needs.
