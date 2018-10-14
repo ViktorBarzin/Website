@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> 05 HA!Proxy - Discovering the wonders of proxying and load balancing &middot; Viktor Barzin&#39;s Site </title>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.40.1" />
+
+
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://viktorbarzin.me/css/nix.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=https://viktorbarzin.me/>viktor@web ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="https://viktorbarzin.me/">/home/viktor</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/blog/">~/blog</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/projects/">~/projects</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/about-me/">~/about-me</a>
+            		
+        		</li>
+        		
+
+			</ul>
+		</div>
+	</div>
+</nav>
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="https://viktorbarzin.me/blog/05-haproxy/">05 HA!Proxy - Discovering the wonders of proxying and load balancing</a></h1>
+            <span class="post-date">Oct 14, 2018 </span>
+            <div class="post-content">
+                
+
+<h1 id="introduction">Introduction</h1>
+
+<p>In this week&rsquo;s post I&rsquo;ll share my experince with <strong><a href="http://www.haproxy.org/">HAProxy</a></strong> - a high performance TCP/HTTP <strong>load balancer</strong></p>
+
+<h4 id="disclaimer-there-will-be-nothing-that-you-can-t-read-in-the-haproxy-options-manual-https-cbonte-github-io-haproxy-dconv-1-7-configuration-html-apart-from-my-thoughts">Disclaimer: There will be nothing that you can&rsquo;t read in the <a href="https://cbonte.github.io/haproxy-dconv/1.7/configuration.html">haproxy options manual</a> apart from my thoughts.</h4>
+
+<p>Still, if you&rsquo;re interested in my experience configuring this application for my setup keep on reading.</p>
+
+<p>This post will be shorter than usual because <strong>I am a bit low on time</strong> since <strong>I&rsquo;m preparing for an important interview</strong>.
+<strong>I don&rsquo;t feel like posting coding exercises</strong> due to the fact that <strong>there&rsquo;s plenty of material on the web for all of them</strong> and I do not consider myself as an <em>&ldquo;algo guru&rdquo;</em> or something.</p>
+
+<h4 id="in-the-next-couple-of-weeks-i-ll-probably-not-post-anything-because-of-the-reason-above">In the next couple of weeks I&rsquo;ll probably not post anything because of the reason above.</h4>
+
+<h1 id="let-s-get-started">Let&rsquo;s get started</h1>
+
+<p>In the <a href="blog/04-down-the-rabbit-hole/#time-to-haproxy">end of last week&rsquo;s post</a> I ended up <strong>using HAProxy to proxy connections made to my router at home to my container hosting the website</strong>.
+I went through a lot of hassle but in the end I was able to <strong>log the original client&rsquo;s IP address</strong> which I passed as a header from HAProxy to my web server.</p>
+
+<p>I will not go through that again. If you are curiuos feel free to read <a href="blog/04-down-the-rabbit-hole/#time-to-haproxy">the whole story</a>.</p>
+
+<p>This time I&rsquo;ll explain some of the options which are pretty well described in the documentation and my experience of using the software.</p>
+
+<h3 id="some-prerequisites">Some prerequisites</h3>
+
+<p>If you&rsquo;re new to load balancing, <strong>I&rsquo;d strongly recommend reading <a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts">this blog on load balancing concepts in the context of HAProxy</a></strong> before reading on.</p>
+
+<h1 id="hiding-behind-1-public-address">Hiding behind 1 public address</h1>
+
+<p>If you&rsquo;ve read <a href="/blog/03-a-walk-down-infrastructure-lane/">my post where I explained my network</a> you know that I&rsquo;m <em>a bit low on public ip addresses</em>.</p>
+
+<p>If I had a single web service I wanted to be public that&rsquo;s fine - I can just let it slide through port 80 or 443 and no issues whatsoever.
+However, recently <strong>I&rsquo;ve been setting up more and more web services</strong> and I had to get creative to access them - <strong>let&rsquo;s put that on port 8000, this other one on port 8080 etc</strong>.</p>
+
+<h4 id="unfortunately-there-are-2-major-issues-with-this-strategy">Unfortunately, there are 2 major issues with this strategy:</h4>
+
+<ol>
+<li>It is <strong><em>really inconvenient</em></strong> to have to remember what service on what port is</li>
+<li>I started running out of traditional &ldquo;web&rdquo;-related ports and <strong>running a web server on port 4443 is a bit odd, right?</strong></li>
+</ol>
+
+<h1 id="haproxy-to-the-rescue">HAProxy to the rescue</h1>
+
+<p>It turned out that appart from adding headers to requests, <strong>HAProxy is able to check for both presence of headers, as well as their value which is interesting</strong>.</p>
+
+<p>This is what an ordinary get request to <code>www.google.com</code> looks like:</p>
+
+<pre><code>GET / HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Connection: close
+Upgrade-Insecure-Requests: 1
+</code></pre>
+
+<p>This is what a request to <code>mail.google.com</code> looks like:</p>
+
+<pre><code>GET / HTTP/1.1
+Host: mail.google.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Upgrade-Insecure-Requests: 1
+Connection: close
+</code></pre>
+
+<p>Notice how the <code>Host</code> header changes its value.</p>
+
+<h4 id="well-what-if-i-setup-multiple-sub-domains-to-point-to-the-same-ip-address-and-then-have-something-route-requests-based-on-the-host-header">Well what if I setup multiple (sub)domains to point to the same ip address and then have something route requests based on the <code>Host</code> header?</h4>
+
+<h5 id="note-that-the-domain-i-m-doing-this-is-samitor-com-as-i-consider-is-for-more-proffesional-the-actual-domain-does-not-matter-here">Note that the domain I&rsquo;m doing this is <code>samitor.com</code> as I consider is for more <em>proffesional</em>. The actual domain does not matter here</h5>
+
+<p>Here is how my dns zone looks like:</p>
+
+<p><img src="/images/05-HA!Proxy-b5202366.png" alt="" /></p>
+
+<p>Notice the <strong>multiple CNAME records that point to the same address</strong> which in my case is <code>213.191.184.70</code>.
+<strong>On layer 4 this wouldn&rsquo;t make much sense</strong>, but <strong>as we go up to layer 7, it makes all the difference.</strong></p>
+
+<h4 id="so-what-i-eventually-want-to-achieve-is-have-a-service-that-listens-on-ports-80-and-443-for-http-requests-when-one-is-received-i-want-it-to-inspect-the-host-header-and-route-the-request-to-the-according-backend-service">So what I eventually want to achieve is have a service that listens on ports 80 and 443 for HTTP requests. When one is received, I want it to inspect the <code>Host</code> header and route the request to the according backend service.</h4>
+
+<p>This is how this requirements look like in HAProxy config&rsquo;s terms:</p>
+
+<pre><code>frontend http_proxy
+    bind 213.191.184.70:80             # Public address to bind to
+    mode http                          # We are routing http here
+    option forwardfor                  # Add Forward-For header to tell the backend server there is a proxy
+    option http-server-close
+    reqadd X-Forwared-Proto:\ http
+    reqadd X-Forwarded-Port:\ 80
+
+    acl host_website hdr(host) -i viktorbarzin.me      # ACL that matches requests with Host header = viktorbarzin.me
+    acl host_kms_info hdr(host) -i kms.samitor.com     # ACL that matches requests with Host header = kms.samitor.com
+    acl host_privatebin hdr(host) -i pb.samitor.com    # ACL that matches requests with Host header = pb.samitor.com
+
+    use_backend docker_gateway_http if host_website    # If host is viktorbarzin.me, then use backend that serves my site.
+    use_backend kms_info_http if host_kms_info         # If host is kms.samitor.com - use the backend that serves this
+    use_backend privatebin_http if host_privatebin     # --//--
+
+# The below logic is the same as the one above. The difference is adding the ssl settings.
+frontend https_proxy
+
+    # Bind to port 81 and 444 on all interfaces (0.0.0.0)
+    bind 213.191.184.70:443 ssl crt /root/le/live/viktorbarzin.me/viktorbarzin.me.pem
+
+    # We're proxying HTTP here...
+    mode http
+    option forwardfor
+    option http-server-close
+    reqadd X-Forwarded-Proto:\ https
+    reqadd X-Forwarded-Port:\ 443
+
+    acl host_website hdr(host) -i viktorbarzin.me
+    use_backend docker_gateway_https if host_website
+</code></pre>
+
+<p>Once an Access Control List (ACL) is matched, traffic is routed to the specified backend server. This is how they are configured:</p>
+
+<pre><code>backend docker_gateway_http # Specify backend name
+    mode http # We are routing http here
+    option httpclose
+    option forwardfor
+    server node1 10.2.0.1:80 # Route traffic to this host at this port
+
+backend docker_gateway_https
+    mode http
+    option httpclose
+    option forwardfor
+    server node1 10.2.0.1:443 ssl verify none
+
+backend kms_info_http
+    mode http
+    option httpclose
+    option forwardfor
+    server node1 10.2.0.3:80
+
+backend privatebin_http
+    mode http
+    option httpclose
+    option forwardfor
+    server node1 10.2.0.1:8000
+</code></pre>
+
+<p><strong>The configuration is pretty clear and intuitive</strong> and it doesn&rsquo;t take any debugging to make it work.
+It <em>just works</em>.</p>
+
+<p>So opening the domains, <strong>despite they resolve to the same ip address, a different service is loaded:</strong></p>
+
+<p><center> <img src="/images/05-HA!Proxy-1d379d4b.png" alt="" /> </center></p>
+
+<p><img src="/images/05-HA!Proxy-64c65ce4.png" alt="" /></p>
+
+<p><center> <img src="/images/05-HA!Proxy-b6df7cfe.png" alt="" /> </center></p>
+
+<p><img src="/images/05-HA!Proxy-a54ef1d3.png" alt="" /></p>
+
+<p>And of course accessing <a href="https://viktorbarzin.me">viktorbarzin.me</a> routes to the website you&rsquo;re on right now.</p>
+
+<h4 id="if-you-try-another-domain-that-resolves-to-this-ip-address-haproxy-will-not-be-able-to-find-a-matching-acl-therefore-will-return-an-error">If you try another domain that resolves to this IP address, HAProxy will not be able to find a matching ACL therefore will return an error:</h4>
+
+<p><img src="/images/05-HA!Proxy-4560f875.png" alt="" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>In this post I showed you how I have implemented and how I use HAProxy in my home environment.</p>
+
+<p>You saw how you could run potentially infinite amount of services all seemingly listening on the same IP address at the same port which may not be obvious if you have only your <em>Networking 101</em> knowledge.</p>
+
+<p>Here is a list of some useful sources I went through when I was setting up HAProxy:</p>
+
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts">Digital Ocean article on introduction to load-balancing concepts and haproxy</a></li>
+<li><a href="https://seanmcgary.com/posts/haproxy---route-by-domain-name/">HAProxy - routing based on domain name</a></li>
+<li><a href="http://cbonte.github.io/haproxy-dconv/configuration-1.7.html#7">HAProxy configuration options</a></li>
+<li><a href="https://www.haproxy.com/documentation/aloha/8-5/traffic-management/lb-layer7/acls/">Setting up Access Control Lists(ACL) in haproxy - HAProxy Documentation</a></li>
+</ul>
+
+            </div>
+            
+            <div class="post-comments">
+                
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2018 Viktor Barzin
+<span class="credit">
+	
+	
+	
+	
+</span>
+</p>
+</footer>
+
+    </body>
