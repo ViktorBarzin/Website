@@ -30,19 +30,19 @@ If you're new to load balancing, **I'd strongly recommend reading [this blog on 
 
 # Hiding behind 1 public address
 
-If you've read [my post where I explained my network](/blog/03-a-walk-down-infrastructure-lane/) you know that I'm a bit low on public ip addresses.
+If you've read [my post where I explained my network](/blog/03-a-walk-down-infrastructure-lane/) you know that I'm *a bit low on public ip addresses*.
 
 If I had a single web service I wanted to be public that's fine - I can just let it slide through port 80 or 443 and no issues whatsoever.
-However, recently I've been setting up more and more web services and I had to get creative to access them - let's put that on port 8000, this other one on port 8080 etc.
+However, recently **I've been setting up more and more web services** and I had to get creative to access them - **let's put that on port 8000, this other one on port 8080 etc**.
 
-Unfortunately, there are 2 major issues with this strategy:
+#### Unfortunately, there are 2 major issues with this strategy:
 
-1. It is really inconvenient to have to remember what service on what port is
-2. I started running out of traditional "web"-related ports and running a web server on port 4443 is a bit odd, right?
+1. It is ***really inconvenient*** to have to remember what service on what port is
+2. I started running out of traditional "web"-related ports and **running a web server on port 4443 is a bit odd, right?**
 
 # HAProxy to the rescue
 
-It turned out that appart from adding headers to requests, HAProxy is able to check for both presence of headers, as well as their value which is interesting.
+It turned out that appart from adding headers to requests, **HAProxy is able to check for both presence of headers, as well as their value which is interesting**.
 
 This is what an ordinary get request to `www.google.com` looks like:
 
@@ -64,37 +64,38 @@ This is what a request to `mail.google.com` looks like:
     Upgrade-Insecure-Requests: 1
     Connection: close
 
-Notice how the `Host` header has different value?
-Well what if I setup multiple (sub)domain names to point to the same ip address and then have something route requests based on the `Host` header?
+Notice how the `Host` header changes its value.
 
-#### Note that the domain I'm doing this is `samitor.com` as I consider is for more *proffesional*. The actual domain does not matter here
+#### Well what if I setup multiple (sub)domains to point to the same ip address and then have something route requests based on the `Host` header?
+
+##### Note that the domain I'm doing this is `samitor.com` as I consider is for more *proffesional*. The actual domain does not matter here
 
 Here is how my dns zone looks like:
 
 ![](/images/05-HA!Proxy-b5202366.png)
 
-Notice the multiple CNAME records that point to the same address which in my case is `213.191.184.70`.
-On layer 4 this wouldn't make much sense to do, but as we go up to layer 7 it makes all the difference.
+Notice the **multiple CNAME records that point to the same address** which in my case is `213.191.184.70`.
+**On layer 4 this wouldn't make much sense**, but **as we go up to layer 7, it makes all the difference.**
 
-So what I eventually want to achieve is have a service that listens on ports 80 and 443 for http requests. When once is received I want it to inspect the `Host` header and route the request to the according backend service.
+#### So what I eventually want to achieve is have a service that listens on ports 80 and 443 for HTTP requests. When one is received, I want it to inspect the `Host` header and route the request to the according backend service.
 
-This is how this requirements looks like in HAProxy config's terms:
+This is how this requirements look like in HAProxy config's terms:
 
     frontend http_proxy
-    	bind 213.191.184.70:80 # Public address to bind to
-    	mode http # We are routing http here
-    	option forwardfor # Add Forward-For header to tell the backend server there is a proxy
+    	bind 213.191.184.70:80             # Public address to bind to
+    	mode http                          # We are routing http here
+    	option forwardfor                  # Add Forward-For header to tell the backend server there is a proxy
     	option http-server-close
     	reqadd X-Forwared-Proto:\ http
     	reqadd X-Forwarded-Port:\ 80
 
-    	acl host_website hdr(host) -i viktorbarzin.me  # ACL that matches requests with Host header = viktorbarzin.me
-    	acl host_kms_info hdr(host) -i kms.samitor.com # ACL that matches requests with Host header = kms.samitor.com
-    	acl host_privatebin hdr(host) -i pb.samitor.com # ACL that matches requests with Host header = pb.samitor.com
+    	acl host_website hdr(host) -i viktorbarzin.me      # ACL that matches requests with Host header = viktorbarzin.me
+    	acl host_kms_info hdr(host) -i kms.samitor.com     # ACL that matches requests with Host header = kms.samitor.com
+    	acl host_privatebin hdr(host) -i pb.samitor.com    # ACL that matches requests with Host header = pb.samitor.com
 
-    	use_backend docker_gateway_http if host_website # If host is viktorbarzin.me, then use backend that serves my site.
-    	use_backend kms_info_http if host_kms_info # If host is kms.samitor.com - use the backend that serves this
-    	use_backend privatebin_http if host_privatebin # --//--
+    	use_backend docker_gateway_http if host_website    # If host is viktorbarzin.me, then use backend that serves my site.
+    	use_backend kms_info_http if host_kms_info         # If host is kms.samitor.com - use the backend that serves this
+    	use_backend privatebin_http if host_privatebin     # --//--
 
     # The below logic is the same as the one above. The difference is adding the ssl settings.
     frontend https_proxy
@@ -138,10 +139,10 @@ Once an Access Control List (ACL) is matched, traffic is routed to the specified
         option forwardfor
         server node1 10.2.0.1:8000
 
-The configuration is pretty clear and intuitive and it doesn't take any debugging to make it work.
+**The configuration is pretty clear and intuitive** and it doesn't take any debugging to make it work.
 It *just works*.
 
-So opening the domains, despite they resolve to the same ip address, a different service is loaded:
+So opening the domains, **despite they resolve to the same ip address, a different service is loaded:**
 
 <center> ![](/images/05-HA!Proxy-1d379d4b.png) </center>
 
@@ -152,6 +153,11 @@ So opening the domains, despite they resolve to the same ip address, a different
 ![](/images/05-HA!Proxy-a54ef1d3.png)
 
 And of course accessing [viktorbarzin.me](https://viktorbarzin.me) routes to the website you're on right now.
+
+#### If you try another domain that resolves to this IP address, HAProxy will not be able to find a matching ACL therefore will return an error:
+
+![](/images/05-HA!Proxy-4560f875.png)
+
 
 # Conclusion
 
