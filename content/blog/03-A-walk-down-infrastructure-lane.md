@@ -154,6 +154,7 @@ So each time you are visiting this site, or sending me mail at [viktorbarzin@sam
 I've also bridged the **wifi network at home to route the *10.0.0.0/8* network via the vpn interface** so when I'm at home I don't need to connect to the vpn.
 
 #### You can see the full network topology [here](/images/net-topology.png)
+#### NOTE: this image will be updated from time to time - the post might not.
 
 # Conclusion
 
