@@ -6,7 +6,7 @@ pygmentsCodeFences = true
 pygmentsstyle = "native"
 # disqusShortname = 1
 
-disableKinds = ["sitemap", "categories"]
+disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
 
 [taxonomies]
 
