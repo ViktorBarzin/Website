@@ -9,9 +9,9 @@ pygmentsstyle = "native"
 
 [sitemap]
   changefreq = "weekly"
-  filename = "sitemap.xml"
+  filename = "sitemap2.xml"
   priority = 0.8
-  
+
 [params]
 Name = "Viktor Barzin"
 HeaderUsername = "viktor"

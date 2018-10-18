@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/05-haproxy/</loc>
+    <lastmod>2018-10-14T14:04:13+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</loc>
+    <lastmod>2018-10-08T10:04:27+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</loc>
+    <lastmod>2018-09-28T15:36:21+03:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/projects/</loc>
+    <lastmod>2018-09-19T01:33:52+03:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/02-blog-a-blog/</loc>
+    <lastmod>2018-09-17T15:36:49+03:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/01-secure-by-default/</loc>
+    <lastmod>2018-09-08T13:44:49+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/blog/</loc>
+    <lastmod>2018-09-02T17:32:07+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>3</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/about-me/</loc>
+    <lastmod>2018-09-02T00:22:22+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/categories/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/tags/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://viktorbarzin.me/</loc>
+    <lastmod>2018-10-14T14:04:13+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
