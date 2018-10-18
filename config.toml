@@ -31,3 +31,8 @@ FacebookID = "viktorbarzin"
         name = "projects"
         weight = 1
         url = "/projects/"
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.8
