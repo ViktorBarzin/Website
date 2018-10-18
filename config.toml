@@ -8,6 +8,11 @@ pygmentsstyle = "native"
 
 disableKinds = ["sitemap", "categories"]
 
+[taxonomies]
+  tag = ""
+  group = ""
+  category = ""
+
 
 [params]
 Name = "Viktor Barzin"
