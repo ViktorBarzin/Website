@@ -6,11 +6,8 @@ pygmentsCodeFences = true
 pygmentsstyle = "native"
 # disqusShortname = 1
 
+disableKinds = ["sitemap"]
 
-[sitemap]
-  changefreq = "weekly"
-  filename = "sitemap2.xml"
-  priority = 0.8
 
 [params]
 Name = "Viktor Barzin"
