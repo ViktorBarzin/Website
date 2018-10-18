@@ -6,6 +6,12 @@ pygmentsCodeFences = true
 pygmentsstyle = "native"
 # disqusShortname = 1
 
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.8
+  
 [params]
 Name = "Viktor Barzin"
 HeaderUsername = "viktor"
@@ -31,8 +37,3 @@ FacebookID = "viktorbarzin"
         name = "projects"
         weight = 1
         url = "/projects/"
-
-[sitemap]
-  changefreq = "weekly"
-  filename = "sitemap.xml"
-  priority = 0.8
