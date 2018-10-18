@@ -9,7 +9,7 @@ pygmentsstyle = "native"
 disableKinds = ["sitemap", "categories"]
 
 [taxonomies]
-  tag = ""
+  tags = ""
   group = ""
   category = ""
 

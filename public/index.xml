@@ -6,77 +6,9 @@
     <description>Recent content on Viktor Barzin&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Oct 2018 14:04:13 +0100</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>05 HA!Proxy - Discovering the wonders of proxying and load balancing</title>
-      <link>https://viktorbarzin.me/blog/05-haproxy/</link>
-      <pubDate>Sun, 14 Oct 2018 14:04:13 +0100</pubDate>
-      
-      <guid>https://viktorbarzin.me/blog/05-haproxy/</guid>
-      <description>Introduction In this week&amp;rsquo;s post I&amp;rsquo;ll share my experince with HAProxy - a high performance TCP/HTTP load balancer
-Disclaimer: There will be nothing that you can&amp;rsquo;t read in the haproxy options manual apart from my thoughts. Still, if you&amp;rsquo;re interested in my experience configuring this application for my setup keep on reading.
-This post will be shorter than usual because I am a bit low on time since I&amp;rsquo;m preparing for an important interview.</description>
-    </item>
-    
-    <item>
-      <title>04 Down the Rabbit Hole - How a simple monitoring task lead me to compiling a custom version of OpenWRT</title>
-      <link>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</link>
-      <pubDate>Mon, 08 Oct 2018 10:04:27 +0100</pubDate>
-      
-      <guid>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</guid>
-      <description>Introduction In this blogpost I&amp;rsquo;ll go through the journey I went when I was setting up monitoring with ELK for my website. The task seemed simple - install *beats and tell it to report to my elk stack vm. You&amp;rsquo;ll see why in my setup it wasn&amp;rsquo;t as easy as it sounds initially.
-The issue If you recall my network setup had a little issue - I do not own the public IP address where my infrastructure sits.</description>
-    </item>
-    
-    <item>
-      <title>03 A Walk Down Infrastructure Lane - My Home Lab Setup</title>
-      <link>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</link>
-      <pubDate>Fri, 28 Sep 2018 15:36:21 +0300</pubDate>
-      
-      <guid>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</guid>
-      <description>Intro As the tittle suggests It&amp;rsquo;s time to go down infrastructure lane. In this blog post I&amp;rsquo;ll show my &amp;ldquo;home&amp;rdquo; lab and all the services I&amp;rsquo;ve built so far.
-Without further due let&amp;rsquo;s get started.
-Physical topology So the physical topology is rather simple. It can be best explained by this photo:
-Site 1 is where my main infrastructure is located. The catch there is that the public-facing router is not mine and I cannot manage it.</description>
-    </item>
-    
-    <item>
-      <title>02 Blog a Blog - The creation of this site</title>
-      <link>https://viktorbarzin.me/blog/02-blog-a-blog/</link>
-      <pubDate>Mon, 17 Sep 2018 15:36:49 +0300</pubDate>
-      
-      <guid>https://viktorbarzin.me/blog/02-blog-a-blog/</guid>
-      <description>Intro Recently I&amp;rsquo;ve been quite busy. I was helping with the organisation of HackConf this weekend which was both awesome and exhausting.
-Therefore this blog will be covering something simpler - how I created this site. I won&amp;rsquo;t cover the ceation of the actual ui - it is a statically generated website from markdown files (you can find the sources here).
-Just google for a static site generator and you&amp;rsquo;ll find plenty.</description>
-    </item>
-    
-    <item>
-      <title>01 Secure by default - Why you shouldn&#39;t disable Django&#39;s CSRF middleware</title>
-      <link>https://viktorbarzin.me/blog/01-secure-by-default/</link>
-      <pubDate>Sat, 08 Sep 2018 13:44:49 +0100</pubDate>
-      
-      <guid>https://viktorbarzin.me/blog/01-secure-by-default/</guid>
-      <description>Brief intro Recently I&amp;rsquo;ve been messing around with various client-side web attacks. I&amp;rsquo;ve noticed that most web devs&amp;rsquo; knowledge goes as far as the framework their using requires and that&amp;rsquo;s it. When asked what is the purpose of a csrf token, they would say - &amp;ldquo;Oh, it&amp;rsquo;s something for security and if I don&amp;rsquo;t put it, my forms don&amp;rsquo;t work so it must be there.&amp;rdquo;
-If you find yourself having a similar answer, keep on reading.</description>
-    </item>
-    
-    <item>
-      <title>About me</title>
-      <link>https://viktorbarzin.me/about-me/</link>
-      <pubDate>Sun, 02 Sep 2018 00:22:22 +0100</pubDate>
-      
-      <guid>https://viktorbarzin.me/about-me/</guid>
-      <description>Hi there! I&amp;rsquo;m Viktor.
-I&amp;rsquo;m {{ current_year }} - 1998 years old and I&amp;rsquo;m currently doing my BSc in Computer Science at the University of Southampton.
-You can find me on facebook, twitter and github.
-I&amp;rsquo;m all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
-In my free time I watch Formula 1, play chess and soon I&amp;rsquo;ll be jumping out of planes</description>
-    </item>
     
   </channel>
 </rss>
