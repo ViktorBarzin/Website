@@ -2,6 +2,8 @@
 title: "02 Blog a Blog - The creation of this site"
 date: 2018-09-17T15:36:49+03:00
 draft: false
+sitemap:
+   priority: 0.3
 ---
 
 # Intro

@@ -2,6 +2,8 @@
 title: "05 HA!Proxy - Discovering the wonders of proxying and load balancing"
 date: 2018-10-14T14:04:13+01:00
 draft: false
+sitemap:
+   priority: 0.3
 ---
 
 # Introduction

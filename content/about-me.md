@@ -3,8 +3,7 @@ title: "About me"
 date: 2018-09-02T00:22:22+01:00
 draft: false
 sitemap:
-   changefreq: "weekly"
-   priority: 0.75
+   priority: 0.5
 ---
 
 Hi there! I'm Viktor.
