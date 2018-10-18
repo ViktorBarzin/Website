@@ -40,6 +40,8 @@
   <url>
     <loc>https://viktorbarzin.me/about-me/</loc>
     <lastmod>2018-09-02T00:22:22+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
   </url>
   
   <url>
