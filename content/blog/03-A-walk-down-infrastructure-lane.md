@@ -11,6 +11,8 @@ sitemap:
 As the tittle suggests It's time to go down infrastructure lane. In this blog post
 I'll show my "home" lab and all the services I've built so far.
 
+#### NOTE: I will do my best to keep this up to date so check this post regularly for updates, both to the content and the image at the end.
+
 Without further due let's get started.
 
 # Physical topology

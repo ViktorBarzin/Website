@@ -39,9 +39,8 @@ The issue If you recall my network setup had a little issue - I do not own the p
       
       <guid>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</guid>
       <description>Intro As the tittle suggests It&amp;rsquo;s time to go down infrastructure lane. In this blog post I&amp;rsquo;ll show my &amp;ldquo;home&amp;rdquo; lab and all the services I&amp;rsquo;ve built so far.
-Without further due let&amp;rsquo;s get started.
-Physical topology So the physical topology is rather simple. It can be best explained by this photo:
-Site 1 is where my main infrastructure is located. The catch there is that the public-facing router is not mine and I cannot manage it.</description>
+NOTE: I will do my best to keep this up to date so check this post regularly for updates, both to the content and the image at the end. Without further due let&amp;rsquo;s get started.
+Physical topology So the physical topology is rather simple.</description>
     </item>
     
     <item>
