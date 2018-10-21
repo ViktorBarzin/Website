@@ -111,7 +111,9 @@ owa_cmds.push(['trackClicks']);
 <p>As the tittle suggests It&rsquo;s time to go down infrastructure lane. In this blog post
 I&rsquo;ll show my &ldquo;home&rdquo; lab and all the services I&rsquo;ve built so far.</p>
 
-<h4 id="note-i-will-do-my-best-to-keep-this-up-to-date-so-check-this-post-regularly-for-updates-both-to-the-content-and-the-image-at-the-end">NOTE: I will do my best to keep this up to date so check this post regularly for updates, both to the content and the image at the end.</h4>
+<p>I will do my best to keep this up to date so check this post regularly for updates, both to the content and the image at the end.</p>
+
+<h4 id="if-you-are-interested-in-just-the-network-topology-you-can-find-it-here-images-net-topology-png">If you are interested in just the network topology, you can find it <a href="/images/net-topology.png">here</a></h4>
 
 <p>Without further due let&rsquo;s get started.</p>
 
@@ -130,15 +132,14 @@ Site 1 consists of <strong>2 ESXi hosts connected with a simple linksys router</
 <h1 id="logical-topology">Logical topology</h1>
 
 <p>Now the fun part - the <strong>logical layout</strong>. Instead of describing all the virtual machines that I have,
-I reckon it would be <strong>more useful to explain what you&rsquo;ll hit</strong> and what you can <strong>access</strong> once you&rsquo;re on the network.
-<strong>I&rsquo;ll post the full network diagram at the end</strong> so you can see for yourself each of the vms out there.</p>
+I reckon it would be <strong>more useful to explain what you&rsquo;ll hit</strong> and what you can <strong>access</strong> once you&rsquo;re on the network.</p>
 
 <p><strong>Accessing the network can be done only via VPN</strong> - this can be done at <strong><em>vpn.samitor.com</em></strong>  on <strong>port 1194/udp</strong>.
 Once you connect you&rsquo;ll find yourself connected to an <strong>Ubuntu server</strong> vm running the <strong>vpn server only</strong>.</p>
 
 <p>I used to run the vpn service in docker but I recently changed that since <a href="https://stackoverflow.com/questions/39632285/how-to-enable-logging-for-iptables-inside-a-docker-container#answer-39681550">you cannot log container&rsquo;s iptables connections</a> and I need the monitoring feature.</p>
 
-<p>Depending on the VPN certificate that you have, you&rsquo;ll join a <strong>different network</strong> that will give you the correct permissions to access resources on the network.
+<p>Depending on the VPN certificate that you have, you&rsquo;ll join a <strong>different subnet</strong> that will give you the correct permissions to access resources on the network.
 The IP that you&rsquo;ll get is <strong>not</strong> NAT-ed so I can <strong>filter and track</strong> the outbound connections <strong>based on client IP</strong> at the nearest firewall which happens to be the <a href="https://www.pfsense.org/"><strong>pfSense</strong></a> appliance at <em>10.0.30.1</em>. This is what we know so far:</p>
 
 <p><img src="/images/03-A-walk-down-infrastructure-lane-bc1a97ab.png" alt="" /></p>
@@ -158,7 +159,7 @@ The IP that you&rsquo;ll get is <strong>not</strong> NAT-ed so I can <strong>fil
 </ul>
 
 <p>If any of the clients on my vpn want access to anything on the internal network it will be <strong>explicitly allowed</strong>
-and added as a rule in here (look the rule that allows clients on <em>10.3.3.0/24</em> access to <em>10.0.101.10</em> host).</p>
+and added as a whitelist rule in here (look the rule that allows clients on <em>10.3.3.0/24</em> access to <em>10.0.101.10</em> host).</p>
 
 <p>The <em>10.0.101.10</em> host is a simple Windows Server VM that is given to a 3rd party for testing purposes.</p>
 
@@ -182,13 +183,15 @@ and added as a rule in here (look the rule that allows clients on <em>10.3.3.0/2
 <li><strong>Openfiler storage vm</strong> - this is supposed to be some sort of a global datastore and everything should store their data in here but alas I&rsquo;m currently using is just for NFS datastores for the ESXi hosts.</li>
 </ul>
 
-<h3 id="the-container-host-currently-runs-the-following-containers">The <em>Container Host</em> currently runs the following containers:</h3>
+<h3 id="the-container-host-changes-the-most-frequently-and-it-currently-runs-the-following-containers">The <em>Container Host</em> changes the most frequently and it currently runs the following containers:</h3>
 
 <ul>
 <li><a href="https://hub.docker.com/_/nginx/"><strong>Nginx web server</strong></a> that <strong>hosts the website you&rsquo;re watching</strong> right now.</li>
 <li>A <a href="https://hub.docker.com/r/serjs/go-socks5-proxy/"><strong>socks5 proxy</strong></a> which I give access to people that need proxying their traffic via a bulgarian ip and do not need to be issued a vpn certificate.</li>
 <li>A very important <a href="https://hub.docker.com/r/sameersbn/bind/"><strong>DNS container</strong></a> because noone likes remembering ip addresses anyway. It currently <strong>has more than 20 A records just for my services</strong>.</li>
 <li><a href="https://hub.docker.com/_/nginx/"><strong>Nginx web server</strong></a> that hosts <strong>my notes on how to activate windows machines</strong> that I ocassionally give out access to friends</li>
+<li>A <a href="https://hub.docker.com/r/jgeusebroek/privatebin/">privatebin</a> instance for the times when I need a private pastebin.</li>
+<li>An <a href="https://github.com/vladk1m0/docker-owa">Open Web analytics</a> container that keeps track of user activity on my website - it will soon be replaced by <a href="https://goaccess.io/">goaccess</a> which I see as way simpler, easier to setup and less hassle to maintain.</li>
 </ul>
 
 <p>There used to be an owncloud service but I&rsquo;ve removed that since it wasn&rsquo;t used.</p>
@@ -200,15 +203,13 @@ and added as a rule in here (look the rule that allows clients on <em>10.3.3.0/2
 <h3 id="elk-stack">ELK Stack</h3>
 
 <p>I have a dedicated vm for <strong>ELK</strong> - this is the Ubuntu server at <em>10.0.20.13</em>.
-It currently collects only <strong>the logs from the pfSense appliance</strong>. Here is how that looks like:</p>
+It currently collects the logs from the <em>pfSense appliance</em>, the <em>Container host</em> and the <em>VPN Server vm</em>. Here is how that looks like:</p>
 
 <p><img src="/images/03-A-walk-down-infrastructure-lane-e69a61a1.png" alt="" /></p>
 
-<p>Recently, I had some adventures debugging grok files. I&rsquo;ll soon be setting up <strong>more monitoring via <a href="https://www.elastic.co/products/beats">beats</a></strong>.</p>
-
 <h3 id="the-mail-server-is-where-my-mailing-service-runs">The <em>Mail server</em> is where my mailing service runs.</h3>
 
-<p>It is a <a href="https://roundcube.net/">Roundcube</a> installation with <a href="http://www.postfix.org/">postfix</a> running as mail transfer agent.
+<p>It is a <a href="https://roundcube.net/">Roundcube</a> installation with <a href="http://www.postfix.org/">postfix</a> running as mail transfer agent and <a href="https://www.dovecot.org/">Dovecot</a> as a IMAP and POP3 server.
 I don&rsquo;t use the Roundcube web ui to access my mail - I use KDE&rsquo;s powerful <a href="https://www.kde.org/applications/internet/kmail/">kmail</a> client.</p>
 
 <h5 id="protip-after-couple-of-reinstalls-i-figured-out-that-the-installation-can-be-automated-with-iredmail-https-www-iredmail-org">ProTip: After couple of reinstalls I figured out that the installation can be automated with <a href="https://www.iredmail.org/">iredmail</a></h5>
@@ -229,7 +230,7 @@ Here is a screenshot of the home screen:</p>
 
 <p>So this concludes VLAN 20 walkthrough</p>
 
-<p><img src="/images/03-A-walk-down-infrastructure-lane-c1343164.png" alt="" /></p>
+<p><img src="/images/03-A-walk-down-infrastructure-lane-25ca6ac3.png" alt="" /></p>
 
 <h3 id="last-but-not-least-is-vlan-10-which-is-the-infrastructure-manager-vlan">Last but not least is VLAN 10 which is the infrastructure manager vlan.</h3>
 
@@ -254,7 +255,7 @@ Here is what zabbix looks like:</p>
 <p>Well the catch is that at my main site I <strong>do not own and manage the public IP address</strong>.
 The <strong>only open port I have is 1194</strong> and this is quite insufficient for my needs.</p>
 
-<h4 id="so-how-do-i-run-a-mail-server-2-websites-and-what-not-with-only-1-open-port">So how do I run a mail server, 2 websites and what not with only 1 open port?</h4>
+<h4 id="so-how-do-i-run-a-mail-server-multiple-websites-and-what-not-with-only-1-open-port">So how do I run a mail server, multiple websites and what not with only 1 open port?</h4>
 
 <p>Remember the router at home? It is running <a href="https://openwrt.org/">OpenWrt</a> which is a sort of distro for routers.
 Maybe <strong>busybox on steroids</strong> is more accurate.</p>
@@ -262,22 +263,62 @@ Maybe <strong>busybox on steroids</strong> is more accurate.</p>
 <p>Anyway, it <strong>has a VPN certificate that connects straight into the main site</strong>.
 <strong>I&rsquo;ve forwarded ports on my router at home to services in the vpn network</strong> linking the 2 networks.</p>
 
-<p>This is how the public site of my network looks like:</p>
+<p>This is how the public side of my network looks like:</p>
 
-<p><img src="/images/03-A-walk-down-infrastructure-lane-a194c284.png" alt="" /></p>
+<p><img src="/images/03-A-walk-down-infrastructure-lane-92ee6897.png" alt="" /></p>
 
 <p>So each time you are visiting this site, or sending me mail at <a href="mailto:viktorbarzin@samitor.com">viktorbarzin@samitor.com</a> <strong>you are going through the router at home which is routing traffic via the vpn eventually reaching its target service</strong>.</p>
 
 <p>I&rsquo;ve also bridged the <strong>wifi network at home to route the <em>10.0.0.0/8</em> network via the vpn interface</strong> so when I&rsquo;m at home I don&rsquo;t need to connect to the vpn.</p>
 
-<h4 id="you-can-see-the-full-network-topology-here-images-net-topology-png">You can see the full network topology <a href="/images/net-topology.png">here</a></h4>
+<h1 id="the-ugly-part">The ugly part</h1>
 
-<h4 id="note-this-image-will-be-updated-from-time-to-time-the-post-might-not">NOTE: this image will be updated from time to time - the post might not.</h4>
+<p>Now that all seems pretty and nice, however, there is a <em>small</em> caveat. I showed you the logical part of the things, but I didn&rsquo;t show you <strong>exactly how that translates to the physical topology</strong>.</p>
+
+<p>I have <strong>2 ESXi hosts</strong> controlled by a <strong>vCenter appliance</strong>.</p>
+
+<p>If you have a <strong>single host</strong>, you <strong>can virtualize everything</strong> and do whatever you want and lie the vms as much as you want about the physical topology beneath.
+However, <strong>once you have to step outside</strong> in the real world, <strong>things change dramatically</strong>.
+The main issue is that <strong>each of the hosts has its own TCP/IP networking stack</strong> therefore routing and iterface subnets need to be configured again for the second host as well and more importantly, <strong>each of the hosts needs to know where everything else is</strong>.</p>
+
+<p>I <strong>hoped that vCenter will manage this in some &ldquo;magical&rdquo; way but alas it wasn&rsquo;t the case</strong>.
+I wanted eventually <strong>to move a VM between hosts without worrying about networking</strong>.</p>
+
+<p>I looked into <a href="https://www.vmware.com/uk/products/vsphere/distributed-switch.html">Distirbuted switches</a>,
+<a href="https://en.wikipedia.org/wiki/Private_VLAN">Private VLANs</a> and what not. Unfortunately neither did the job for me
+and eventually <strong>I had to setup a copy instance of the PfSense on the second host</strong>.</p>
+
+<p><strong>I was really reluctant to do that</strong> since changing any configs in one of the instances, I had to replicate them in the second one so that everything is consistent.
+But oh well, there it is</p>
+
+<p><img src="/images/03-A-walk-down-infrastructure-lane-ec1a5d94.png" alt="" /></p>
+
+<p>Now if I want to move a VM to the other host <strong>I also need to change the according routes to it</strong>.</p>
+
+<p>Firstly, I have to add the routing information in the first pfSense instance. Here is what I currently route:</p>
+
+<p><img src="/images/03-A-walk-down-infrastructure-lane-92686158.png" alt="" /></p>
+
+<p>All of the routes that use the <em>t610 10.0.0.115</em> gateway are hosted on my <strong>second ESXi host</strong>.</p>
+
+<p>For some reason, when matching any of these, <strong>it sends it first to the gateway at <em>10.0.0.1</em> which then has to make the same routing decision</strong>. This is how it looks on my linksys router:</p>
+
+<p><img src="/images/03-A-walk-down-infrastructure-lane-c9873515.png" alt="" /></p>
+
+<p><strong>It also routes the other way around</strong> - VMs on my second host that need to access VMs on my first hosts also need to know where to find them - <strong>this is done both at the linksys level as well as at the second pfSense instance</strong>.</p>
+
+<p>By default it routes the <strong>entire <code>10.0.0.0/16</code> subnet via the pfSense at <code>10.0.0.114</code></strong></p>
+
+<p>I&rsquo;ve made <strong>identical vSwitches on both of my ESXi hosts</strong>, so moving a <strong>VM is rather easy</strong>&hellip; just add the appropriate routings and it all works.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 
-<p>I hope this gives a general idea of what my lab setup looks like. I&rsquo;ve spent an year or so building it.
+<p>I hope this gives a general idea of what my lab setup looks like. I&rsquo;ve spent an year or so to build it.
 In the near future I&rsquo;d like to setup more monitoring via <a href="https://www.elastic.co/products/beats">ELK beats</a> and also setup a <a href="https://kubernetes.io/">Kubernetes cluster</a>.</p>
+
+<h4 id="you-can-see-the-full-network-topology-here-images-net-topology-png">You can see the full network topology <a href="/images/net-topology.png">here</a></h4>
+
+<h4 id="note-this-image-will-be-updated-from-time-to-time">NOTE: this image will be updated from time to time.</h4>
 
             </div>
             
