@@ -4,7 +4,7 @@ title = "Viktor Barzin"
 theme = "hugo-theme-nix"
 pygmentsCodeFences = true
 pygmentsstyle = "native"
-# disqusShortname = 1
+disqusShortname = "viktorbarzin-me.disqus.com"
 
 disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
 
