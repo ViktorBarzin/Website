@@ -1,0 +1,28 @@
+lets setup open web Analytics
+
+CSP in the way...
+
+open up csp and move owa to http -> can't have mixed content on site
+
+try subdomain owa.viktorbarzin.me
+try routing /owa path
+certbot create new wildcard certificate
+
+owa try with firefox
+https://github.com/padams/Open-Web-Analytics/issues/71
+
+------------------------------
+
+Red is Dead
+elasticsearch shard issues
+https://thoughts.t37.net/how-to-fix-your-elasticsearch-cluster-stuck-in-initializing-shards-mode-ce196e20ba95
+https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
+https://discuss.elastic.co/t/default-number-of-replicas-for-new-indices/22612/3
+https://www.fpcomplete.com/blog/2018/04/recover-your-elasticsearch
+
+
+------------------------------
+
+lets encrypt wildcard cert renewal operation
+https://community.letsencrypt.org/t/how-to-specify-subject-name-on-san/52270
+https://en.wikipedia.org/wiki/Wildcard_certificate
