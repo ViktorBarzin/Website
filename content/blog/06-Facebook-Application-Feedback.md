@@ -104,4 +104,4 @@ Regarding the systems part, the only way of learning these stuff is by doing the
 
 Doing the last one also shines quite brightly in your CV as extracurricular projects as well so it's again a win-win.
 
-In general, just be curious about technology and very very stubborn - don't quit at the slightest issues and work your way through them and you'll have great success.
+In general, if you are curious about technology and stubborn enough - you'll have great success.
