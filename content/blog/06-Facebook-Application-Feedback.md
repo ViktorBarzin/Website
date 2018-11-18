@@ -1,7 +1,7 @@
 ---
 title: "06 In the big 4! - Facebook Application Experience"
 date: 2018-11-17T20:41:50Z
-draft: true
+draft: false
 ---
 
 # Introduction
