@@ -26,3 +26,31 @@ https://www.fpcomplete.com/blog/2018/04/recover-your-elasticsearch
 lets encrypt wildcard cert renewal operation
 https://community.letsencrypt.org/t/how-to-specify-subject-name-on-san/52270
 https://en.wikipedia.org/wiki/Wildcard_certificate
+
+
+----------------------------------------
+
+git story - rebasing and git-fu
+
+rewriting history
+https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History
+
+undoing, fixing or removing commits in git
+https://sethrobertson.github.io/GitFixUm/fixup.html
+
+show full hhistory of file
+https://stackoverflow.com/questions/7203515/git-how-to-find-a-deleted-file-in-the-project-commit-history/7203551
+git log --all --full-history -- **/thefile.*
+
+changing commit dates
+https://codewithhugo.com/change-the-date-of-a-git-commit/
+
+git filter-branch delete file form entire History
+https://help.github.com/articles/removing-sensitive-data-from-a-repository/
+git filter-branch --force --index-filter \
+'git rm --cached --ignore-unmatch PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA' \
+--prune-empty --tag-name-filter cat -- --all
+
+----------------------------------------
+
+python selenium guide?
