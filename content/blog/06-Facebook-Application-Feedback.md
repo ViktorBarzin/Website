@@ -36,7 +36,7 @@ Now you can, and probably should, have a *Skills* section where you list what yo
 **I can't stress enough the importance of having projects that are not related to school or university.**
 **The more, the better** but also **the more completed the better - quality over quantity!**
 
-There was this youtube video that described precisely this - it went on with the story of 2 characters one of which had many many **incomplete projects and couldn't really use any of the to put in their CV** as none were complete, whereas the other character **didn't have as many** projects, but the few he had were **all completed, well documented and tested which the better option**.
+There was this youtube video that described precisely this - it went on with the story of 2 characters one of which had many many **incomplete projects and couldn't really use any of the to put in their CV** as none were complete, whereas the other character **didn't have as many** projects, but the few he had were **all completed, well documented and tested which is the better option**.
 
 I had an issue with the aforementioned section since I have several projects I want to list but I lack space.
 What did I do? - **I setup my own site** where I could put a [/projects](/projects) section which could have **unlimited space!**
