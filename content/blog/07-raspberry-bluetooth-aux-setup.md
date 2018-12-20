@@ -1,7 +1,7 @@
 ---
 title: "07 Going musical - Setting up an improvised home audio system"
-date: 2018-12-16T13:01:54Z
-draft: true
+date: 2018-12-20T13:01:54Z
+draft: false
 ---
 
 # Introduction
