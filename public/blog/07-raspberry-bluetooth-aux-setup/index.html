@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> 07 Going musical - Setting up an improvised home audio system &middot; Viktor Barzin </title>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+
+<script src="/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://viktorbarzin.me/css/nix.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=https://viktorbarzin.me/>viktor@web ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="https://viktorbarzin.me/">/home/viktor</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/blog/">~/blog</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/projects/">~/projects</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/about-me/">~/about-me</a>
+            		
+        		</li>
+        		
+			</ul>
+		</div>
+	</div>
+</nav>
+
+
+
+<script async type="text/javascript">
+
+var owa_baseUrl = 'https://owa.viktorbarzin.me/';
+var owa_cmds = owa_cmds || [];
+owa_cmds.push(['setSiteId', 'bf85bba618ad337c9e4eb880e7fb7baa']);
+owa_cmds.push(['trackPageView']);
+owa_cmds.push(['trackClicks']);
+
+(function() {
+	var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
+	owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
+	_owa.src = owa_baseUrl + 'modules/base/js/owa.tracker-combined-min.js';
+	var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
+}());
+
+</script>
+
+
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/">07 Going musical - Setting up an improvised home audio system</a></h1>
+            <span class="post-date">Dec 20, 2018 </span>
+            <div class="post-content">
+                
+
+<h1 id="introduction">Introduction</h1>
+
+<p>Some time ago myself and a <a href="https://www.facebook.com/atanunq/">friend of mine</a> won these awesome bluetooth <a href="https://www.logitech.com/en-us/product/z537-bluetooth-speaker-system">Logitech speakers</a></p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-6c366282.png" alt="" /></p>
+
+<p>The sound is quite decent, unfortunately connecting to both at the same time is a bit tricky and
+without having an external bluetooth adapter one could not easily play the same music on both.</p>
+
+<p>In this blog post I&rsquo;ll show you how with a raspberry pi, some clever thinking and a fair amount of patience I managed to stream music simultaneously onto both.</p>
+
+<h1 id="what-s-the-issue">What&rsquo;s the issue?</h1>
+
+<p>The thing with bluetooth is that if you have 1 adapter - you can connect to 1 receiver and that&rsquo;s it.
+There isn&rsquo;t much room for doing hacky stuff like connecting to multiple receivers with 1 adapter.</p>
+
+<p>As you can imagine, playing music on 2 speakers is always better than playing it on 1 only so measures had to be taken.</p>
+
+<h1 id="what-options-are-there">What options are there?</h1>
+
+<p>The speakers also have an AUX input. Add a <a href="https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&amp;field-keywords=aux+splitter">simple aux splitter</a> and it&rsquo;s problem solved at that point.
+However, it is quite inconvenient to walk around the room with an aux cable hanging from whatever device I&rsquo;m using to stream music from so I had to come up with something cleverer.</p>
+
+<h1 id="perhaps-make-use-of-the-raspberry-pi">Perhaps make use of the raspberry pi?</h1>
+
+<p>The next thing that came to my mind was to use my flatmate&rsquo;s raspberry pi for a media server to which I could stream music.
+There&rsquo;s plenty of media server software out there for raspberries so not after long I had a <a href="https://volumio.org/">Volumio</a> instance up and running.</p>
+
+<p>It was somewhat ok - the web interface is a misbehaves rather often (perhaps because of the angular frontend) but once you get it running its alright.
+There are plugins available for Youtube, Spotify and what not so you can listen music from a variety of sources.</p>
+
+<h1 id="raspberry-volumio-aux-splitter-the-solution">Raspberry + Volumio + AUX splitter - the solution?</h1>
+
+<p>Unfortunately the implementation is quite hacky so it is not as usable as I want it to be.
+Say I wanted to play some online radio that wasn&rsquo;t in Volumio&rsquo;s list or perhaps play a youtube playlist (yes Volumio allows playing videos 1 by 1 only) - with Volumio I am somewhat limited.</p>
+
+<h4 id="what-i-d-like-is-to-be-able-to-play-media-from-whatever-source-to-the-raspberry-and-it-would-then-forward-it-to-its-aux-output">What I&rsquo;d like is to be able to play media from whatever source to the raspberry and it would then forward it to its aux output.</h4>
+
+<p>Simple right?</p>
+
+<p>Volumio was not the solution for me. I tried other media servers such as <a href="https://kodi.tv/">Kodi</a> but it wasn&rsquo;t what I wanted either.</p>
+
+<h1 id="meh-let-s-replace-the-volumio-part">Meh, let&rsquo;s replace the Volumio part</h1>
+
+<p>So I had to go closer to the metal. I opened the specs of the raspberry and it turned out that it has a bluetooth adapter as well!</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-3ecd27a1.png" alt="" /></p>
+
+<p>Perhaps I could set it up as a bluetooth speaker that I would pair with, stream music to it and then it would forward the music to its aux output.
+This would work regardless of the media source I use!</p>
+
+<h1 id="raspberry-pi-as-a-bluetooth-speaker">Raspberry pi as a bluetooth speaker</h1>
+
+<p>I came across this promising <a href="https://www.raspberrypi.org/forums/viewtopic.php?t=68779">guide</a> that began with the words:</p>
+
+<p><em>&ldquo;I spent a lot of time to get information from different sources and use a part of each to make my raspberry doing what I wanted. I didn&rsquo;t find any complete tutorial to do it and I think it can be interesting for people who want to have the same use of their raspberry PIs.&rdquo;</em></p>
+
+<p>This was exactly what I needed. At that point I had my fingers crossed that it&rsquo;s descriptive enough and fairly recent.</p>
+
+<p>I started following the guide, however, with each and every step the instructions started mismatching reality more and more - some config files were located elsewhere, some values varied, others were completely missing&hellip;</p>
+
+<p>Some of the configs were changed quite some time ago so I wasn&rsquo;t quite surprised when I saw the date when the article was published:</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-0b969532.png" alt="" /></p>
+
+<p>While troubleshooting issue after issue I came across this <a href="https://www.raspberrypi.org/forums/viewtopic.php?t=133961">useful topic</a> that had some pretty useful commands on how to pair with a device from the <code>bluetoothctl</code> cli:</p>
+
+<pre><code>power on
+discoverable on
+agent on
+default-agent
+</code></pre>
+
+<p>These commands enable the bluetooth on the raspberry and make it discoverable by other devices.
+Basically the 101 on linux cli bluetooth :D
+Once my device tries to pair with the raspberry, the casual bluetooth pairing process occurs so nothing unusual there.</p>
+
+<h2 id="pi-would-not-find-its-bluetooth-adapter">Pi would not find its bluetooth adapter</h2>
+
+<p>However, I had some issues starting the bluetooth - the raspberry kept denying it had a bluetooth adapter. I restarted the <em>bluetooth systemd service</em>, restarted the pi several times and what not and it just kept refusing to admit it has a bluetooth adapter available.</p>
+
+<p>Since it didn&rsquo;t have any important data on it and because it had some nasty dependency issues with apt I decided to reflash it a brand new <a href="https://www.raspberrypi.org/downloads/raspbian/">raspbian</a> image.
+If you know me personally, you know that I&rsquo;m not much of a GUI user so I just installed the plain terminal version of raspbian without a desktop environment.</p>
+
+<p>What was quite weird was even though I flashed the most recent raspbian image, the raspberry continued to refuse it had a bluetooth adapter&hellip; WTF? I double checked the model and surely it had one.</p>
+
+<p>There was something more to this&hellip;</p>
+
+<p>I went deeper to figure out what&rsquo;s going on. After a few hours of debugging I finally found the root cause - it turned out that the <a href="https://dbus.freedesktop.org/doc/dbus-daemon.1.html">D-BUS message bus daemon</a> would not autostart without having a <code>$DISPLAY</code> set for X11:</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-5bf6ecb0.png" alt="" /></p>
+
+<h4 id="tl-dr-bluetooth-daemon-does-not-start-because-it-cannot-communicate-to-dbus-daemon-which-does-not-start-because-it-is-missing-a-desktop-environment">TL;DR - bluetooth daemon does not start because it cannot communicate to dbus daemon which does not start because it is missing a desktop environment&hellip;</h4>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-53ee2e8e.png" alt="" /></p>
+
+<p>Next thing I do:</p>
+
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    sudo apt install lxde</code></pre></div>
+
+<p>Having a desktop environment fixed all the dbus issues.
+Suddenly <code>hciconfig -a</code> started showing the bluetooth adapter as expected!</p>
+
+<h1 id="back-to-the-plan">Back to the plan</h1>
+
+<p>While debugging bluetooth issues, I came across this lovely <a href="https://gist.github.com/oleq/24e09112b07464acbda1">gist</a> that described the entire process and summarised it neatly:</p>
+
+<pre><code>Audio source (i.e. smartphone)
+             |
+             v
+(((  Bluetooth Channel  )))
+             |
+             v
+        Raspberry PI
+             |
+             v
+    USB Audio Interface
+             |
+             v
+          Speakers
+</code></pre>
+
+<p>Too bad I saw it when I had done most of it.</p>
+
+<p>I did some little tweaks to the quality of the sound in the pulseaudio config which I may upload at some point.
+Once everything was working, pulseaudio started seeing the bluez (bluetooth) audio source:</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-8cdd5278.png" alt="" /></p>
+
+<h4 id="after-pairing-the-pulseaudio-client-on-my-machine-managed-to-see-the-pulseaudio-on-the-raspberry-and-voala-the-speakers-started-playing-music-in-sync">After pairing, the pulseaudio client on my machine managed to see the pulseaudio on the raspberry and voala - the speakers started playing music in sync!</h4>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-18ce4bce.png" alt="" /></p>
+
+<h1 id="automate-the-world">Automate the world</h1>
+
+<p>There are 2 things to automate before calling it a day.
+Firstly, I had to make sure it is persistent - rebooting the raspberry is not uncommon at all and I want to make sure I&rsquo;ll skip the struggle of pairing again.</p>
+
+<p>Secondly, the pairing process is a quite inconvenient - to pair, one has to ssh into the pi, start bluetoothctl, run the commands I mentioned above (of course find them from somewhere) and keep fingers crossed that it&rsquo;ll work - exactly the opposite as how I imagine it.
+My flatmates that are studying computer science are afraid to do these steps to connect let alone anyone else&hellip;</p>
+
+<h1 id="let-s-see-if-it-s-persistent-reboot-the-pi">Let&rsquo;s see if it&rsquo;s persistent - reboot the pi</h1>
+
+<p>As expected, it is not :/ - after the pi booted, I could not connect back to it to start playing music.
+For some odd reason pulseaudio would not load its bluetooth module, hence I could not pair to it.</p>
+
+<p>After some googling, I found that I could specify which modules are loaded when pulseaudio starts. So the magic edit lives in <code>/etc/pulse/default.pa</code>:</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-2f2fa9a2.png" alt="" /></p>
+
+<p>The <code>load-module</code> line has to be uncommented.</p>
+
+<p>This sort of fixed the issue, but it still would make trouble.
+I still haven&rsquo;t figured out why, but when I list the media sources with <code>pactl list sources short</code>, pulseaudio does something and initializes the bluetooth module. Success!</p>
+
+<p>Now let&rsquo;s add this command to run on startup. One way of doing it is to create a <a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html">systemd service</a> and run it once on <code>graphical.target</code> and/or <code>reboot.target</code>.</p>
+
+<p>But me, being lazy, I know that I can run scripts by dropping a line in <code>/etc/rc.local</code>.
+Now this may not be the best way of doing it, but if it works - it ain&rsquo;t stupid.</p>
+
+<p>I popped that in, rebooted the pi but alas it failed to initialize the module&hellip; The most annoying part is that when I ssh into it and manually run the command, it works and now I can connect to the pi.</p>
+
+<p>It took me a while to figure out that apparently pulseaudio does not start as root but as the user &lsquo;pi&rsquo;:</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-1704d2ca.png" alt="" /></p>
+
+<p>The &lsquo;aha&rsquo; moment is that rc.local runs, but once it tries to execute <code>pactl</code> as root but it failes and because of the <code>#/bin/sh -e</code> at the beginning (the &lsquo;-e&rsquo;) it exits once that command fails and doesn&rsquo;t run anything else.
+So what I had to do in rc.local was run this command as &lsquo;pi&rsquo; and it would all work!</p>
+
+<p><code>su pi -c 'pactl list sources short</code></p>
+
+<p>Bam!</p>
+
+<p>Unfortunately, while debugging this, I made a little mess by creating a few <code>.service</code> files to run rc.local. Now the odd part is that if I delete them, rc.local does not get executed anymore but w/e :D
+It doesn&rsquo;t hurt to have a service running rc.local for you (this might be how it is run anyway).</p>
+
+<p>Here is how a service file looks like:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    <span style="color:#999;font-style:italic"># rc-local.service
+</span><span style="color:#999;font-style:italic"></span>    [Unit]
+    <span style="color:#40ffff">Description</span>=Start rc.local
+
+    [Service]
+    <span style="color:#40ffff">ExecStart</span>=/etc/rc.local
+
+    [Install]
+    <span style="color:#40ffff">WantedBy</span>=multi-user.target reboot.target</code></pre></div></p>
+
+<p>At last I got pulseaudio to initialize the bluetooth module properly so even if the pi gets rebooted, I would still be able to connect to it afterwards!</p>
+
+<h1 id="the-pairing-part">The pairing part</h1>
+
+<p>Now the seemingly easier part. You know when you have a bluetooth device you would normally have a &lsquo;pairing button&rsquo; which you would press when you want to pair to the device.
+Well the pi does not have one so I had to come up with some sort of replacement for it.</p>
+
+<p>The first thing that came to my mind was - well let&rsquo;s put a web endpoint that when accessed would run a pairing script that would take care of the pairing process. That shouldn&rsquo;t be that hard right?</p>
+
+<p>Wrong! Let me show you what went wrong.</p>
+
+<p>I started with the easiest part - the web endpoint:</p>
+
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt install python3-pip &amp;&amp; pip3 install flask</code></pre></div>
+
+<p>This is what my python web server looks like:</p>
+
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#999;font-style:italic"># webserver.py</span>
+<span style="color:#6ab825;font-weight:bold">import</span> <span style="color:#447fcf;text-decoration:underline">os</span>
+
+<span style="color:#6ab825;font-weight:bold">from</span> <span style="color:#447fcf;text-decoration:underline">flask</span> <span style="color:#6ab825;font-weight:bold">import</span> Flask
+app = Flask(__name__)
+
+<span style="color:#ffa500">@app.route</span>(<span style="color:#ed9d13">&#34;/&#34;</span>)
+<span style="color:#6ab825;font-weight:bold">def</span> <span style="color:#447fcf">index</span>():
+        <span style="color:#999;font-style:italic"># Pait with device</span>
+        os.system(<span style="color:#ed9d13">&#34;/home/pi/start_pairing.sh&#34;</span>)
+        <span style="color:#999;font-style:italic"># Add device to trusted devices</span>
+        cmd = <span style="color:#ed9d13">&#34;echo &#39;trust &#39;$(echo &#39;paired-devices&#39; | bluetoothctl 2&gt;/dev/null | grep paired-devices -A 1 | awk &#39;{print $2}&#39;| tail -n 1) | bluetoothctl&#34;</span>
+        os.system(cmd)
+        <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#ed9d13">&#34;Started pairing&#34;</span></code></pre></div>
+
+<p>The aim of this server is to run the pairing script upon receiving a request.
+It is the &ldquo;button&rdquo; you would normally press on a regular bluetooth device.</p>
+
+<h1 id="you-didn-t-expect-that">You didn&rsquo;t <em>expect</em> that</h1>
+
+<p>The pairing script is a simple <a href="https://linux.die.net/man/1/expect">expect</a> script that handles the pairing procedure within the <a href="http://www.linux-magazine.com/Issues/2017/197/Command-Line-bluetoothctl">bluetoothctl</a> cli.
+That&rsquo;s what it&rsquo;s like:</p>
+
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#cd2828;font-weight:bold">#!/usr/bin/expect -f
+</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># start_pairing.sh
+</span><span style="color:#999;font-style:italic"></span>
+<span style="color:#24909d">set</span> prompt <span style="color:#ed9d13">&#34;#&#34;</span>
+<span style="color:#24909d">set</span> timeout <span style="color:#3677a9">120</span>
+
+spawn bluetoothctl
+expect -re <span style="color:#ed9d13">&#34;</span><span style="color:#40ffff">$prompt</span><span style="color:#ed9d13">&#34;</span>
+send <span style="color:#ed9d13">&#34;discoverable on\r&#34;</span>
+sleep <span style="color:#3677a9">1</span>
+send <span style="color:#ed9d13">&#34;agent on\r&#34;</span>
+sleep <span style="color:#3677a9">1</span>
+send <span style="color:#ed9d13">&#34;default-agent\r&#34;</span>
+sleep <span style="color:#3677a9">1</span>
+expect <span style="color:#ed9d13">&#34;Default agent request successful*&#34;</span>
+<span style="color:#999;font-style:italic">#expect -re &#34;$prompt&#34;
+</span><span style="color:#999;font-style:italic"></span>expect <span style="color:#ed9d13">&#34;Request confirmation\r&#34;</span>
+expect <span style="color:#ed9d13">&#34;*Confirm passkey*&#34;</span>
+sleep <span style="color:#3677a9">5</span>
+send <span style="color:#ed9d13">&#34;yes\r&#34;</span>
+sleep <span style="color:#3677a9">3</span>
+<span style="color:#999;font-style:italic">#expect &#34;Authorize service\r\n&#34;
+</span><span style="color:#999;font-style:italic"></span>expect <span style="color:#ed9d13">&#34;yes/no*&#34;</span>
+sleep <span style="color:#3677a9">5</span>
+send <span style="color:#ed9d13">&#34;yes\r&#34;</span>
+sleep <span style="color:#3677a9">1</span>
+send <span style="color:#ed9d13">&#34;quit\r&#34;</span></code></pre></div>
+
+<p>The script is quite hacky with all the <em>sleeps</em> and what not but I reckon that&rsquo;s how expect scripts look like anyway and, oh well, <em>it works on my machine ™</em>.
+If you&rsquo;ve written similar scripts you know what a pain they are, and the bluetoothctl cli doesn&rsquo;t make it any easier with all the color encodings as well&hellip;</p>
+
+<p>One thing I found very useful while writing the script is the debug option - run your script with <code>expect -d script.sh</code>.
+The good thing is there is plenty of resources online for writing expect scripts so I won&rsquo;t go into details in here.
+Most issues I had were using the &lsquo;*&rsquo; in inappropriate places and that caused me some headaches, but apart from that it&rsquo;s quite straightforward.</p>
+
+<h1 id="trust-issues">Trust issues&hellip;</h1>
+
+<p>A fun thing I learned at this point was that <em>pairing</em> with a device does not mean that you <em>trust</em> this device.
+So once you pair, you need to add yourself to the trusted devices list on both sides.
+Otherwise each time you connect to the pi, you would need to open bluetoothctl and confirm the identity of the device.</p>
+
+<p>Now this part is make it or break it kind of thing - I just got that hacky expect script working and now I had to change it to automatically trust the last device that paired with it.</p>
+
+<p><img src="/images/07-raspberry-bluetooth-aux-setup-c7b7560b.png" alt="" /></p>
+
+<p>That was definitely a no-no so I had to find another way.
+Wouldn&rsquo;t it be cool if I could get the mac address of your bluetooth adapter when you connect to the flask server, and then pass it on as an argument to some script that would add it to the trusted devices list?</p>
+
+<p>I was really surprised when I found out that it is not possible to get that mac address via javascript :O
+Then I had a little &lsquo;is-this-even-possible&rsquo; moment in my head but after some more brainstorming I noticed that the <code>paired-devices</code> command in the bluetoothctl cli had a rather predictable behavior - the last paired device would always appear on top of the list - bingo!</p>
+
+<p>The bash one-liner below (and in <code>webserver.py</code>) gets the last paired device and adds it to the trusted devices list with the <code>trust AA:BB:CC:DD:EE:FF</code> command.<br />
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#39;trust &#39;</span><span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#39;paired-devices&#39;</span> | bluetoothctl <span style="color:#3677a9">2</span>&gt;/dev/null | grep paired-devices -A <span style="color:#3677a9">1</span> | awk <span style="color:#ed9d13">&#39;{print $2}&#39;</span>| tail -n <span style="color:#3677a9">1</span><span style="color:#6ab825;font-weight:bold">)</span> | bluetoothctl</code></pre></div></p>
+
+<p>Currently, the entire thing works alright-ish. The main issue is that it is quite inconsistent meaning that if it doesn&rsquo;t work the first time, you should retry and it might work the second time.
+Unfortunately, I couldn&rsquo;t spend more time fixing this because of coursework due dates and being sick of bluetooth and expect and mostly because it works on my machine therefore it works :D</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Overall, it was quite a fun experience and I learned a lot about bluetooth and gained some valuable <em>expect</em> experience.</p>
+
+<p>Making a raspberry pi act as a bluetooth speaker is a good way to practice your linux skills and also it is quite satisfying once you get it working. Here are some of the resources I found most useful while setting the raspberry up:</p>
+
+<p><a href="https://www.raspberrypi.org/forums/viewtopic.php?t=68779">Guide describing the same thing but from 2014</a></p>
+
+<p><a href="https://www.raspberrypi.org/forums/viewtopic.php?t=133961">bluetoothctl 101</a></p>
+
+<p><a href="https://gist.github.com/oleq/24e09112b07464acbda1">Project with similar aim</a></p>
+
+<p><a href="https://gist.github.com/Fluidbyte/6294378">TCL scripting basics</a></p>
+
+<p><a href="http://code.activestate.com/lists/expect/187/">Storing output into tcl variables</a></p>
+
+            </div>
+            
+            <div class="post-comments">
+                
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2018 Viktor Barzin
+<span class="credit">
+	
+	
+	
+	
+    
+</span>
+</p>
+</footer>
+
+
+    </body>

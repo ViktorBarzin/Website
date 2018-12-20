@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>07 Going musical - Setting up an improvised home audio system</title>
+      <link>https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/</link>
+      <pubDate>Thu, 20 Dec 2018 13:01:54 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/</guid>
+      <description>Introduction Some time ago myself and a friend of mine won these awesome bluetooth Logitech speakers
+The sound is quite decent, unfortunately connecting to both at the same time is a bit tricky and without having an external bluetooth adapter one could not easily play the same music on both.
+In this blog post I&amp;rsquo;ll show you how with a raspberry pi, some clever thinking and a fair amount of patience I managed to stream music simultaneously onto both.</description>
+    </item>
+    
+    <item>
       <title>06 In the big 4! - Facebook Application Experience</title>
       <link>https://viktorbarzin.me/blog/06-facebook-application-feedback/</link>
       <pubDate>Sun, 18 Nov 2018 19:31:50 +0000</pubDate>
