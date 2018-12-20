@@ -1,5 +1,5 @@
 ---
-title: "07 Raspberry Bluetooth Aux Setup"
+title: "07 Going musical - Setting up an improvised home audio system"
 date: 2018-12-16T13:01:54Z
 draft: true
 ---
@@ -13,7 +13,7 @@ Some time ago myself and a [friend of mine](https://www.facebook.com/atanunq/) w
 The sound is quite decent, unfortunately connecting to both at the same time is a bit tricky and
 without having an external bluetooth adapter one could not easily play the same music on both.
 
-In this blog post I'll show you how with a raspberry pi, some clever thinking and a decent amount of patience I managed to stream music simultaneously onto both.
+In this blog post I'll show you how with a raspberry pi, some clever thinking and a fair amount of patience I managed to stream music simultaneously onto both.
 
 # What's the issue?
 The thing with bluetooth is that if you have 1 adapter - you can connect to 1 receiver and that's it.
@@ -96,7 +96,7 @@ I went deeper to figure out what's going on. After a few hours of debugging I fi
 Next thing I do:
 
 {{< highlight bash >}}
-    apt install lxde
+    sudo apt install lxde
 {{< / highlight >}}
 
 Having a desktop environment fixed all the dbus issues.
@@ -280,7 +280,11 @@ Wouldn't it be cool if I could get the mac address of your bluetooth adapter whe
 
 I was really surprised when I found out that it is not possible to get that mac address via javascript :O
 Then I had a little 'is-this-even-possible' moment in my head but after some more brainstorming I noticed that the `paired-devices` command in the bluetoothctl cli had a rather predictable behavior - the last paired device would always appear on top of the list - bingo!
-The bash one-liner in `webserver.py` gets the last paired device and adds it to the trusted devices list with the `trust AA:BB:CC:DD:EE:FF` command.  
+
+The bash one-liner below (and in `webserver.py`) gets the last paired device and adds it to the trusted devices list with the `trust AA:BB:CC:DD:EE:FF` command.  
+{{< highlight bash >}}
+echo 'trust '$(echo 'paired-devices' | bluetoothctl 2>/dev/null | grep paired-devices -A 1 | awk '{print $2}'| tail -n 1) | bluetoothctl
+{{< / highlight >}}
 
 Currently, the entire thing works alright-ish. The main issue is that it is quite inconsistent meaning that if it doesn't work the first time, you should retry and it might work the second time.
 Unfortunately, I couldn't spend more time fixing this because of coursework due dates and being sick of bluetooth and expect and mostly because it works on my machine therefore it works :D
