@@ -6,7 +6,7 @@ draft: false
 
 # Introduction
 
-Some time ago myself and a [friend of mine](https://www.facebook.com/atanunq/) won these awesome bluetooth [Logitech speakers](https://www.logitech.com/en-us/product/z537-bluetooth-speaker-system)
+Some time ago myself and a [friend of mine](https://www.linkedin.com/in/atanas-yankov/) won these awesome bluetooth [Logitech speakers](https://www.logitech.com/en-us/product/z537-bluetooth-speaker-system)
 
 ![](/images/07-raspberry-bluetooth-aux-setup-6c366282.png)
 
