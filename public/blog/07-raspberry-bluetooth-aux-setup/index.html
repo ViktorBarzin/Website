@@ -205,7 +205,7 @@ If you know me personally, you know that I&rsquo;m not much of a GUI user so I j
 
 <p>Next thing I do:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    sudo apt install lxde</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt install lxde</code></pre></div>
 
 <p>Having a desktop environment fixed all the dbus issues.
 Suddenly <code>hciconfig -a</code> started showing the bluetooth adapter as expected!</p>
@@ -284,15 +284,15 @@ So what I had to do in rc.local was run this command as &lsquo;pi&rsquo; and it 
 It doesn&rsquo;t hurt to have a service running rc.local for you (this might be how it is run anyway).</p>
 
 <p>Here is how a service file looks like:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    <span style="color:#999;font-style:italic"># rc-local.service
-</span><span style="color:#999;font-style:italic"></span>    [Unit]
-    <span style="color:#40ffff">Description</span>=Start rc.local
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># rc-local.service
+</span><span style="color:#999;font-style:italic"></span>[Unit]
+<span style="color:#40ffff">Description</span>=Start rc.local
 
-    [Service]
-    <span style="color:#40ffff">ExecStart</span>=/etc/rc.local
+[Service]
+<span style="color:#40ffff">ExecStart</span>=/etc/rc.local
 
-    [Install]
-    <span style="color:#40ffff">WantedBy</span>=multi-user.target reboot.target</code></pre></div></p>
+[Install]
+<span style="color:#40ffff">WantedBy</span>=multi-user.target reboot.target</code></pre></div></p>
 
 <p>At last I got pulseaudio to initialize the bluetooth module properly so even if the pi gets rebooted, I would still be able to connect to it afterwards!</p>
 

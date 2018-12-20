@@ -96,7 +96,7 @@ I went deeper to figure out what's going on. After a few hours of debugging I fi
 Next thing I do:
 
 {{< highlight bash >}}
-    sudo apt install lxde
+sudo apt install lxde
 {{< / highlight >}}
 
 Having a desktop environment fixed all the dbus issues.
@@ -173,15 +173,15 @@ It doesn't hurt to have a service running rc.local for you (this might be how it
 
 Here is how a service file looks like:
 {{< highlight bash >}}
-    # rc-local.service
-    [Unit]
-    Description=Start rc.local
+# rc-local.service
+[Unit]
+Description=Start rc.local
 
-    [Service]
-    ExecStart=/etc/rc.local
+[Service]
+ExecStart=/etc/rc.local
 
-    [Install]
-    WantedBy=multi-user.target reboot.target
+[Install]
+WantedBy=multi-user.target reboot.target
 
 {{< / highlight >}}
 
