@@ -54,3 +54,15 @@ git filter-branch --force --index-filter \
 ----------------------------------------
 
 python selenium guide?
+
+----------------------------------------
+
+pulse audio network music streaming
+
+----------------------------------------
+
+PXE server
+
+----------------------------------------
+
+Kubernetes

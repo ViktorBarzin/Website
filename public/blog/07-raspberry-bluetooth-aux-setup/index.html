@@ -6,7 +6,7 @@
 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.47.1" />
+<meta name="generator" content="Hugo 0.37.1" />
 
 
 
@@ -98,6 +98,36 @@ owa_cmds.push(['trackClicks']);
 
 </script>
 
+
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https://viktorbarzin.me/"
+    },
+    "articleSection" : "blog",
+    "name" : "07 Going musical - Setting up an improvised home audio system",
+    "headline" : "07 Going musical - Setting up an improvised home audio system",
+    "description" : "Introduction Some time ago myself and a friend of mine won these awesome bluetooth Logitech speakers
+The sound is quite decent, unfortunately connecting to both at the same time is a bit tricky and without having an external bluetooth adapter one could not easily play the same music on both.
+In this blog post I&rsquo;ll show you how with a raspberry pi, some clever thinking and a fair amount of patience I managed to stream music simultaneously onto both.",
+    "inLanguage" : "en-US",
+    "author" : "",
+    "creator" : "",
+    "publisher": "",
+    "accountablePerson" : "",
+    "copyrightHolder" : "",
+    "copyrightYear" : "20128",
+    "datePublished": "2018-12-20 13:01:54 &#43;0000 UTC",
+    "dateModified" : "2018-12-20 13:01:54 &#43;0000 UTC",
+    "url" : "https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/",
+    "wordCount" : "2442",
+    "keywords" : [ "Blog" ]
+}
+</script>
 
 </header>
 
@@ -312,19 +342,19 @@ Well the pi does not have one so I had to come up with some sort of replacement 
 <p>This is what my python web server looks like:</p>
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#999;font-style:italic"># webserver.py</span>
-<span style="color:#6ab825;font-weight:bold">import</span> <span style="color:#447fcf;text-decoration:underline">os</span>
+<span style="color:#6ab825;font-weight:bold">import</span> <span style="color:#447fcf">os</span>
 
-<span style="color:#6ab825;font-weight:bold">from</span> <span style="color:#447fcf;text-decoration:underline">flask</span> <span style="color:#6ab825;font-weight:bold">import</span> Flask
+<span style="color:#6ab825;font-weight:bold">from</span> <span style="color:#447fcf">flask</span> <span style="color:#6ab825;font-weight:bold">import</span> Flask
 app = Flask(__name__)
 
-<span style="color:#ffa500">@app.route</span>(<span style="color:#ed9d13">&#34;/&#34;</span>)
+<span style="color:#ffa500">@app.route</span>(<span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;/&#34;</span>)
 <span style="color:#6ab825;font-weight:bold">def</span> <span style="color:#447fcf">index</span>():
         <span style="color:#999;font-style:italic"># Pait with device</span>
-        os.system(<span style="color:#ed9d13">&#34;/home/pi/start_pairing.sh&#34;</span>)
+        os.system(<span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;/home/pi/start_pairing.sh&#34;</span>)
         <span style="color:#999;font-style:italic"># Add device to trusted devices</span>
-        cmd = <span style="color:#ed9d13">&#34;echo &#39;trust &#39;$(echo &#39;paired-devices&#39; | bluetoothctl 2&gt;/dev/null | grep paired-devices -A 1 | awk &#39;{print $2}&#39;| tail -n 1) | bluetoothctl&#34;</span>
+        cmd = <span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;echo &#39;trust &#39;$(echo &#39;paired-devices&#39; | bluetoothctl 2&gt;/dev/null | grep paired-devices -A 1 | awk &#39;{print $2}&#39;| tail -n 1) | bluetoothctl&#34;</span>
         os.system(cmd)
-        <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#ed9d13">&#34;Started pairing&#34;</span></code></pre></div>
+        <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;Started pairing&#34;</span></code></pre></div>
 
 <p>The aim of this server is to run the pairing script upon receiving a request.
 It is the &ldquo;button&rdquo; you would normally press on a regular bluetooth device.</p>
