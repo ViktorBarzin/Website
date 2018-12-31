@@ -1,9 +1,13 @@
 ---
+author : "Viktor Barzin"
 title: "02 Blog a Blog - The creation of this site"
 date: 2018-09-17T15:36:49+03:00
 draft: false
 sitemap:
    priority: 0.3
+firstImgUrl: "https://viktorbarzin.me/images/02-blog-a-blog-278df7d1.png"
+description: "In this blogpost I show you how I setup my website - all the way from buying the domain, setting up the production server and setting up git hooks to automate deployment process."
+tags: ["DNS", "GoDaddy", "Let's encrypt", "Domain parking", "Automation", "git bare repository", "git hooks", "nginx", "docker", "container", "ansible"]
 ---
 
 # Intro
