@@ -1,7 +1,11 @@
 ---
+author : "Viktor Barzin"
 title: "06 In the big 4! - Facebook Application Experience"
 date: 2018-11-18T19:31:50Z
 draft: false
+firstImgUrl: "/images/06-Facebook-Application-Feedback-5fbb016d.png"
+description: "In this blogpost I share my experience from my application process with Facebook which resulted with an offer and some tips and tricks on what I believe made me a successful candidate."
+tags: ["Facebook", "Production Engineer Internship", "London", "2019", "CV", "Online test", "technical interview", "Coding interview", "Systems interview", "Big O complexity", "Clean code", "Uncle Bob", "Cracking the coding interview", "Data structures and algorithms"]
 ---
 
 # Introduction
