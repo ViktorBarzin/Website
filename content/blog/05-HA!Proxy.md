@@ -1,9 +1,13 @@
 ---
+author : "Viktor Barzin"
 title: "05 HA!Proxy - Discovering the wonders of proxying and load balancing"
 date: 2018-10-14T14:04:13+01:00
 draft: false
 sitemap:
    priority: 0.3
+firstImgUrl: "/images/05-HA!Proxy-b5202366.png"
+description: "In this blogpost I show you my experience load-balancing and proxying with HAProxy."
+tags: ["HAProxy", "DNS", "HAProxy config", "HAProxy Access-control-list", "Host header", "linux networking"]
 ---
 
 # Introduction
