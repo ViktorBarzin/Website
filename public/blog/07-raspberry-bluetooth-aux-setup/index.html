@@ -124,6 +124,7 @@ owa_cmds.push(['trackClicks']);
     "dateModified" : "2018-12-20 13:01:54 &#43;0000 UTC",
     "url" : "https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/",
     "wordCount" : "2442",
+    "image": 	"/images/07-raspberry-bluetooth-aux-setup-6c366282.png",
     "keywords" : [ "raspberrypi","bluetooth","logitech","speakers","linux","systemd","rc.local","volumio","flask","expect","Blog" ]
 }
 </script>
@@ -414,7 +415,7 @@ Wouldn&rsquo;t it be cool if I could get the mac address of your bluetooth adapt
 <p>I was really surprised when I found out that it is not possible to get that mac address via javascript :O
 Then I had a little &lsquo;is-this-even-possible&rsquo; moment in my head but after some more brainstorming I noticed that the <code>paired-devices</code> command in the bluetoothctl cli had a rather predictable behavior - the last paired device would always appear on top of the list - bingo!</p>
 
-<p>The bash one-liner below (and in <code>webserver.py</code>) gets the last paired device and adds it to the trusted devices list with the <code>trust AA:BB:CC:DD:EE:FF</code> command.<br />
+<p>The bash one-liner below (and in <code>webserver.py</code>) gets the last paired device and adds it to the trusted devices list with the <code>trust AA:BB:CC:DD:EE:FF</code> command.
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#39;trust &#39;</span><span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#39;paired-devices&#39;</span> | bluetoothctl <span style="color:#3677a9">2</span>&gt;/dev/null | grep paired-devices -A <span style="color:#3677a9">1</span> | awk <span style="color:#ed9d13">&#39;{print $2}&#39;</span>| tail -n <span style="color:#3677a9">1</span><span style="color:#6ab825;font-weight:bold">)</span> | bluetoothctl</code></pre></div></p>
 
 <p>Currently, the entire thing works alright-ish. The main issue is that it is quite inconsistent meaning that if it doesn&rsquo;t work the first time, you should retry and it might work the second time.
