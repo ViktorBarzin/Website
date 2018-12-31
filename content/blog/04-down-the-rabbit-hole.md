@@ -1,9 +1,13 @@
 ---
+author : "Viktor Barzin"
 title: "04 Down the Rabbit Hole - How a simple monitoring task lead me to compiling a custom version of OpenWRT"
 date: 2018-10-08T10:04:27+01:00
 draft: false
 sitemap:
    priority: 0.3
+firstImgUrl: "/images/04-down-the-rabbit-hole-e955cc2d.png"
+description: "In this blogpost I show you my experience of setting up a monitoring service for my website via my OpenWRT router and the ugly hacks I used to make it work."
+tags: ["monitor access logs", "OpenWrt", "iptables", "logstash", "elk", "OSI layers", "nginx proxy_pass", "log_format", "nginx ssl support", "recompile OpenWrt", "opkg", "HAProxy", "Temrinating ssl proxy", "certificates", "luci"]
 ---
 
 # Introduction
