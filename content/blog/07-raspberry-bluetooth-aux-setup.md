@@ -1,7 +1,11 @@
 ---
+author : "Viktor Barzin"
 title: "07 Going musical - Setting up an improvised home audio system"
 date: 2018-12-20T13:01:54Z
+description: "In this blogpost I share my experience setting up an improvised audio system that consists of a raspberry pi and 2 bluetooth speakers"
+tags: ["raspberrypi", "bluetooth", "logitech", "speakers", "linux", "systemd", "rc.local", "volumio", "flask", "expect"]
 draft: false
+firstImgUrl: "https://viktorbarzin.me/images/07-raspberry-bluetooth-aux-setup-6c366282.png"
 ---
 
 # Introduction
@@ -281,7 +285,7 @@ Wouldn't it be cool if I could get the mac address of your bluetooth adapter whe
 I was really surprised when I found out that it is not possible to get that mac address via javascript :O
 Then I had a little 'is-this-even-possible' moment in my head but after some more brainstorming I noticed that the `paired-devices` command in the bluetoothctl cli had a rather predictable behavior - the last paired device would always appear on top of the list - bingo!
 
-The bash one-liner below (and in `webserver.py`) gets the last paired device and adds it to the trusted devices list with the `trust AA:BB:CC:DD:EE:FF` command.  
+The bash one-liner below (and in `webserver.py`) gets the last paired device and adds it to the trusted devices list with the `trust AA:BB:CC:DD:EE:FF` command.
 {{< highlight bash >}}
 echo 'trust '$(echo 'paired-devices' | bluetoothctl 2>/dev/null | grep paired-devices -A 1 | awk '{print $2}'| tail -n 1) | bluetoothctl
 {{< / highlight >}}
