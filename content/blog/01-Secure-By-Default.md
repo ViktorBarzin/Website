@@ -5,7 +5,7 @@ date: 2018-09-08T13:44:49+01:00
 draft: false
 sitemap:
    priority: 0.3
-firstImgUrl: "https://vitorbarzin.me/images/01-Secure-By-Default-cf13175f.png"
+firstImgUrl: "https://viktorbarzin.me/images/01-Secure-By-Default-cf13175f.png"
 tags: ["Django", "CSRF", "cross-site request forgery", "CSRF tokens", "CSRFview middleware", "SameOrigin", "X-Frame-Options", "Cookies"]
 description: "In this blogpost I demonstrate how dnagerous Cross-site request forgery (CSRF) is and how web frameworks like Django protect us againts this attack."
 ---
