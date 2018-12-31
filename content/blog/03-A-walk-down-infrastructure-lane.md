@@ -1,9 +1,13 @@
 ---
+author : "Viktor Barzin"
 title: "03 A Walk Down Infrastructure Lane - My Home Lab Setup"
 date: 2018-09-28T15:36:21+03:00
 draft: false
 sitemap:
    priority: 0.3
+firstImgUrl: "https://viktorbarzin.me/images/03-A-walk-down-infrastructure-lane-9fa36db1.png"
+description: "In this blogpost I show you what my home lab looks like and some of the more interesting machines and services that I've setup."
+tags: ["network topology", "vpn", "openvpn", "pfsense", "firewall", "containers", "elastic stack", "mail server", "windows domain controller", "openfiler", "nginx web server", "privatebin", "socks5 proxy", "open web analytics", "vCenter server appliance", "zabbix", "OpenWrt", "linux"]
 ---
 
 # Intro
