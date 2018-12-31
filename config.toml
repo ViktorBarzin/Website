@@ -10,8 +10,8 @@ disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
 
 [taxonomies]
 
-
 [params]
+Author = "Viktor Barzin"
 Name = "Viktor Barzin"
 HeaderUsername = "viktor"
 HeaderHostname = "web"
