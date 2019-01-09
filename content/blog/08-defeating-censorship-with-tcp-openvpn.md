@@ -1,6 +1,10 @@
 ---
 title: "08 Defeating Censorship And Improviing Security With Openvpn On Port 443"
 date: 2019-01-09T10:10:13Z
+author: "Viktor Barzin"
+description: ""
+tags: ""
+firstImgUrl: "https://viktorbarzin.me/"
 draft: true
 ---
 

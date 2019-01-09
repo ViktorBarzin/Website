@@ -22,7 +22,7 @@ This post will be shorter than usual because **I am a bit low on time** since **
 
 # Let's get started
 
-In the [end of last week's post](blog/04-down-the-rabbit-hole/#time-to-haproxy) I ended up **using HAProxy to proxy connections made to my router at home to my container hosting the website**.
+In the [end of last week's post](/blog/04-down-the-rabbit-hole/#time-to-haproxy) I ended up **using HAProxy to proxy connections made to my router at home to my container hosting the website**.
 I went through a lot of hassle but in the end I was able to **log the original client's IP address** which I passed as a header from HAProxy to my web server.
 
 I will not go through that again. If you are curiuos feel free to read [the whole story](blog/04-down-the-rabbit-hole/#time-to-haproxy).
