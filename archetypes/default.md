@@ -6,7 +6,7 @@ author: "{{ .Site.Params.Author }}"
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 description: ""
-tags: ""
+tags: []
 firstImgUrl: "https://viktorbarzin.me/"
 draft: true
 ---
