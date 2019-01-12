@@ -6,10 +6,20 @@
     <description>Recent content on Viktor Barzin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Dec 2018 13:01:54 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 12 Jan 2019 10:10:13 +0000</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>08 Defeating Censorship And Improving Security With OpenVPN</title>
+      <link>https://viktorbarzin.me/blog/08-defeating-censorship-with-tcp-openvpn/</link>
+      <pubDate>Sat, 12 Jan 2019 10:10:13 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/08-defeating-censorship-with-tcp-openvpn/</guid>
+      <description>Introduction I do happen to travel from time to time and in order to stay online I have to use insecure public wifi. Everyone who understands a bit about network security knows the risks of connecting to unsafe networks and how dangerous they could be.
+One of the most common solutions to this problem, including mine, is a VPN service. That&amp;rsquo;s all great, however, more and more network administrators put effort into blocking VPN traffic.</description>
+    </item>
     
     <item>
       <title>07 Going musical - Setting up an improvised home audio system</title>
