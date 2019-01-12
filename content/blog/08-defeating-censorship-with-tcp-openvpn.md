@@ -4,7 +4,7 @@ date: 2019-01-12T10:10:13Z
 author: "Viktor Barzin"
 description: "In this blogpost I show you how I set up multiple OpenVPN instances - one running on port 443/tcp to mask it as regular HTTPS traffic and avoid being blocked. I show how to do it and also some neat tricks about systemd and debugging openvpn-related networking issues."
 tags: ["OpenVPN", "tcp OpenVPN", "port 443/tcp", "iptables", "SSL/TLS", "TLS", "multiple openvpn", "systemd", "service files", "systemd services", "openvpn-server@.service", "OpenWRT tunneling openvpn traffic", "firewall", "routing", "learn-address", "static routes", "sudoers", "/sbin/ip", "linux capabilities", "CapabilityBoundingSet"]
-firstImgUrl: "https://viktorbarzin.me/images/08-defeating-censorship-with-tcp-openvpn-072ee9b6.png"
+firstImgUrl: "https://viktorbarzin.me/images/08-defeating-censorship-with-tcp-openvpn-072ee9b6-ln.png"
 draft: false
 ---
 
