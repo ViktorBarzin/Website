@@ -15,7 +15,7 @@ You can find me on [facebook](https://www.facebook.com/viktor.barzin), [twitter]
 
 I'm all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
 
-In my free time I watch Formula 1, play chess and soon I'll be jumping out of planes
+In my free time I watch Formula 1, play chess, go and soon I'll be jumping out of planes
 
 ![](/images/index-f170bc66.png)
 
