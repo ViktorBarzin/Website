@@ -1,6 +1,6 @@
 ---
 title: "09 Peeling the layers of security with Security Onion"
-date: 2019-01-21T15:18:44Z
+date: 2019-01-23T15:18:44Z
 author: "Viktor Barzin"
 description: "In this blogpost I share my experience of integrating Security Onion appliance in my home environment. I faced some quite interesting netowrking issues and learned quite a lot including how Security Onion sensors work, how exactly the promiscuous mode on VMware vSwitch works and lots more."
 tags: ["pfSense", "security onion", "vmware esxi", "vmware vSwitch", "vSwitch", "Elasticsearch", "Logstash", "Kibana", "Snort", "Suricata", "Bro", "Wazuh", "Sguil", "Squert", "CyberChef", "OpenWRT", "pfSense logging", "tcpdump", "packetbeat", "vSwitch promiscuous mode", "vSwitch", "pfSense bridge"]
