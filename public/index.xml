@@ -6,10 +6,21 @@
     <description>Recent content on Viktor Barzin (Viktor Barzin&#39;s Website And Personal Blog)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Jan 2019 10:10:13 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 23 Jan 2019 10:18:44 +0000</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>09 Peeling the layers of security with Security Onion</title>
+      <link>https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/</link>
+      <pubDate>Wed, 23 Jan 2019 10:18:44 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/</guid>
+      <description>Introduction This time round, I&amp;rsquo;ll share my experience with Security Onion and the journey of setting it up in my environment.
+I will skip the dull installation process (everyone can click next at the prompts) and rather show you how it fits in my increasingly complex network topology. The focus of this blogpost will be on the interconnection between pfSense, VMWare ESXi and Security Onion.
+Prerequisites Before reading further on, I&amp;rsquo;d recommend familiarizing yourself with pfSense and the awesome stuff it can do.</description>
+    </item>
     
     <item>
       <title>08 Defeating Censorship And Improving Security With OpenVPN</title>
