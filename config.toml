@@ -5,6 +5,7 @@ theme = "hugo-theme-nix"
 pygmentsCodeFences = true
 pygmentsstyle = "native"
 disqusShortname = "viktorbarzin"
+googleAnalytics = "UA-132992428-1"
 
 disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
 
