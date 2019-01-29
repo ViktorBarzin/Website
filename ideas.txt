@@ -66,3 +66,16 @@ PXE server
 ----------------------------------------
 
 Kubernetes
+
+----------------------------------------
+
+twitter cards
+
+add twitter: meta tags
+validator fails - https://cards-dev.twitter.com/validator
+curl fails to validate certificate, maybe that's the issue?
+
+update and replace certificate
+    still issues
+
+cat fullchain.pem privkey.pem > viktorbarzin.me.pem - and done, it was supposed to work this way initially but something has gone wrong
