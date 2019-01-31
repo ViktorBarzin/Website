@@ -58,6 +58,15 @@ python selenium guide?
 ----------------------------------------
 
 pulse audio network music streaming
+https://blog.stigok.com/2018/09/17/pi-pulseaudio-network-stream-audio-linux.html
+https://askubuntu.com/questions/151216/how-can-i-force-the-rediscovery-of-pulseaudio-virtual-sound-devices
+https://www.raspberrypi.org/forums/viewtopic.php?t=11124
+https://blogs.gnome.org/ignatenko/2015/07/31/how-to-set-up-network-audio-server-based-on-pulseaudio-and-auto-discovered-via-avahi/
+https://wiki.archlinux.org/index.php/PulseAudio/Examples#PulseAudio_over_network
+https://www.willprice.org/2013/05/10/pulseaudio-network-streaming.html
+
+https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/#index22h3
+https://raspberrypi.stackexchange.com/questions/11735/using-pi-to-stream-all-audio-output-from-my-pc-to-my-stereo
 
 ----------------------------------------
 
