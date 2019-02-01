@@ -10,7 +10,7 @@ Hi there! I'm Viktor.
 
 I'm {{ whatever year we are currently }} - 1998 years old and I'm currently doing my BSc in Computer Science at the [University of Southampton](https://www.southampton.ac.uk/).
 
-You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin), [linkedin](https://linkedin.com/in/viktor-barzin) and [twitter](https://twitter.com/ViktorBarzin). 
+You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin), [linkedin](https://linkedin.com/in/viktor-barzin) and [twitter](https://twitter.com/ViktorBarzin).
 
 
 I'm all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
@@ -50,4 +50,4 @@ I also enjoy programming so I often find myself at various Hackatons winning stu
 <sup>(05-2016)</sup>
 
 ### <h3>What information can you find on this site?</h3>
-The website will mostly be me sharing my experience with various technologies. I will try to post new articles every week with the technologies I've come across.
+The website will mostly be me sharing my experience with various technologies. I'll post new articles every now and then on various technologies I've come across.
