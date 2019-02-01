@@ -10,7 +10,7 @@ Hi there! I'm Viktor.
 
 I'm {{ whatever year we are currently }} - 1998 years old and I'm currently doing my BSc in Computer Science at the [University of Southampton](https://www.southampton.ac.uk/).
 
-You can find me on [facebook](https://www.facebook.com/viktor.barzin), [twitter](https://twitter.com/ViktorBarzin) and [github](https://github.com/ViktorBarzin).
+You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin),[linkedin](https://linkedin.com/in/viktor-barzin) and [twitter](https://twitter.com/ViktorBarzin). 
 
 
 I'm all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
