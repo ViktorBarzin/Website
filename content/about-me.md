@@ -8,7 +8,7 @@ sitemap:
 
 Hi there! I'm Viktor.
 
-I'm {{ current_year }} - 1998 years old and I'm currently doing my BSc in Computer Science at the [University of Southampton](https://www.southampton.ac.uk/).
+I'm {{ whatever year we are currently }} - 1998 years old and I'm currently doing my BSc in Computer Science at the [University of Southampton](https://www.southampton.ac.uk/).
 
 You can find me on [facebook](https://www.facebook.com/viktor.barzin), [twitter](https://twitter.com/ViktorBarzin) and [github](https://github.com/ViktorBarzin).
 

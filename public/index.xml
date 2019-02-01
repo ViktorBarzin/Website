@@ -113,7 +113,7 @@ If you find yourself having a similar answer, keep on reading.</description>
       
       <guid>https://viktorbarzin.me/about-me/</guid>
       <description>Hi there! I&amp;rsquo;m Viktor.
-I&amp;rsquo;m {{ current_year }} - 1998 years old and I&amp;rsquo;m currently doing my BSc in Computer Science at the University of Southampton.
+I&amp;rsquo;m {{ whatever year we are currently }} - 1998 years old and I&amp;rsquo;m currently doing my BSc in Computer Science at the University of Southampton.
 You can find me on facebook, twitter and github.
 I&amp;rsquo;m all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
 In my free time I watch Formula 1, play chess, go and soon I&amp;rsquo;ll be jumping out of planes</description>
