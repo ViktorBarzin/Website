@@ -1,6 +1,6 @@
 baseURL = "https://viktorbarzin.me/"
 languageCode = "en-us"
-title = "Viktor Barzin (Viktor Barzin's Website And Personal Blog)"
+title = "Viktor Barzin (Viktor Barzin's Website)"
 theme = "hugo-theme-nix"
 pygmentsCodeFences = true
 pygmentsstyle = "native"
