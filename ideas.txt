@@ -88,3 +88,48 @@ update and replace certificate
     still issues
 
 cat fullchain.pem privkey.pem > viktorbarzin.me.pem - and done, it was supposed to work this way initially but something has gone wrong
+
+----------------------------------------
+
+kdeconnect + youtube-dl + python clap detection = profit
+
+youtube-dl docs on string formatting
+https://github.com/rg3/youtube-dl/blob/master/README.md#output-template-examples
+
+bash traps to kill all children on script exit
+http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_12_02.html
+
+bash formatting numbers in for loop
+https://stackoverflow.com/questions/8789729/how-to-zero-pad-a-sequence-of-integers-in-bash-so-that-all-have-the-same-width
+
+xargs weird behaviour
+https://stackoverflow.com/questions/199266/make-xargs-execute-the-command-once-for-each-line-of-input#comment45908536_199270
+
+bash $SECONDS variable to time
+https://stackoverflow.com/questions/8903239/how-to-calculate-time-difference-in-bash-script
+
+bash number comparison
+https://stackoverflow.com/questions/18668556/comparing-numbers-in-bash
+
+python clap detector
+https://stackoverflow.com/questions/4160175/detect-tap-with-pyaudio-from-live-mic
+https://github.com/xSparfuchs/clap-detection/blob/master/clap-detection.py
+
+pyaudio library to connect to alsa
+https://pypi.org/project/PyAudio/
+
+-------------------- Future work --------------------
+vlc-ctrl - control vlc over dbus for more advanced instructions
+https://pypi.org/project/vlc-ctrl/
+
+control media players cli
+https://www.ostechnix.com/control-media-players-commandline-linux/
+
+pactl set default sink
+https://askubuntu.com/questions/71863/how-to-change-pulseaudio-sink-with-pacmd-set-default-sink-during-playback
+
+playerctl
+https://github.com/acrisci/playerctl
+
+
+----------------------- Tracking pixels -----------------
