@@ -133,3 +133,17 @@ https://github.com/acrisci/playerctl
 
 
 ----------------------- Tracking pixels -----------------
+
+----------------------- LaFortuna DuckyScript -----------------------
+
+atmel usb keyboard demo wandering
+keyboard_task.c - Usb_write_byte
+usb_keys - list of keys to be send
+_delay_ms to wait for initializing on the host
+
+python to parse DuckyScript and create usb_keys array
+Usb_write_byte modifier keys
+bitwise or to send multiple modifiers
+
+_delay_ms requires constant sleep time - so loop constant times :P
+https://www.avrfreaks.net/forum/error-1-builtinavrdelaycycles-expects-integer-constant
