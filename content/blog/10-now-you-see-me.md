@@ -204,7 +204,7 @@ $ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p 
 ```
 Finally change the source code of the application to use camera id *2* instead of *0* (default) and it magically works!
 
-![](/images/10-home-face-recognizer-0c438cd8.png)
+<img style="width:50%" src="/images/10-home-face-recognizer-0c438cd8.png" />
 
 # Upcoming imporvements
 
