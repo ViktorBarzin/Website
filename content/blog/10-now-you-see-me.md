@@ -9,7 +9,6 @@ firstImgUrl: "https://viktorbarzin.me/images/10-preview-resized.png"
 ---
 
 # Pre-Intro
-![](/images/10-now-you-see-me-d039cfd3.png)
 It's been a long time since my last blog post.
 
 I've been quite busy recently, playing around with [Go](https://golang.org/),
