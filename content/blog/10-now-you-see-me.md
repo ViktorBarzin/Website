@@ -1,6 +1,6 @@
 ---
 title: "10 Now you see me..."
-date: 2019-05-18T17:24:22Z
+date: 2019-05-18T14:24:22Z
 draft: false
 author: "Viktor Barzin"
 description: "Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult."

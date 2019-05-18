@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> 10 Now you see me... &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
+
+		<meta property='og:title' content="10 Now you see me..."/>
+<meta property="og:image" content="https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8.png" />
+<meta property="og:description" content="Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult." />
+<meta property='og:url' content="https://viktorbarzin.me/blog/10-now-you-see-me/" />
+<meta property='og:type' content="website" />
+<meta property="og:site_name" content="Viktor Barzin (Viktor Barzin&#39;s Website And Personal Blog)" />
+<meta name="description" content="Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult." />
+
+<meta name="twitter:title" content="10 Now you see me..." />
+<meta name="twitter:description" content="Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult." />
+<meta name="twitter:image" content="https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8.png" />
+<meta name="twitter:site" content="@viktorbarzin" />
+<meta name="twitter:creator" content="@viktorbarzin" />
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/viktorbarzin.me\/"
+    },
+    "articleSection" : "blog",
+    "name" : "10 Now you see me...",
+    "headline" : "10 Now you see me...",
+    "description" : "Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult.",
+    "inLanguage" : "en-US",
+    "author" : {
+        "@type": "Person",
+        "name": "Viktor Barzin",
+        "image": "",
+        "url": "https://viktorbarzin.me/",
+        "description": "I've been digging into Programming for quite some time now. My passion for technology has grown into cyber security and automation. I love ot go offline, watch Formula 1, play cheess and go skiing."
+    },
+    "creator" : "Viktor Barzin",
+    "publisher": {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "Viktor Barzin",
+        "sameAs": [
+            "https://www.facebook.com/viktor.barzin",
+            "https://github.com/ViktorBarzin",
+            "https://twitter.com/ViktorBarzin",
+            "https://www.linkedin.com/in/viktor-barzin/"
+        ],
+        "url": "https://viktorbarzin.me",
+        "name": "Viktor Barzin",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://viktorbarzin.me/images/profile-picture.jpeg"
+        }
+    },
+    "accountablePerson" : "Viktor Barzin",
+    "copyrightHolder" : "Viktor Barzin",
+    "copyrightYear" : "18058",
+    "datePublished": "2019-05-18 14:24:22 \x2b0000 UTC",
+    "dateModified" : "2019-05-18 14:24:22 \x2b0000 UTC",
+    "url" : "https:\/\/viktorbarzin.me\/blog\/10-now-you-see-me\/",
+    "wordCount" : "1685",
+    "image": 	"https:\/\/viktorbarzin.me\/images\/10-home-face-recognizer-0c438cd8.png",
+    "keywords" : [ "OpenCV","python","machine learning","raspberry pi","RTSP","character devices","block devices","kernel modules","mknod","virtual camera","ffmpeg","vlc","IP Camera","v4l2","video4linux2 loopback","dummy device","Blog" ]
+}
+</script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+
+
+
+
+<script src="/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://viktorbarzin.me/css/nix.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+
+
+<script src="/google-analytics.js" type="application/javascript"></script>
+<script async src='//www.google-analytics.com/analytics.js'type="application/javascript"></script>
+
+
+    </head>
+
+    <body>
+        <header>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse font-header">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" id="green-terminal" href=https://viktorbarzin.me/>viktor@web ~ $</a>
+		</div>
+
+		
+		<div class="collapse navbar-collapse" id="navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="https://viktorbarzin.me/">/home/viktor</a>
+				</li>
+				
+				
+				<li class="dropdown">
+                    
+            		<a href="/blog/">~/blog</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/projects/">~/projects</a>
+            		
+        		</li>
+        		
+				
+				<li class="dropdown">
+                    
+            		<a href="/about-me/">~/about-me</a>
+            		
+        		</li>
+        		
+			</ul>
+		</div>
+	</div>
+</nav>
+
+
+
+
+
+
+</header>
+
+        <div class="container wrapper">
+            <h1><a href="https://viktorbarzin.me/blog/10-now-you-see-me/">10 Now you see me...</a></h1>
+            <span class="post-date">May 18, 2019 </span>
+            <div class="post-content">
+                
+
+<h1 id="pre-intro">Pre-Intro</h1>
+
+<p>It&rsquo;s been a long time since my last blog post.</p>
+
+<p>I&rsquo;ve been quite busy recently, playing around with <a href="https://golang.org/">Go</a>,
+<a href="https://www.haskell.org/">Haskell</a>, <a href="https://www.haskell.org/alex/">Alex parser</a>,
+<a href="http://dinosaur.compilertools.net/">Lex lexer</a>, <a href="https://shop.hak5.org/products/usb-rubber-ducky-deluxe">home-made Rubber Duckies</a> and plenty of other interesting stuff I may blog about at some point.</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>This post is about setting up a <strong>home face recognition system</strong> using an <a href="https://www.amazon.co.uk/VSTARCAM-C7824WIP-Wireless-Camera-Network/dp/B00W17WWWE">IP Camera</a>, OpenCV and a raspberry pi.</p>
+
+<p>I <strong>won&rsquo;t</strong> focus on the face recognition part that much since the code I used <strong>was not written by me</strong> but instead was sourced from <a href="https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/">this</a> <strong>awesome</strong> blog post that I <strong>highly</strong> recommend reading if you&rsquo;re into ML with python.</p>
+
+<p>My post will be mostly about <strong>glueing together the <a href="https://opencv.org/">OpenCV</a> with my IP Camera</strong> and making the latter read it&rsquo;s input from a <a href="https://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol">RTSP source</a> which <a href="https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python">apperently works</a> if you have the right OpenCV (more on this later).</p>
+
+<h1 id="aim-of-project">Aim of project</h1>
+
+<p>In my home automation journey, after <a href="/blog/07-raspberry-bluetooth-aux-setup/">setting up an audio system</a> next thing on the list is to control the music played in some way that&rsquo;s simple (basically making a home-made alexa thingy).</p>
+
+<p>We spend a lot of time in our living room listening to music. Unfortunately I didn&rsquo;t simplify the audio system enough so that less tech-savvy people (Windows guys) could use it so I wondered - <strong>wouldn&rsquo;t it be cool if every time someone enters the room, he would be recognized by a camera a play some music based on their taste?</strong></p>
+
+<p>Hell yeah, sounds like a fun pre-exam project to do while procrastinating revision right?</p>
+
+<h1 id="doing-reading-on-ml-and-face-detection-and-recognition">Doing reading on ML and face detection and recognition</h1>
+
+<p>Image processing has become quite a trending topic recently which is probably the reason why there is such an abundance of libraries for it.</p>
+
+<p>Unfortunately (for me) most are written in C++ and people who know me know that <strong>I&rsquo;m not a fan of writing excessive amounts of code</strong> for simple tasks (such as face detection lol).</p>
+
+<p>Happily, there is python for the lazy people and what&rsquo;s even better is that most of the C++ libraries (<a href="http://dlib.net/">dlib</a>, <a href="https://opencv.org/">OpenCV</a>, etc) have their Python implementations. Yay!</p>
+
+<p>Even though, I was genuinely interested in the topic so I did some reading on <a href="https://www.datacamp.com/community/tutorials/face-detection-python-opencv">using opencv with python</a>. This blog post was quite useful and shows the 101 of OpenCV with Python (loading images, drawing stuff onto images etc.).</p>
+
+<p>The main source for my code was mentioned previously. Here&rsquo;s the <a href="https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/">link</a> again because it&rsquo;s so great - do read the blog.
+They describe how the code they&rsquo;ve posted works and how to train the support vector machine for your face from new images.
+As a bonus, they even added face recognition using a video source!</p>
+
+<p><img src="https://s3-us-west-2.amazonaws.com/static.pyimagesearch.com/opencv-face-recognition/opencv_face_reco_animation.gif" alt="" /></p>
+
+<h1 id="so-if-the-code-is-online-what-did-i-do-exactly">So&hellip; if the code is online what did I do exactly?</h1>
+
+<p>Getting the the code to work is the easy part.</p>
+
+<p><img style="width:35%" src="/images/viktor-face-rec.gif" /></p>
+
+<p>That&rsquo;s fair and square, however, it&rsquo;s using my laptop camera.</p>
+
+<p>Next thing is to make it read the <strong>RTSP stream</strong> which shouldn&rsquo;t be too hard right?</p>
+
+<p><img style="width:20%" src="/images/10-home-face-recognizer-eba99d00.png" /></p>
+
+<h1 id="the-issue">The issue</h1>
+
+<p><a href="https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python">According to StackOverflow</a> OpenCV <em>does</em> support RTSP, however, this was <strong>not the case</strong> for my setup.</p>
+
+<p>It is possible that I&rsquo;ve done something wrong so if anyone figures out how to make it work I&rsquo;ll get him a beer.
+Upon running <code>recognize_video.py</code> it reaches the point of reading from the camera and after a little timeout it errors out:</p>
+
+<p><img src="/images/10-home-face-recognizer-95fd877e.png" alt="" /></p>
+
+<p>Yes, I&rsquo;ve triple-checked the URI so the issue lies somewhere else.</p>
+
+<h3 id="my-build-info-that-doesn-t-allow-opencv-to-read-from-a-rtsp-source">My build info that DOESN&rsquo;T allow OpenCV to read from a RTSP source</h3>
+
+<p>Here&rsquo;s my setup info if anyone fancies a try to debug with me:</p>
+
+<pre><code>fedora 30 with latest updates
+python --version -&gt; python 3.7.3
+cv2.__version__ -&gt; 4.1.0
+
+cv2.getBuildConfiguration() (Video I/O section) -&gt;  
+
+    DC1394:                      NO
+    FFMPEG:                      YES
+      avcodec:                   YES (58.47.106)
+      avformat:                  YES (58.26.101)
+      avutil:                    YES (56.26.100)
+      swscale:                   YES (5.4.100)
+      avresample:                NO
+    GStreamer:                   NO
+    v4l/v4l2:                    YES (linux/videodev2.h)
+
+</code></pre>
+
+<p>The reason might be because of the missing <code>GStreamer</code> option, even though I tried <strong>compiling it manually</strong> with that option included - <strong>still didn&rsquo;t work</strong>.</p>
+
+<h1 id="planning-a-workaround">Planning a workaround</h1>
+
+<p>I did look into a few libraries like <a href="https://pypi.org/project/rtsp/">this one</a>, <a href="https://github.com/jrosebr1/imutils">this one</a> and a some others but <strong>none of them</strong> seemed to do the trick and read from the IP Cam.
+Furthermore, I had my doubts that even if I managed to read a frame from it, it <strong>would still go wrong when passing it to OpenCV</strong> (image format, pixel format etc, FPS, etc.).</p>
+
+<p>Before jumping on me saying I&rsquo;m an idiot and got the URI wrong, that&rsquo;s not the case - adequate <strong>tools like VLC, FFMpeg</strong> and similar media playing software <strong>did read the stream correctly</strong>.</p>
+
+<p>So the 2 options were either to <strong>keep looking for a library</strong> that manages to read the RTSP, or <strong>do something hacky-er</strong> - <strong>I could read from a local web cam, so why not make the IP camera look like a local camera?</strong> After all if powerful tools such as FFMpeg can read from it, surely they can do other magic as well.</p>
+
+<h1 id="workaround-sketch">Workaround sketch</h1>
+
+<p><img src="/images/10-home-face-recognizer-2a46e123.png" alt="" /></p>
+
+<p>First step is to make another <code>/dev/video</code> device so that I could stream to it.</p>
+
+<p>To admit, my first attempt was <strong>waaay off target</strong>:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo touch /dev/video5</code></pre></div>
+<p>Sure, I could write to it, but it was <strong>nowhere near a capture device</strong> that I could read from afterwards.
+I did try some bash-fu to make OpenCV read from a constantly changing file but couldn&rsquo;t manage to trick it to.</p>
+
+<p>After a bit of google-ing on <a href="https://www.quora.com/What-is-the-difference-between-character-and-block-device-drivers-in-UNIX">character devices and block devices</a>, soon enough I arrived at the <code>mknod</code> command.</p>
+
+<p>Turns out that <code>/dev/videoX</code> devices as well as some other such as <code>/dev/null</code>, <code>/dev/random</code> etc. are all <a href="https://www.win.tue.nl/~aeb/linux/lk/lk-11.html"><em>character devices</em></a>.</p>
+
+<p>The command to make one and let the kernel know it should treat it as a camera device is:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ sudo mknod test_cam c <span style="color:#3677a9">81</span> <span style="color:#3677a9">0</span></code></pre></div>
+<p>The <code>c</code> tells it&rsquo;s a character device, <code>81</code> and <code>0</code> tell the kernel what modules to use for that specific device (<a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/devices.txt">list of all device major minor numbers</a> - 81 is char device, the 0 is <code>/dev/video0</code>).
+Now running <code>file</code> on the new <em>file</em> confirms it is a character device:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ file test_cam
+test_cam: character special (<span style="color:#3677a9">81</span>/0)</code></pre></div>
+<p><strong>That&rsquo;s cool! Now I have a virtual camera as a file on my hard disk!</strong></p>
+
+<p>Let&rsquo;s see how to write to it now.</p>
+
+<h1 id="fighting-character-devices">Fighting character devices</h1>
+
+<p>My initial idea was to basically do something similar to <code>sudo cat video.mp4 &gt; test_cam</code> and afterwards read from <code>test_cam</code>.</p>
+
+<p>Well surprise, surprise writing to character devices isn&rsquo;t that straightforward.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">[root@yuhu]: cat kek.mp4 &gt; test_cam
+cat: write error: Invalid argument
+[root@yuhu]: <span style="color:#24909d">echo</span> <span style="color:#3677a9">1</span> &gt; test_cam
+-bash: echo: write error: Invalid argument</code></pre></div>
+<p>They expect data in <em>characters</em> as opposed to <em>blocks</em> with which we are used to.
+So <strong>outputting a file into a character devices wouldn&rsquo;t make much sense</strong> the way I was trying to do it.
+<a href="https://unix.stackexchange.com/questions/409874/how-to-write-to-a-character-special-device#answer-409879">This</a> answer explains it in <strong>greater detail</strong>.</p>
+
+<p>I decided bothering with kernel IO would be too much for 1am so I started <strong>looking elsewhere</strong>.</p>
+
+<h3 id="v4l2loopback-module">v4l2loopback module</h3>
+
+<p>At some point it started to get a bit depressing since <strong>forwarding a RTSP video source to a local virtual camera isn&rsquo;t something people do every day</strong> and therefore not much is online about how to go about it.</p>
+
+<p>On the edge of despair (opening sites that I&rsquo;ve already gone through) I found <a href="https://github.com/umlaeute/v4l2loopback">v4l2loopback</a> module.
+<em>Lord and saviour!</em></p>
+
+<p>This is a kernel module that enables us to creating virtual video devices that normal <a href="https://en.wikipedia.org/wiki/Video4Linux">video4linux2</a> (v4l2) applications can read as capture device, but also allows writing to it which is what I was after!</p>
+
+<p>Next step was to start writing to it.</p>
+
+<h1 id="ffmpeg-magic">FFMPeg magic</h1>
+
+<p>The tool of choice for me was the infamous <a href="https://ffmpeg.org/">ffmpeg</a> which is like a Swiss knife for media.
+It can do all kind of crazy stuff like streaming the active X (Desktop) via network stream, or convert input/output media&rsquo;s pixel formats, RGB values and many many other funky stuff.</p>
+
+<p>Having hundreds of options is a two edged sword though, especially for someone who doesn&rsquo;t understand in great detail how media is converted and all the different types of codecs and the differences between each.
+I spent the next few hours trying to figure out all the correct input/output options to stream the IP cam to my virtual one.</p>
+
+<p>The main issue was that <strong>I didn&rsquo;t understand much</strong> about how moving pictures (aka videos) are seen from the computers&rsquo; point of view.
+There are quite a few moving parts that I had to basically brute-force to make the thing work since <strong>it either works or you see no picture whatsoever</strong>. There is no other state.</p>
+
+<p>By the end of the night this was the best output I ever got:</p>
+
+<p><img src="/images/10-home-face-recognizer-4c065cf3.png" alt="" /></p>
+
+<p>You can see some silhouettes here and there so there was light at the end of the tunnel.</p>
+
+<h1 id="at-last">At last</h1>
+
+<p>Finally, on the following day by continuing to tweak parameters of <em>ffmpeg</em> I finally had success reading the stream with the correct settings. Running the face recognition python app afterwards was as simple as changing the id it uses for the camera input.</p>
+
+<p><img style="width:40%" src="/images/10-face-recog-working-ip-cam.jpg" /></p>
+
+<h4 id="this-is-me-taking-a-photo-with-my-phone-of-my-laptop-screen-which-is-showing-the-output-of-the-opencv-face-recognition-app-which-gets-its-input-from-the-virtual-camera-device-which-is-getting-its-input-from-the-video4linux-loopback-module-which-is-being-written-to-by-ffmpeg-s-rtsp-input">This is me taking a photo with my phone of my laptop screen which is showing the output of the OpenCV face recognition app which gets its input from the virtual camera device which is getting its input from the video4linux loopback module which is being written to by ffmpeg&rsquo;s RTSP input.</h4>
+
+<p>That ^^ described quite well what the goal result was.</p>
+
+<p>Now <strong>I have a programmatic way to do whatever I want once a face is detected</strong> and even when a specific person is recognized.</p>
+
+<p>The magic steps that made all this possible were:</p>
+
+<ol>
+<li>Firstly, install the <code>v4l2loopback</code> module and load it - it will create the virtual camera devices.</li>
+<li>Stream to the virtual camera (in my case <code>/dev/video2</code>) using ffmpeg:</li>
+</ol>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p /dev/video2</code></pre></div>
+<p>Finally change the source code of the application to use camera id <em>2</em> instead of <em>0</em> (default) and it magically works!</p>
+
+<p><img src="/images/10-home-face-recognizer-0c438cd8.png" alt="" /></p>
+
+<h1 id="upcoming-imporvements">Upcoming imporvements</h1>
+
+<p>Next step is to put all this setup on the raspberry pi and run some scripts based on who the detected person is.
+Still have to gather all my housemates&rsquo; consent but you know, people are easier to handle with than computers :D</p>
+
+            </div>
+            
+            <div class="post-comments">
+                <div id="disqus_thread"></div>
+
+<script type="application/javascript">
+    var disqus_config = function () {
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "viktorbarzin" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2019 Viktor Barzin
+<span class="credit">
+	
+	
+	
+	
+    
+</span>
+</p>
+</footer>
+
+
+    </body>

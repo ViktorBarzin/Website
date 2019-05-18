@@ -12,6 +12,18 @@
     
     
     <item>
+      <title>10 Now you see me...</title>
+      <link>https://viktorbarzin.me/blog/10-now-you-see-me/</link>
+      <pubDate>Sat, 18 May 2019 14:24:22 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/10-now-you-see-me/</guid>
+      <description>Pre-Intro It&amp;rsquo;s been a long time since my last blog post.
+I&amp;rsquo;ve been quite busy recently, playing around with Go, Haskell, Alex parser, Lex lexer, home-made Rubber Duckies and plenty of other interesting stuff I may blog about at some point.
+Introduction This post is about setting up a home face recognition system using an IP Camera, OpenCV and a raspberry pi.
+I won&amp;rsquo;t focus on the face recognition part that much since the code I used was not written by me but instead was sourced from this awesome blog post that I highly recommend reading if you&amp;rsquo;re into ML with python.</description>
+    </item>
+    
+    <item>
       <title>09 Peeling the layers of security with Security Onion</title>
       <link>https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/</link>
       <pubDate>Wed, 23 Jan 2019 10:18:44 +0000</pubDate>
