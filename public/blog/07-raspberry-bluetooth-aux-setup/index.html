@@ -24,7 +24,7 @@
     "@type" : "BlogPosting",
     "mainEntityOfPage": {
          "@type": "WebPage",
-         "@id": "https://viktorbarzin.me/"
+         "@id": "https:\/\/viktorbarzin.me\/"
     },
     "articleSection" : "blog",
     "name" : "07 Going musical - Setting up an improvised home audio system",
@@ -59,11 +59,11 @@
     "accountablePerson" : "Viktor Barzin",
     "copyrightHolder" : "Viktor Barzin",
     "copyrightYear" : "20128",
-    "datePublished": "2018-12-20 13:01:54 &#43;0000 UTC",
-    "dateModified" : "2018-12-20 13:01:54 &#43;0000 UTC",
-    "url" : "https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/",
+    "datePublished": "2018-12-20 13:01:54 \x2b0000 UTC",
+    "dateModified" : "2018-12-20 13:01:54 \x2b0000 UTC",
+    "url" : "https:\/\/viktorbarzin.me\/blog\/07-raspberry-bluetooth-aux-setup\/",
     "wordCount" : "2442",
-    "image": 	"https://viktorbarzin.me/images/07-raspberry-bluetooth-aux-setup-6c366282.png",
+    "image": 	"https:\/\/viktorbarzin.me\/images\/07-raspberry-bluetooth-aux-setup-6c366282.png",
     "keywords" : [ "raspberrypi","bluetooth","logitech","speakers","linux","systemd","rc.local","volumio","flask","expect","Blog" ]
 }
 </script>
@@ -340,8 +340,8 @@ So what I had to do in rc.local was run this command as &lsquo;pi&rsquo; and it 
 It doesn&rsquo;t hurt to have a service running rc.local for you (this might be how it is run anyway).</p>
 
 <p>Here is how a service file looks like:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># rc-local.service
-</span><span style="color:#999;font-style:italic"></span>[Unit]
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># rc-local.service</span>
+[Unit]
 <span style="color:#40ffff">Description</span>=Start rc.local
 
 [Service]
@@ -368,19 +368,19 @@ Well the pi does not have one so I had to come up with some sort of replacement 
 <p>This is what my python web server looks like:</p>
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#999;font-style:italic"># webserver.py</span>
-<span style="color:#6ab825;font-weight:bold">import</span> <span style="color:#447fcf">os</span>
+<span style="color:#6ab825;font-weight:bold">import</span> <span style="color:#447fcf;text-decoration:underline">os</span>
 
-<span style="color:#6ab825;font-weight:bold">from</span> <span style="color:#447fcf">flask</span> <span style="color:#6ab825;font-weight:bold">import</span> Flask
+<span style="color:#6ab825;font-weight:bold">from</span> <span style="color:#447fcf;text-decoration:underline">flask</span> <span style="color:#6ab825;font-weight:bold">import</span> Flask
 app = Flask(__name__)
 
-<span style="color:#ffa500">@app.route</span>(<span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;/&#34;</span>)
+<span style="color:#ffa500">@app.route</span>(<span style="color:#ed9d13">&#34;/&#34;</span>)
 <span style="color:#6ab825;font-weight:bold">def</span> <span style="color:#447fcf">index</span>():
         <span style="color:#999;font-style:italic"># Pait with device</span>
-        os.system(<span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;/home/pi/start_pairing.sh&#34;</span>)
+        os.system(<span style="color:#ed9d13">&#34;/home/pi/start_pairing.sh&#34;</span>)
         <span style="color:#999;font-style:italic"># Add device to trusted devices</span>
-        cmd = <span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;echo &#39;trust &#39;$(echo &#39;paired-devices&#39; | bluetoothctl 2&gt;/dev/null | grep paired-devices -A 1 | awk &#39;{print $2}&#39;| tail -n 1) | bluetoothctl&#34;</span>
+        cmd = <span style="color:#ed9d13">&#34;echo &#39;trust &#39;$(echo &#39;paired-devices&#39; | bluetoothctl 2&gt;/dev/null | grep paired-devices -A 1 | awk &#39;{print $2}&#39;| tail -n 1) | bluetoothctl&#34;</span>
         os.system(cmd)
-        <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#ed9d13"></span><span style="color:#ed9d13">&#34;Started pairing&#34;</span></code></pre></div>
+        <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#ed9d13">&#34;Started pairing&#34;</span></code></pre></div>
 
 <p>The aim of this server is to run the pairing script upon receiving a request.
 It is the &ldquo;button&rdquo; you would normally press on a regular bluetooth device.</p>
@@ -391,8 +391,8 @@ It is the &ldquo;button&rdquo; you would normally press on a regular bluetooth d
 That&rsquo;s what it&rsquo;s like:</p>
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#cd2828;font-weight:bold">#!/usr/bin/expect -f
-</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># start_pairing.sh
-</span><span style="color:#999;font-style:italic"></span>
+</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># start_pairing.sh</span>
+
 <span style="color:#24909d">set</span> prompt <span style="color:#ed9d13">&#34;#&#34;</span>
 <span style="color:#24909d">set</span> timeout <span style="color:#3677a9">120</span>
 
@@ -405,14 +405,14 @@ sleep <span style="color:#3677a9">1</span>
 send <span style="color:#ed9d13">&#34;default-agent\r&#34;</span>
 sleep <span style="color:#3677a9">1</span>
 expect <span style="color:#ed9d13">&#34;Default agent request successful*&#34;</span>
-<span style="color:#999;font-style:italic">#expect -re &#34;$prompt&#34;
-</span><span style="color:#999;font-style:italic"></span>expect <span style="color:#ed9d13">&#34;Request confirmation\r&#34;</span>
+<span style="color:#999;font-style:italic">#expect -re &#34;$prompt&#34;</span>
+expect <span style="color:#ed9d13">&#34;Request confirmation\r&#34;</span>
 expect <span style="color:#ed9d13">&#34;*Confirm passkey*&#34;</span>
 sleep <span style="color:#3677a9">5</span>
 send <span style="color:#ed9d13">&#34;yes\r&#34;</span>
 sleep <span style="color:#3677a9">3</span>
-<span style="color:#999;font-style:italic">#expect &#34;Authorize service\r\n&#34;
-</span><span style="color:#999;font-style:italic"></span>expect <span style="color:#ed9d13">&#34;yes/no*&#34;</span>
+<span style="color:#999;font-style:italic">#expect &#34;Authorize service\r\n&#34;</span>
+expect <span style="color:#ed9d13">&#34;yes/no*&#34;</span>
 sleep <span style="color:#3677a9">5</span>
 send <span style="color:#ed9d13">&#34;yes\r&#34;</span>
 sleep <span style="color:#3677a9">1</span>

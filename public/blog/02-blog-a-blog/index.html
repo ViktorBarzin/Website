@@ -24,7 +24,7 @@
     "@type" : "BlogPosting",
     "mainEntityOfPage": {
          "@type": "WebPage",
-         "@id": "https://viktorbarzin.me/"
+         "@id": "https:\/\/viktorbarzin.me\/"
     },
     "articleSection" : "blog",
     "name" : "02 Blog a Blog - The creation of this site",
@@ -59,12 +59,12 @@
     "accountablePerson" : "Viktor Barzin",
     "copyrightHolder" : "Viktor Barzin",
     "copyrightYear" : "17098",
-    "datePublished": "2018-09-17 15:36:49 &#43;0300 EEST",
-    "dateModified" : "2018-09-17 15:36:49 &#43;0300 EEST",
-    "url" : "https://viktorbarzin.me/blog/02-blog-a-blog/",
-    "wordCount" : "1406",
-    "image": 	"https://viktorbarzin.me/images/02-blog-a-blog-278df7d1.png",
-    "keywords" : [ "DNS","GoDaddy","Let&#39;s encrypt","Domain parking","Automation","git bare repository","git hooks","nginx","docker","container","ansible","Blog" ]
+    "datePublished": "2018-09-17 15:36:49 \x2b0300 \x2b0300",
+    "dateModified" : "2018-09-17 15:36:49 \x2b0300 \x2b0300",
+    "url" : "https:\/\/viktorbarzin.me\/blog\/02-blog-a-blog\/",
+    "wordCount" : "1412",
+    "image": 	"https:\/\/viktorbarzin.me\/images\/02-blog-a-blog-278df7d1.png",
+    "keywords" : [ "DNS","GoDaddy","Let\x27s encrypt","Domain parking","Automation","git bare repository","git hooks","nginx","docker","container","ansible","Blog" ]
 }
 </script>
 
@@ -291,10 +291,10 @@ This is a wonderful feature and if you haven&rsquo;t used them before, you shoul
 <p>Most of the time I am using the <em>post-receive</em> hook that triggers right after code has been pushed to a bare repository.
 The script I wrote checks out the code from the repository and keeps only the static files:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#cd2828;font-weight:bold">#!/bin/bash
-</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># Checkout repo
-</span><span style="color:#999;font-style:italic"></span>git --work-tree=/ansible_files/nginx/blog --git-dir=/ansible_files/nginx/blog.git/ checkout -f
-<span style="color:#999;font-style:italic"># remove all but public folder
-</span><span style="color:#999;font-style:italic"></span>find /ansible_files/nginx/blog -maxdepth <span style="color:#3677a9">1</span> | grep -v public | grep <span style="color:#ed9d13">&#39;blog/&#39;</span> | xargs rm -rf
+</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># Checkout repo</span>
+git --work-tree=/ansible_files/nginx/blog --git-dir=/ansible_files/nginx/blog.git/ checkout -f
+<span style="color:#999;font-style:italic"># remove all but public folder</span>
+find /ansible_files/nginx/blog -maxdepth <span style="color:#3677a9">1</span> | grep -v public | grep <span style="color:#ed9d13">&#39;blog/&#39;</span> | xargs rm -rf
 mv /ansible_files/nginx/blog/public/* /ansible_files/nginx/blog
 rmdir /ansible_files/nginx/blog/public
 docker <span style="color:#24909d">exec</span> nginx-blog service nginx reload</code></pre></div>
@@ -315,9 +315,9 @@ So instead of setting aside an entire vm just for a single web server I run all 
 <h2 id="ansible-docker">Ansible + Docker = ♥</h2>
 
 <p>Here is the <a href="https://www.ansible.com/">ansible</a> role I&rsquo;m using to build the container and set everything up:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---<span style="color:#666">
-</span><span style="color:#666">
-</span><span style="color:#666"></span>-<span style="color:#666"> </span>name:<span style="color:#666"> </span>Setup<span style="color:#666"> </span>nginx<span style="color:#666"> </span>data<span style="color:#666"> </span>dir<span style="color:#666">
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">--<span style="color:#ed9d13">-
+</span><span style="color:#ed9d13">
+</span><span style="color:#ed9d13">- name: Setup nginx data dir</span><span style="color:#666">
 </span><span style="color:#666">  </span>file:<span style="color:#666">
 </span><span style="color:#666">      </span>path:<span style="color:#666"> </span><span style="color:#ed9d13">&#34;{{ nginx_data_dir_path }}&#34;</span><span style="color:#666">
 </span><span style="color:#666">      </span>state:<span style="color:#666"> </span>directory<span style="color:#666">

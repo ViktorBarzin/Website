@@ -24,12 +24,12 @@
     "@type" : "BlogPosting",
     "mainEntityOfPage": {
          "@type": "WebPage",
-         "@id": "https://viktorbarzin.me/"
+         "@id": "https:\/\/viktorbarzin.me\/"
     },
     "articleSection" : "blog",
     "name" : "08 Defeating Censorship And Improving Security With OpenVPN",
     "headline" : "08 Defeating Censorship And Improving Security With OpenVPN",
-    "description" : "In this blogpost I show you how I set up multiple OpenVPN instances - one running on port 443/tcp to mask it as regular HTTPS traffic and avoid being blocked. I show how to do it and also some neat tricks about systemd and debugging openvpn-related networking issues.",
+    "description" : "In this blogpost I show you how I set up multiple OpenVPN instances - one running on port 443\/tcp to mask it as regular HTTPS traffic and avoid being blocked. I show how to do it and also some neat tricks about systemd and debugging openvpn-related networking issues.",
     "inLanguage" : "en-US",
     "author" : {
         "@type": "Person",
@@ -59,12 +59,12 @@
     "accountablePerson" : "Viktor Barzin",
     "copyrightHolder" : "Viktor Barzin",
     "copyrightYear" : "12018",
-    "datePublished": "2019-01-12 10:10:13 &#43;0000 UTC",
-    "dateModified" : "2019-01-12 10:10:13 &#43;0000 UTC",
-    "url" : "https://viktorbarzin.me/blog/08-defeating-censorship-with-tcp-openvpn/",
+    "datePublished": "2019-01-12 10:10:13 \x2b0000 UTC",
+    "dateModified" : "2019-01-12 10:10:13 \x2b0000 UTC",
+    "url" : "https:\/\/viktorbarzin.me\/blog\/08-defeating-censorship-with-tcp-openvpn\/",
     "wordCount" : "3298",
-    "image": 	"https://viktorbarzin.me/images/08-defeating-censorship-with-tcp-openvpn-072ee9b6-ln.png",
-    "keywords" : [ "OpenVPN","tcp OpenVPN","port 443/tcp","iptables","SSL/TLS","TLS","multiple openvpn","systemd","service files","systemd services","openvpn-server@.service","OpenWRT tunneling openvpn traffic","firewall","routing","learn-address","static routes","sudoers","/sbin/ip","linux capabilities","CapabilityBoundingSet","Blog" ]
+    "image": 	"https:\/\/viktorbarzin.me\/images\/08-defeating-censorship-with-tcp-openvpn-072ee9b6-ln.png",
+    "keywords" : [ "OpenVPN","tcp OpenVPN","port 443\/tcp","iptables","SSL\/TLS","TLS","multiple openvpn","systemd","service files","systemd services","openvpn-server@.service","OpenWRT tunneling openvpn traffic","firewall","routing","learn-address","static routes","sudoers","\/sbin\/ip","linux capabilities","CapabilityBoundingSet","Blog" ]
 }
 </script>
 
@@ -191,7 +191,7 @@ That&rsquo;s all great, however, more and more network administrators put effort
 
 <p>By default, OpenVPN runs on port <em>1194/UDP</em> so filtering it can be as simple as</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"># iptables -A FORWARD -p udp --destination-port <span style="color:#3677a9">1194</span> -j DROP</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># iptables -A FORWARD -p udp --destination-port 1194 -j DROP</span></code></pre></div>
 
 <p>Nowadays, network admins would probably use a more GUI-like user interface to do that, but that&rsquo;s essentially what it boils down to.</p>
 
@@ -227,11 +227,11 @@ Blocking 443/TCP would mean breaking the internet for the common user so no one 
 
 <p>I looked for a more Linux-y way of solving this issue so I had a think - OpenVPN is just a daemon ran by systemd. By default it has the following config:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn.service
-</span><span style="color:#999;font-style:italic"></span>
-<span style="color:#999;font-style:italic"># This service is actually a systemd target,
-</span><span style="color:#999;font-style:italic"># but we are using a service since targets cannot be reloaded.
-</span><span style="color:#999;font-style:italic"></span>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn.service</span>
+
+<span style="color:#999;font-style:italic"># This service is actually a systemd target,</span>
+<span style="color:#999;font-style:italic"># but we are using a service since targets cannot be reloaded.</span>
+
 [Unit]
 <span style="color:#40ffff">Description</span>=OpenVPN service
 <span style="color:#40ffff">After</span>=network.target
@@ -274,33 +274,33 @@ root@vpn:/lib/systemd/system# ls openvpn</code></pre></div>
 
 <p>Having a look at the <code>openvpn-server@.service</code> file we can see that it&rsquo;s more complicated that the first one:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 1</span><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn-server@.service
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 2</span><span style="color:#999;font-style:italic"></span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>[Unit]
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 4</span><span style="color:#40ffff">Description</span>=OpenVPN service <span style="color:#6ab825;font-weight:bold">for</span> %I
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 5</span><span style="color:#40ffff">After</span>=syslog.target network-online.target
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 6</span><span style="color:#40ffff">Wants</span>=network-online.target
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 7</span><span style="color:#40ffff">Documentation</span>=man:openvpn(<span style="color:#3677a9">8</span>)
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 8</span><span style="color:#40ffff">Documentation</span>=https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 9</span><span style="color:#40ffff">Documentation</span>=https://community.openvpn.net/openvpn/wiki/HOWTO
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">10</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">11</span>[Service]
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">12</span><span style="color:#40ffff">Type</span>=notify
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">13</span><span style="color:#40ffff">PrivateTmp</span>=<span style="color:#24909d">true</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">14</span><span style="color:#40ffff">WorkingDirectory</span>=/etc/openvpn/server
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">15</span><span style="color:#40ffff">ExecStart</span>=/usr/sbin/openvpn --status %t/openvpn-server/status-%i.log --status-version <span style="color:#3677a9">2</span> --suppress-timestamps --config %i.conf
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">16</span><span style="color:#40ffff">CapabilityBoundingSet</span>=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">17</span><span style="color:#40ffff">LimitNPROC</span>=<span style="color:#3677a9">10</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">18</span><span style="color:#40ffff">DeviceAllow</span>=/dev/null rw
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">19</span><span style="color:#40ffff">DeviceAllow</span>=/dev/net/tun rw
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">20</span><span style="color:#40ffff">ProtectSystem</span>=<span style="color:#24909d">true</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">21</span><span style="color:#40ffff">ProtectHome</span>=<span style="color:#24909d">true</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">22</span><span style="color:#40ffff">KillMode</span>=process
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">23</span><span style="color:#40ffff">RestartSec</span>=5s
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">24</span><span style="color:#40ffff">Restart</span>=on-failure
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">25</span>
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">26</span>[Install]
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">27</span><span style="color:#40ffff">WantedBy</span>=multi-user.target</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 1</span><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn-server@.service</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 3</span>[Unit]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 4</span><span style="color:#40ffff">Description</span>=OpenVPN service <span style="color:#6ab825;font-weight:bold">for</span> %I
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 5</span><span style="color:#40ffff">After</span>=syslog.target network-online.target
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 6</span><span style="color:#40ffff">Wants</span>=network-online.target
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 7</span><span style="color:#40ffff">Documentation</span>=man:openvpn(<span style="color:#3677a9">8</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 8</span><span style="color:#40ffff">Documentation</span>=https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 9</span><span style="color:#40ffff">Documentation</span>=https://community.openvpn.net/openvpn/wiki/HOWTO
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">11</span>[Service]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">12</span><span style="color:#40ffff">Type</span>=notify
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">13</span><span style="color:#40ffff">PrivateTmp</span>=<span style="color:#24909d">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">14</span><span style="color:#40ffff">WorkingDirectory</span>=/etc/openvpn/server
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">15</span><span style="color:#40ffff">ExecStart</span>=/usr/sbin/openvpn --status %t/openvpn-server/status-%i.log --status-version <span style="color:#3677a9">2</span> --suppress-timestamps --config %i.conf
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">16</span><span style="color:#40ffff">CapabilityBoundingSet</span>=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">17</span><span style="color:#40ffff">LimitNPROC</span>=<span style="color:#3677a9">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">18</span><span style="color:#40ffff">DeviceAllow</span>=/dev/null rw
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">19</span><span style="color:#40ffff">DeviceAllow</span>=/dev/net/tun rw
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">20</span><span style="color:#40ffff">ProtectSystem</span>=<span style="color:#24909d">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">21</span><span style="color:#40ffff">ProtectHome</span>=<span style="color:#24909d">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">22</span><span style="color:#40ffff">KillMode</span>=process
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">23</span><span style="color:#40ffff">RestartSec</span>=5s
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">24</span><span style="color:#40ffff">Restart</span>=on-failure
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">26</span>[Install]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">27</span><span style="color:#40ffff">WantedBy</span>=multi-user.target</code></pre></div>
 
 <p>I&rsquo;m interested in the <code>ExecStart</code> directive as this is what is being executed as a &lsquo;service&rsquo;.
 Obviously, this is the OpenVPN daemon being started and I&rsquo;m keen on learning what this &lsquo;<strong>%i</strong>&rsquo; stands for since the config I want it to use is referenced as &lsquo;<strong>%i.conf</strong>&rsquo; (at the end of line 15)</p>
@@ -322,7 +322,7 @@ Obviously, this is the OpenVPN daemon being started and I&rsquo;m keen on learni
 
 <p>By default, there is no <em>server</em> directory in <em>/etc/openvpn</em> so after we make that we should get our hands on creating the new tcp config file:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"># mkdir /etc/openvpn/server &amp;&amp; cp /etc/openvpn/openvpn.conf /etc/openvpn/server/tcp.conf</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># mkdir /etc/openvpn/server &amp;&amp; cp /etc/openvpn/openvpn.conf /etc/openvpn/server/tcp.conf</span></code></pre></div>
 
 <p>We want to have the same config, to make use of the same client certificates and what not, but run on port 443/tcp.
 So the config has to be mostly the same with only a few changes :</p>
@@ -341,7 +341,7 @@ So the config has to be mostly the same with only a few changes :</p>
 
 <p>The rest of the config is the same. So let&rsquo;s start the second instance and keep our fingers crossed:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"># systemctl start openvpn-server@tcp</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># systemctl start openvpn-server@tcp</span></code></pre></div>
 
 <p>That seemed to have done the trick since the vpn instance was up and running.</p>
 
@@ -395,7 +395,7 @@ Tue Jan <span style="color:#3677a9">08</span> <span style="color:#3677a9">19</sp
 Tue Jan <span style="color:#3677a9">08</span> <span style="color:#3677a9">19</span>:09:05 <span style="color:#3677a9">2019</span> /sbin/ip addr add dev tun0 <span style="color:#24909d">local</span> <span style="color:#3677a9">10</span>.3.2.1 peer <span style="color:#3677a9">10</span>.3.2.2
 Tue Jan <span style="color:#3677a9">08</span> <span style="color:#3677a9">19</span>:09:05 <span style="color:#3677a9">2019</span> WARNING: this configuration may cache passwords in memory -- use the auth-nocache option to
 prevent this
-<span style="background-color:#363636;display:block;width:100%">Tue Jan <span style="color:#3677a9">08</span> <span style="color:#3677a9">19</span>:09:05 <span style="color:#3677a9">2019</span> Initialization Sequence Completed</span></code></pre></div>
+<span style="display:block;width:100%;background-color:#363636">Tue Jan <span style="color:#3677a9">08</span> <span style="color:#3677a9">19</span>:09:05 <span style="color:#3677a9">2019</span> Initialization Sequence Completed</span></code></pre></div>
 So we should be done by now right?</p>
 
 <p>Ehm, not quite:</p>
@@ -427,7 +427,7 @@ Firing up <code>tcpdump</code> everywhere yeilded an odd result - the ping is be
 
 <p>So it&rsquo;s probably <code>iptables</code> that&rsquo;s stopping my traffic isn&rsquo;t it?
 Let&rsquo;s stop it for a moment:
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"># iptables -P {INPUT,OUTPUT,FORWARD} ACCEPT</code></pre></div></p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># iptables -P {INPUT,OUTPUT,FORWARD} ACCEPT</span></code></pre></div></p>
 
 <p>Nope, still no ping back.</p>
 
@@ -446,16 +446,16 @@ Basically, each time a client (dis)connects a static /32 route is being added   
 Otherwise route the client via the default tun0 interface:</p>
 
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#cd2828;font-weight:bold">#!/bin/bash
-</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># /etc/openvpn/scripts/learn-address.sh
-</span><span style="color:#999;font-style:italic">##
-</span><span style="color:#999;font-style:italic"># learn-address script which allow
-</span><span style="color:#999;font-style:italic"># OpenVPN to run on both TCP and UDP
-</span><span style="color:#999;font-style:italic"># with the same range of address on both
-</span><span style="color:#999;font-style:italic"># protocol.
-</span><span style="color:#999;font-style:italic">#
-</span><span style="color:#999;font-style:italic"># tgouverneur -- 2014
-</span><span style="color:#999;font-style:italic">##
-</span><span style="color:#999;font-style:italic"></span>
+</span><span style="color:#cd2828;font-weight:bold"></span><span style="color:#999;font-style:italic"># /etc/openvpn/scripts/learn-address.sh</span>
+<span style="color:#999;font-style:italic">##</span>
+<span style="color:#999;font-style:italic"># learn-address script which allow</span>
+<span style="color:#999;font-style:italic"># OpenVPN to run on both TCP and UDP</span>
+<span style="color:#999;font-style:italic"># with the same range of address on both</span>
+<span style="color:#999;font-style:italic"># protocol.</span>
+#
+<span style="color:#999;font-style:italic"># tgouverneur -- 2014</span>
+<span style="color:#999;font-style:italic">##</span>
+
 <span style="color:#6ab825;font-weight:bold">if</span> [ <span style="color:#40ffff">$#</span> -lt <span style="color:#3677a9">2</span> ]; <span style="color:#6ab825;font-weight:bold">then</span>
   <span style="color:#24909d">exit</span> <span style="color:#3677a9">0</span>;
 <span style="color:#6ab825;font-weight:bold">fi</span>
@@ -484,15 +484,15 @@ Otherwise route the client via the default tun0 interface:</p>
 
 <p>There is a special directive in the OpenVPN server config for that (have to put it in both configs):</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /etc/openvpn/openvpn.conf
-</span><span style="color:#999;font-style:italic"># /etc/openvpn/server/tcp.conf
-</span><span style="color:#999;font-style:italic"></span> --- snip ---
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /etc/openvpn/openvpn.conf</span>
+<span style="color:#999;font-style:italic"># /etc/openvpn/server/tcp.conf</span>
+ --- snip ---
 learn-address /etc/openvpn/scripts/learn-address.sh</code></pre></div>
 
 <h4 id="ps-remember-to-add-your-vpn-daemon-user-to-sudoers-and-allow-him-to-execute-sbin-ip-as-root-it-needs-to-be-able-to-change-system-routes">PS: Remember to add your vpn daemon user to sudoers and allow him to execute <em>/sbin/ip</em> as root - it needs to be able to change system routes:</h4>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /etc/sudoers
-</span><span style="color:#999;font-style:italic"></span> --- snip ---
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /etc/sudoers</span>
+ --- snip ---
 vpn <span style="color:#40ffff">ALL</span>=(ALL:ALL) NOPASSWD: /sbin/ip</code></pre></div>
 
 <p>Finally it should be good to go!</p>
@@ -503,31 +503,31 @@ vpn <span style="color:#40ffff">ALL</span>=(ALL:ALL) NOPASSWD: /sbin/ip</code></
 
 <p>This time I decided to have a look at the server logs - something must have gone wrong server-side!</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>root@vpn:/etc/openvpn/server# journalctl -f -u openvpn-server@tcp -b
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>-- Logs begin at Fri <span style="color:#3677a9">2018</span>-09-21 <span style="color:#3677a9">20</span>:18:43 EEST. --
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:51 vpn openvpn[<span style="color:#3677a9">28814</span>]: Socket Buffers: <span style="color:#40ffff">R</span>=[<span style="color:#3677a9">87380</span>-&gt;87380] <span style="color:#40ffff">S</span>=[<span style="color:#3677a9">16384</span>-&gt;16384]
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:51 vpn openvpn[<span style="color:#3677a9">28814</span>]: Listening <span style="color:#6ab825;font-weight:bold">for</span> incoming TCP connection on [AF_INET][undef]:443
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>--- snip ---
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: <span style="color:#3677a9">10</span>.3.2.9:13131 [sgs7] Peer Connection Initiated with [AF_INET]<span style="color:#3677a9">10</span>.3.2.9:13131
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /etc/openvpn/ccd/sgs7
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /tmp/openvpn_cc_2550293368432e205dcedc71562a78a3.tmp
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]:      vpn : <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro del <span style="color:#3677a9">10</span>.3.2.5/32
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">10</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: unable to send audit message
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">11</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]: PAM audit_log_acct_message() failed: Operation not permitted
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">12</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]: pam_unix(sudo:session): session opened <span style="color:#6ab825;font-weight:bold">for</span> user root by (<span style="color:#40ffff">uid</span>=<span style="color:#3677a9">0</span>)
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">13</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]:      vpn : pam_open_session: System error ; <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro del <span style="color:#3677a9">10</span>.3.2.5/32
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">14</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: pam_open_session: System error
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">15</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: policy plugin failed session initialization
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">16</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]:      vpn : <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro add <span style="color:#3677a9">10</span>.3.2.5/32 dev tun1
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">17</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]: PAM audit_log_acct_message() failed: Operation not permitted
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">18</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: unable to send audit message
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">19</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]: pam_unix(sudo:session): session opened <span style="color:#6ab825;font-weight:bold">for</span> user root by (<span style="color:#40ffff">uid</span>=<span style="color:#3677a9">0</span>)
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">20</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: pam_open_session: System error
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">21</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: policy plugin failed session initialization
-</span><span style="background-color:#363636;display:block;width:100%"><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">22</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]:      vpn : pam_open_session: System error ; <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro add <span style="color:#3677a9">10</span>.3.2.5/32 dev tun1
-</span><span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">23</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 MULTI: Learn: <span style="color:#3677a9">10</span>.3.2.5 -&gt; sgs7/10.3.2.9:13131
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">24</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 MULTI: primary virtual IP <span style="color:#6ab825;font-weight:bold">for</span> sgs7/10.3.2.9:13131: <span style="color:#3677a9">10</span>.3.2.5
-<span style="color:#686868;margin-right:0.4em;padding:00.4em00.4em;">25</span>--- snip ---</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 1</span>root@vpn:/etc/openvpn/server# journalctl -f -u openvpn-server@tcp -b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 2</span>-- Logs begin at Fri <span style="color:#3677a9">2018</span>-09-21 <span style="color:#3677a9">20</span>:18:43 EEST. --
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 3</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:51 vpn openvpn[<span style="color:#3677a9">28814</span>]: Socket Buffers: <span style="color:#40ffff">R</span>=[<span style="color:#3677a9">87380</span>-&gt;87380] <span style="color:#40ffff">S</span>=[<span style="color:#3677a9">16384</span>-&gt;16384]
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 4</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:51 vpn openvpn[<span style="color:#3677a9">28814</span>]: Listening <span style="color:#6ab825;font-weight:bold">for</span> incoming TCP connection on [AF_INET][undef]:443
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 5</span>--- snip ---
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 6</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: <span style="color:#3677a9">10</span>.3.2.9:13131 [sgs7] Peer Connection Initiated with [AF_INET]<span style="color:#3677a9">10</span>.3.2.9:13131
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 7</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /etc/openvpn/ccd/sgs7
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 8</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /tmp/openvpn_cc_2550293368432e205dcedc71562a78a3.tmp
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868"> 9</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]:      vpn : <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro del <span style="color:#3677a9">10</span>.3.2.5/32
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">10</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: unable to send audit message
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">11</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]: PAM audit_log_acct_message() failed: Operation not permitted
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">12</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]: pam_unix(sudo:session): session opened <span style="color:#6ab825;font-weight:bold">for</span> user root by (<span style="color:#40ffff">uid</span>=<span style="color:#3677a9">0</span>)
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">13</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28844</span>]:      vpn : pam_open_session: System error ; <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro del <span style="color:#3677a9">10</span>.3.2.5/32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">14</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: pam_open_session: System error
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">15</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: policy plugin failed session initialization
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">16</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]:      vpn : <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro add <span style="color:#3677a9">10</span>.3.2.5/32 dev tun1
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">17</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]: PAM audit_log_acct_message() failed: Operation not permitted
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">18</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: unable to send audit message
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">19</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]: pam_unix(sudo:session): session opened <span style="color:#6ab825;font-weight:bold">for</span> user root by (<span style="color:#40ffff">uid</span>=<span style="color:#3677a9">0</span>)
+<span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">20</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: pam_open_session: System error
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">21</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sudo: policy plugin failed session initialization
+</span><span style="display:block;width:100%;background-color:#363636"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">22</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn sudo[<span style="color:#3677a9">28845</span>]:      vpn : pam_open_session: System error ; <span style="color:#40ffff">TTY</span>=unknown ; <span style="color:#40ffff">PWD</span>=/etc/openvpn/server ; <span style="color:#40ffff">USER</span>=root ; <span style="color:#40ffff">COMMAND</span>=/sbin/ip ro add <span style="color:#3677a9">10</span>.3.2.5/32 dev tun1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">23</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 MULTI: Learn: <span style="color:#3677a9">10</span>.3.2.5 -&gt; sgs7/10.3.2.9:13131
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">24</span>Jan <span style="color:#3677a9">10</span> <span style="color:#3677a9">21</span>:52:57 vpn openvpn[<span style="color:#3677a9">28814</span>]: sgs7/10.3.2.9:13131 MULTI: primary virtual IP <span style="color:#6ab825;font-weight:bold">for</span> sgs7/10.3.2.9:13131: <span style="color:#3677a9">10</span>.3.2.5
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#686868">25</span>--- snip ---</code></pre></div>
 
 <p>From this log snippet I could tell that the daemon has started listening successfully (line 4), client has connected without any problems either (line 6) but then when running the <em>learn-address</em> script there is this <strong>&ldquo;Operation not permitted&rdquo;</strong> on multiple instances.</p>
 
@@ -544,15 +544,15 @@ The <strong><a href="https://www.freedesktop.org/software/systemd/man/systemd.ex
 
 <p>The easiest way to fix it is just to comment out that line:</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn-server@.service
-</span><span style="color:#999;font-style:italic"></span> --- snip ---
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># /lib/systemd/system/openvpn-server@.service</span>
+ --- snip ---
 [Service]
 <span style="color:#40ffff">Type</span>=notify
 <span style="color:#40ffff">PrivateTmp</span>=<span style="color:#24909d">true</span>
 <span style="color:#40ffff">WorkingDirectory</span>=/etc/openvpn/server
 <span style="color:#40ffff">ExecStart</span>=/usr/sbin/openvpn --status %t/openvpn-server/status-%i.log --status-version <span style="color:#3677a9">2</span> --suppress-timestamps --config %i.conf
-<span style="background-color:#363636;display:block;width:100%"><span style="color:#999;font-style:italic">#CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE
-</span></span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LimitNPROC</span>=<span style="color:#3677a9">10</span>
+<span style="display:block;width:100%;background-color:#363636"><span style="color:#999;font-style:italic">#CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE</span>
+</span><span style="color:#40ffff">LimitNPROC</span>=<span style="color:#3677a9">10</span>
 <span style="color:#40ffff">DeviceAllow</span>=/dev/null rw
 <span style="color:#40ffff">DeviceAllow</span>=/dev/net/tun rw
 <span style="color:#40ffff">ProtectSystem</span>=<span style="color:#24909d">true</span>
