@@ -5,11 +5,11 @@ draft: false
 author: "Viktor Barzin"
 description: "Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult."
 tags: ["OpenCV", "python", "machine learning", "raspberry pi", "RTSP", "character devices", "block devices", "kernel modules", "mknod", "virtual camera", "ffmpeg", "vlc", "IP Camera", "v4l2", "video4linux2 loopback", "dummy device"]
-firstImgUrl: "https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8-resized.png"
+firstImgUrl: "https://viktorbarzin.me/images/10-preview-resized.png"
 ---
 
 # Pre-Intro
-
+![](/images/10-now-you-see-me-d039cfd3.png)
 It's been a long time since my last blog post.
 
 I've been quite busy recently, playing around with [Go](https://golang.org/),
@@ -204,7 +204,7 @@ $ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p 
 ```
 Finally change the source code of the application to use camera id *2* instead of *0* (default) and it magically works!
 
-<img style="width:50%" src="/images/10-home-face-recognizer-0c438cd8.png" />
+![](/images/10-home-face-recognizer-0c438cd8.png)
 
 # Upcoming imporvements
 

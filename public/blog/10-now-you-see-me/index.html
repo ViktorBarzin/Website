@@ -5,7 +5,7 @@
         <title> 10 Now you see me... &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
 
 		<meta property='og:title' content="10 Now you see me..."/>
-<meta property="og:image" content="https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8-resized.png" />
+<meta property="og:image" content="https://viktorbarzin.me/images/10-preview-resized.png" />
 <meta property="og:description" content="Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult." />
 <meta property='og:url' content="https://viktorbarzin.me/blog/10-now-you-see-me/" />
 <meta property='og:type' content="website" />
@@ -14,7 +14,7 @@
 
 <meta name="twitter:title" content="10 Now you see me..." />
 <meta name="twitter:description" content="Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult." />
-<meta name="twitter:image" content="https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8-resized.png" />
+<meta name="twitter:image" content="https://viktorbarzin.me/images/10-preview-resized.png" />
 <meta name="twitter:site" content="@viktorbarzin" />
 <meta name="twitter:creator" content="@viktorbarzin" />
 
@@ -63,7 +63,7 @@
     "dateModified" : "2019-05-18 14:24:22 \x2b0000 UTC",
     "url" : "https:\/\/viktorbarzin.me\/blog\/10-now-you-see-me\/",
     "wordCount" : "1685",
-    "image": 	"https:\/\/viktorbarzin.me\/images\/10-home-face-recognizer-0c438cd8-resized.png",
+    "image": 	"https:\/\/viktorbarzin.me\/images\/10-preview-resized.png",
     "keywords" : [ "OpenCV","python","machine learning","raspberry pi","RTSP","character devices","block devices","kernel modules","mknod","virtual camera","ffmpeg","vlc","IP Camera","v4l2","video4linux2 loopback","dummy device","Blog" ]
 }
 </script>
@@ -165,7 +165,8 @@
 
 <h1 id="pre-intro">Pre-Intro</h1>
 
-<p>It&rsquo;s been a long time since my last blog post.</p>
+<p><img src="/images/10-now-you-see-me-d039cfd3.png" alt="" />
+It&rsquo;s been a long time since my last blog post.</p>
 
 <p>I&rsquo;ve been quite busy recently, playing around with <a href="https://golang.org/">Go</a>,
 <a href="https://www.haskell.org/">Haskell</a>, <a href="https://www.haskell.org/alex/">Alex parser</a>,
@@ -348,7 +349,7 @@ There are quite a few moving parts that I had to basically brute-force to make t
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p /dev/video2</code></pre></div>
 <p>Finally change the source code of the application to use camera id <em>2</em> instead of <em>0</em> (default) and it magically works!</p>
 
-<p><img style="width:50%" src="/images/10-home-face-recognizer-0c438cd8.png" /></p>
+<p><img src="/images/10-home-face-recognizer-0c438cd8.png" alt="" /></p>
 
 <h1 id="upcoming-imporvements">Upcoming imporvements</h1>
 
