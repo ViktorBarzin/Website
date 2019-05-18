@@ -46,7 +46,7 @@ The main source for my code was mentioned previously. Here's the [link](https://
 They describe how the code they've posted works and how to train the support vector machine for your face from new images.
 As a bonus, they even added face recognition using a video source!
 
-![](https://s3-us-west-2.amazonaws.com/static.pyimagesearch.com/opencv-face-recognition/opencv_face_reco_animation.gif)
+![](/images/opencv_face_reco_animation.gif)
 
 # So... if the code is online what did I do exactly?
 
