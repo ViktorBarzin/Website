@@ -5,7 +5,7 @@ draft: false
 author: "Viktor Barzin"
 description: "Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult."
 tags: ["OpenCV", "python", "machine learning", "raspberry pi", "RTSP", "character devices", "block devices", "kernel modules", "mknod", "virtual camera", "ffmpeg", "vlc", "IP Camera", "v4l2", "video4linux2 loopback", "dummy device"]
-firstImgUrl: "https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8.png"
+firstImgUrl: "https://viktorbarzin.me/images/10-home-face-recognizer-0c438cd8-resized.png"
 ---
 
 # Pre-Intro
