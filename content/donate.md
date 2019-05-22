@@ -17,11 +17,15 @@ This page is the only one where you'll see ads (just 1 in fact).
 If you fancy helping out, hopefully there will be an ad below that you can click.
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9755293925267478"
+     data-ad-slot="4603093521"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
-  (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-9755293925267478",
-    enable_page_level_ads: true
-  });
+     (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
 ### Cheers!
