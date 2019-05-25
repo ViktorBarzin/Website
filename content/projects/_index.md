@@ -2,6 +2,10 @@
 title: "Projects"
 date: 2018-09-19T01:33:52+03:00
 draft: false
+author: "Viktor Barzin"
+description: "This is the projects page where I've put some of my highlighted projects."
+tags: ["Projects", "hobbies"]
+firstImgUrl: "https://viktorbarzin.me/images/projects-technology.png"
 ---
 
 This page is a brief showcase of some of the projects I've done myself.
