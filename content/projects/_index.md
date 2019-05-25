@@ -15,12 +15,12 @@ My "home" lab is a bit unusual - comprises of 2 servers, linked with s simple SO
 Here's the in-s and out-s of the R310 machine:
 
 <img style="height:500px" src="/images/projects-e95ca33a.png" />
-<img style="width:74%" src="images/projects-5b561189.png" />
+<img style="width:74%" src="/images/projects-5b561189.png" />
 
 And the T610 one:
 
-<img style="width:50%" src="images/projects-2f875e9d.png" />
-<img style="width:100%" src="images/projects-0446bfc5.png" />
+<img style="width:50%" src="/images/projects-2f875e9d.png" />
+<img style="width:100%" src="/images/projects-0446bfc5.png" />
 
 You can see that the T610 machine has 2 CPUs - adding the 2nd one required adding thermal paste and hoping it will work since the entire setup isn't quite new and stuff could have broken down in various ways.
 
