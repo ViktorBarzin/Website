@@ -62,7 +62,7 @@
     "datePublished": "2019-05-18 14:24:22 \x2b0000 UTC",
     "dateModified" : "2019-05-18 14:24:22 \x2b0000 UTC",
     "url" : "https:\/\/viktorbarzin.me\/blog\/10-now-you-see-me\/",
-    "wordCount" : "1685",
+    "wordCount" : "2122",
     "image": 	"https:\/\/viktorbarzin.me\/images\/10-preview-resized.png",
     "keywords" : [ "OpenCV","python","machine learning","raspberry pi","RTSP","character devices","block devices","kernel modules","mknod","virtual camera","ffmpeg","vlc","IP Camera","v4l2","video4linux2 loopback","dummy device","Blog" ]
 }
@@ -357,10 +357,53 @@ There are quite a few moving parts that I had to basically brute-force to make t
 
 <p><img src="/images/10-home-face-recognizer-0c438cd8.png" alt="" /></p>
 
-<h1 id="upcoming-imporvements">Upcoming imporvements</h1>
+<h1 id="upcoming-improvements">Upcoming improvements</h1>
 
 <p>Next step is to put all this setup on the raspberry pi and run some scripts based on who the detected person is.
 Still have to gather all my housemates&rsquo; consent but you know, people are easier to handle with than computers :D</p>
+
+<h1 id="update">Update</h1>
+
+<p>Setup on the raspberry was tricky due to the <strong>limited resources</strong>.
+<code>pip install -r requirements.txt</code> failed because of <strong>insufficient ram</strong>.</p>
+
+<p><strong>All 4 virtual cpus ran on 100%</strong> eating up all of the 1GB of memory causing the pi to render useless for the time being.</p>
+
+<p>This meant I had to come up with an alternative way to pip install all the needed requirements.
+<strong>The main issue was the compilation of the Cython-related libraries</strong> like <em>numpy</em> and <em>matplotlib</em>.</p>
+
+<p>Fortunately <strong><code>pip install</code>-ing them separately did the trick</strong>.
+After installing the last few system packages like <em>python-dev</em> and the <em>raspberry-kernel-headers</em> for the video4linux2loobpack module everything worked!
+The compilation of the latter was trouble-free and the pi started recognizing images.</p>
+
+<p>The next issue was performance - <strong>with full FPS, the pi was struggling quite hard</strong> to deal with the incoming frames, process them and produce some output.
+So a necessary hack was needed - I added an extra <code>sleep</code> before rendering each frame, whose purpose is to <strong>drop the FPS</strong> and let the pi some air to breathe.</p>
+
+<p>Now there was some tweaking to find the best balance between latency and performance, but soon enough I had a <strong>latency at around 1-2s for 50% load average</strong> which is reasonable.</p>
+
+<h1 id="privacy-concerns">Privacy concerns</h1>
+
+<p>Now obviously there are some <strong>privacy concerns with having an IP camera streaming</strong> all the time.</p>
+
+<p>Excluding myself, it is reasonable to consider the opportunity of <strong>a third party watching the stream as well</strong> (I would be surprised if a chinese ip camera wasn&rsquo;t monitored).</p>
+
+<p>It is disturbing to know that someone might be watching on the other side so I took some precautionary actions to ensure that myself and noone else is watching that live feed.</p>
+
+<p>I simply put the camera to a network without an uplink and connected the pi&rsquo;s wlan interface to it.
+Also made sure that the pi is dropping everything from the camera&rsquo;s ip address except for the RTSP traffic.</p>
+
+<p>So this is what the final setup looks like network-wise:</p>
+
+<p><img src="/images/10-now-you-see-me-4d94ba6b.png" alt="" /></p>
+
+<p>Yes, I could have made it simpler with a simple SOHO router running OpenWRT, unfortunately the devices I had weren&rsquo;t supported so I had to physically block the camera&rsquo;s internet access.</p>
+
+<h1 id="future-plans">Future plans</h1>
+
+<p>Currently, I am the only person that can be recognized by the application, and once it does <em>see</em> me, it says hi to me which is cute.
+I have to add some more pictures of myself and some other people to improve the accuracy of the SVM and that&rsquo;s pretty much it.</p>
+
+<p>P.S: Oh btw, it recognizes people in full darkness as well using it&rsquo;s IR camera which is pretty cool!</p>
 
             </div>
             

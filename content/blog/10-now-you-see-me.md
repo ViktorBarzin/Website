@@ -205,7 +205,50 @@ Finally change the source code of the application to use camera id *2* instead o
 
 ![](/images/10-home-face-recognizer-0c438cd8.png)
 
-# Upcoming imporvements
+# Upcoming improvements
 
 Next step is to put all this setup on the raspberry pi and run some scripts based on who the detected person is.
 Still have to gather all my housemates' consent but you know, people are easier to handle with than computers :D
+
+# Update
+
+Setup on the raspberry was tricky due to the **limited resources**.
+`pip install -r requirements.txt` failed because of **insufficient ram**.
+
+**All 4 virtual cpus ran on 100%** eating up all of the 1GB of memory causing the pi to render useless for the time being.
+
+This meant I had to come up with an alternative way to pip install all the needed requirements.
+**The main issue was the compilation of the Cython-related libraries** like *numpy* and *matplotlib*.
+
+Fortunately **`pip install`-ing them separately did the trick**.
+After installing the last few system packages like *python-dev* and the *raspberry-kernel-headers* for the video4linux2loobpack module everything worked!
+The compilation of the latter was trouble-free and the pi started recognizing images.
+
+The next issue was performance - **with full FPS, the pi was struggling quite hard** to deal with the incoming frames, process them and produce some output.
+So a necessary hack was needed - I added an extra `sleep` before rendering each frame, whose purpose is to **drop the FPS** and let the pi some air to breathe.
+
+Now there was some tweaking to find the best balance between latency and performance, but soon enough I had a **latency at around 1-2s for 50% load average** which is reasonable.
+
+# Privacy concerns
+
+Now obviously there are some **privacy concerns with having an IP camera streaming** all the time.
+
+Excluding myself, it is reasonable to consider the opportunity of **a third party watching the stream as well** (I would be surprised if a chinese ip camera wasn't monitored).
+
+It is disturbing to know that someone might be watching on the other side so I took some precautionary actions to ensure that myself and noone else is watching that live feed.
+
+I simply put the camera to a network without an uplink and connected the pi's wlan interface to it.
+Also made sure that the pi is dropping everything from the camera's ip address except for the RTSP traffic.
+
+So this is what the final setup looks like network-wise:
+
+![](/images/10-now-you-see-me-4d94ba6b.png)
+
+Yes, I could have made it simpler with a simple SOHO router running OpenWRT, unfortunately the devices I had weren't supported so I had to physically block the camera's internet access.
+
+# Future plans
+
+Currently, I am the only person that can be recognized by the application, and once it does *see* me, it says hi to me which is cute.
+I have to add some more pictures of myself and some other people to improve the accuracy of the SVM and that's pretty much it.
+
+P.S: Oh btw, it recognizes people in full darkness as well using it's IR camera which is pretty cool!
