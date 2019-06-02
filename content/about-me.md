@@ -1,9 +1,11 @@
 ---
 title: "About me"
 date: 2018-09-02T00:22:22+01:00
+author: "Viktor Barzin"
 draft: false
-sitemap:
-   priority: 0.5
+description: "This page tells more about myself."
+tags: []
+firstImgUrl: "https://viktorbarzin.me/images/index-f170bc66.png"
 ---
 
 Hi there! I'm Viktor.
