@@ -24,7 +24,7 @@ If you fancy helping out, hopefully there will be an ad below that you can click
      data-ad-slot="4603093521"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
-<script>
+<script nonce="2726c7f26v">
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
