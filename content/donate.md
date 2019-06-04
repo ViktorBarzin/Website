@@ -16,7 +16,7 @@ This page is the only one where you'll see ads (just 1 in fact).
 
 If you fancy helping out, hopefully there will be an ad below that you can click.
 
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script nonce="2726c7f26v" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- ad1 -->
 <ins class="adsbygoogle"
      style="display:block"
