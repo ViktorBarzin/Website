@@ -5,7 +5,7 @@ date: 2019-06-20T14:07:50+03:00
 description: ""
 tags: []
 firstImgUrl: "https://viktorbarzin.me/"
-draft: true
+draft: false
 ---
 
 # Introduction
