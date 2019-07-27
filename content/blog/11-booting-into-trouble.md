@@ -2,9 +2,9 @@
 title: "11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way"
 author: "Viktor Barzin"
 date: 2019-07-27T12:07:50+03:00
-description: ""
-tags: []
-firstImgUrl: "https://viktorbarzin.me/"
+description: "Explaining the early phases of the boot process. Difference between BIOS booting with MBR formatted disk and UEFI booting with GPG formatted disk."
+tags: ["bios", "uefi", "boot", "process", "mbr", "master boot record", "gpt table", "recovery", "luks", "encrypted", "kernel", "efi system partition", "esp"]
+firstImgUrl: "https://viktorbarzin.me/images/11-booting-into-trouble-6-13-50-06.png"
 draft: false
 ---
 
