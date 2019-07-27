@@ -1,7 +1,7 @@
 ---
 title: "11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way"
 author: "Viktor Barzin"
-date: 2019-06-20T14:07:50+03:00
+date: 2019-07-27T12:07:50+03:00
 description: ""
 tags: []
 firstImgUrl: "https://viktorbarzin.me/"
