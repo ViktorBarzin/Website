@@ -10,10 +10,6 @@ firstImgUrl: ""
 
 # Thanks for coming here!
 
-As you might have noticed, there aren't any ads in place anywhere in the site.
-
-This page is the only one where you'll see ads (just 1 in fact).
-
 If you fancy helping out, hopefully there will be an ad below that you can click.
 
 <script nonce="2726c7f26v" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -27,5 +23,6 @@ If you fancy helping out, hopefully there will be an ad below that you can click
 <script nonce="2726c7f26v">
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+
 
 ### Cheers!

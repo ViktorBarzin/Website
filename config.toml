@@ -40,7 +40,7 @@ FacebookID = "viktorbarzin"
         name = "projects"
         weight = 1
         url = "/projects/"
-    [[menu.header]]
-        name = "donate"
-        url = "/donate/"
-        weight = 0
+    # [[menu.header]]
+        # name = "donate"
+        # url = "/donate/"
+        # weight = 0
