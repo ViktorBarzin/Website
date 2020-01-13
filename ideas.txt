@@ -147,3 +147,17 @@ bitwise or to send multiple modifiers
 
 _delay_ms requires constant sleep time - so loop constant times :P
 https://www.avrfreaks.net/forum/error-1-builtinavrdelaycycles-expects-integer-constant
+
+
+----------------------- btrfs snappper is awesome-----------------------
+snapper for doing btrfs snapshots - backups and running dangerous commands
+http://snapper.io/tutorial.html
+https://wiki.archlinux.org/index.php/Snapper
+
+
+----------------------- automating certificate renewals on viktorbarzin.me-----------------------
+
+----------------------- thyme for activity tracking-----------------------
+https://github.com/sourcegraph/thyme
+
+----------------------- vscode for latex dev-----------------------

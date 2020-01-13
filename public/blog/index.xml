@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog on Viktor Barzin (Viktor Barzin&#39;s Website)</title>
@@ -10,6 +10,17 @@
     
 	<atom:link href="https://viktorbarzin.me/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>12 Why I switched from LVM&#43;EXT4 to BTRFS</title>
+      <link>https://viktorbarzin.me/blog/12-why-i-switched-from-lvm-ext4-to-btrfs/</link>
+      <pubDate>Mon, 13 Jan 2020 01:25:47 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/12-why-i-switched-from-lvm-ext4-to-btrfs/</guid>
+      <description>Introduction Happy 2020 chaps!
+It&amp;rsquo;s January again, and it&amp;rsquo;s exam time for me, which means procrastination. And what better way to procrastinate than exploring something awesome like BTRFS snapshots?
+In this blog post I&amp;rsquo;ll share why I migrated from LVM + EXT4 to BTRFS and the benefits I found. I&amp;rsquo;ll go briefly through my experience with BTRFS and I&amp;rsquo;ll also share a tool I found recently - Snapper - which makes snapshotting even easier so let&amp;rsquo;s get started!</description>
+    </item>
     
     <item>
       <title>11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way</title>
