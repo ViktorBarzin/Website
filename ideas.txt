@@ -151,8 +151,6 @@ https://www.avrfreaks.net/forum/error-1-builtinavrdelaycycles-expects-integer-co
 
 ----------------------- btrfs snappper is awesome-----------------------
 snapper for doing btrfs snapshots - backups and running dangerous commands
-http://snapper.io/tutorial.html
-https://wiki.archlinux.org/index.php/Snapper
 
 
 ----------------------- automating certificate renewals on viktorbarzin.me-----------------------
@@ -161,3 +159,10 @@ https://wiki.archlinux.org/index.php/Snapper
 https://github.com/sourcegraph/thyme
 
 ----------------------- vscode for latex dev-----------------------
+
+
+----------------------- fix security onion and improve logging on vpn clients only-----------------------
+pcaps in /nsm/sensor_data/so-ens36/dailylogs
+
+
+----------------------- nginx client certificates -----------------------
