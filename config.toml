@@ -22,10 +22,11 @@ About = "My name is Viktor. I am a student who is interested in technology. I li
 Title = "Viktor Barzin (Viktor Barzin's Website And Personal Blog)"
 ProfilePicture = "https://viktorbarzin.me/images/profile-picture.jpeg"
 GithubID = "viktorbarzin"
-GnuPGFingerprint = "8288D958"
+GnuPGFingerprint = "0EB088298288D958"
 TwitterID = "viktorbarzin"
 LinkedInID = "viktor-barzin"
 FacebookID = "viktorbarzin"
+InstagramID = "vikkbarzin"
 
 [menu]
     [[menu.header]]
