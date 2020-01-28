@@ -20,7 +20,7 @@ tags:
     "trr",
     "trusted recursive resolver",
   ]
-firstImgUrl: "https://viktorbarzin.me/images/14-dns-over-https-2-22-29-48.png"
+firstImgUrl: "https://viktorbarzin.me/images/14-dns-over-https-linkedin.png"
 draft: false
 ---
 
