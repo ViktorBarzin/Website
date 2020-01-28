@@ -149,10 +149,6 @@ _delay_ms requires constant sleep time - so loop constant times :P
 https://www.avrfreaks.net/forum/error-1-builtinavrdelaycycles-expects-integer-constant
 
 
------------------------ btrfs snappper is awesome-----------------------
-snapper for doing btrfs snapshots - backups and running dangerous commands
-
-
 ----------------------- automating certificate renewals on viktorbarzin.me-----------------------
 
 ----------------------- thyme for activity tracking-----------------------
@@ -164,5 +160,7 @@ https://github.com/sourcegraph/thyme
 ----------------------- fix security onion and improve logging on vpn clients only-----------------------
 pcaps in /nsm/sensor_data/so-ens36/dailylogs
 
-
------------------------ nginx client certificates -----------------------
+-----------------------  zabbix monitoring vmware ----------------------- 
+http://mjmohebbi.com/en/blog/How-to-monitor-your-VMware-vSphere-infrastructure-using-Zabbix-&-Grafana
+https://www.zabbix.com/documentation/3.4/manual/vm_monitoring
+https://techexpert.tips/zabbix/zabbix-monitor-vmware-esxi/
