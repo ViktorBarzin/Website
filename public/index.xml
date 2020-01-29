@@ -6,7 +6,7 @@
     <description>Recent content on Viktor Barzin (Viktor Barzin&#39;s Website)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Jan 2020 22:40:13 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 Jan 2020 09:40:13 +0000</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>14 DNS Over HTTPS</title>
       <link>https://viktorbarzin.me/blog/14-dns-over-https/</link>
-      <pubDate>Tue, 28 Jan 2020 22:40:13 +0000</pubDate>
+      <pubDate>Wed, 29 Jan 2020 09:40:13 +0000</pubDate>
       
       <guid>https://viktorbarzin.me/blog/14-dns-over-https/</guid>
       <description>Introduction This post is mainly about me sharing some very useful resources and bringing light onto the cool idea behind DNS-over-HTTPS (aka. DoH).

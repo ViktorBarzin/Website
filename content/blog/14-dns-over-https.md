@@ -1,6 +1,6 @@
 ---
 title: "14 DNS Over HTTPS"
-date: 2020-01-28T22:40:13Z
+date: 2020-01-29T09:40:13Z
 author: "Viktor Barzin"
 description: "This post is mainly about me sharing some very useful resources and bringing light onto the cool idea behind DNS-over-HTTPS (aka. DoH). I'll also share a simple setup on how to run your own DoH server to hide your DNS lookups from spying eyes."
 tags:
