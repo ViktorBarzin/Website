@@ -1,57 +1,123 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!--
+ created with Free Online Sitemap Generator www.xml-sitemaps.com 
+-->
 <url>
-  <loc>https://viktorbarzin.me/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>1.00</priority>
+<loc>https://viktorbarzin.me/</loc>
+<lastmod>2020-02-01T15:37:09+00:00</lastmod>
+<priority>1.00</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://viktorbarzin.me/blog/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.80</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/projects/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://viktorbarzin.me/projects/</loc>
+<lastmod>2020-02-01T15:37:09+00:00</lastmod>
+<priority>0.80</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/about-me/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://viktorbarzin.me/about-me/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.80</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/05-haproxy/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.64</priority>
+<loc>https://viktorbarzin.me/blog/14-dns-over-https/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/04-down-the-rabbit-hole/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.64</priority>
+<loc>
+https://viktorbarzin.me/blog/13-client-side-certificate-authentication-with-nginx/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.64</priority>
+<loc>
+https://viktorbarzin.me/blog/12-why-i-switched-from-lvm-ext4-to-btrfs/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/02-blog-a-blog/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.64</priority>
+<loc>
+https://viktorbarzin.me/blog/11-booting-into-trouble/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
 </url>
 <url>
-  <loc>https://viktorbarzin.me/blog/01-secure-by-default/</loc>
-  <lastmod>2018-10-18T22:29:35+00:00</lastmod>
-  <priority>0.64</priority>
+<loc>https://viktorbarzin.me/blog/10-now-you-see-me/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
 </url>
-
-
+<url>
+<loc>
+https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>
+https://viktorbarzin.me/blog/08-defeating-censorship-with-tcp-openvpn/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>
+https://viktorbarzin.me/blog/07-raspberry-bluetooth-aux-setup/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>
+https://viktorbarzin.me/blog/06-facebook-application-feedback/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>https://viktorbarzin.me/blog/05-haproxy/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>https://viktorbarzin.me/blog/page/2/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>
+https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>https://viktorbarzin.me/blog/02-blog-a-blog/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.64</priority>
+</url>
+<url>
+<loc>https://viktorbarzin.me/images/06-cv.pdf</loc>
+<lastmod>2020-02-01T15:39:09+00:00</lastmod>
+<priority>0.51</priority>
+</url>
+<url>
+<loc>
+https://viktorbarzin.me/blog/04-down-the-rabbit-hole/
+</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.51</priority>
+</url>
+<url>
+<loc>https://viktorbarzin.me/blog/01-secure-by-default/</loc>
+<lastmod>2020-02-01T15:37:07+00:00</lastmod>
+<priority>0.51</priority>
+</url>
 </urlset>
