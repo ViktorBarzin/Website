@@ -252,7 +252,7 @@ I gave it a try to see whether it really logs only header data or does it perfor
 
 <p>in one shell, and</p>
 
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl testmyids.com</code></pre></div>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ed9d13">\$</span> curl testmyids.com</code></pre></div>
 
 <p>in another resulted in the following pcap:</p>
 
@@ -278,7 +278,7 @@ This means that if I want HTTP traffic I&rsquo;ll have to install some web conte
 
 <p>It&rsquo;s not the most elegant solution but I already had <a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks.html">playbooks</a> to install and setup packetbeat so it&rsquo;s an okay-ish solution.</p>
 
-<p>Unfortunately, when I started reading about integrating Security Onion with  packetbeat, I was slapped in the face by the <a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Beats">Security Onions&rsquo;s documentation</a> that says that the only supported *beats are <strong>Filebeat</strong> and <strong>Winlogbeat</strong>.</p>
+<p>Unfortunately, when I started reading about integrating Security Onion with packetbeat, I was slapped in the face by the <a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Beats">Security Onions&rsquo;s documentation</a> that says that the only supported *beats are <strong>Filebeat</strong> and <strong>Winlogbeat</strong>.</p>
 
 <p><img src="/images/09-security-onion-setup-75cec2db.png" alt="" /></p>
 
@@ -330,7 +330,7 @@ Wandering its settings, a particular one caught my attention - <strong>promiscuo
 <p>I came up with the following plan - create a bridge interface on the pfSense appliance, that would bridge all of the interfaces that I want to monitor.
 Create a new portgroup on the vSwitch that would act like a hub and add 2 members to it - the bridged interface from the pfSense and the other one would be the listening interface from the Security Onion appliance.</p>
 
-<p>This way, all of the traffic would be basically broadcasted in a portgroup in which the only other member would be the Security Onion that would happily look at it all  and do its thing.</p>
+<p>This way, all of the traffic would be basically broadcasted in a portgroup in which the only other member would be the Security Onion that would happily look at it all and do its thing.</p>
 
 <p>That idea may be a bit hard to grasp especially if you&rsquo;re a beginner in networking so I&rsquo;ll throw in this picture because images always help:</p>
 

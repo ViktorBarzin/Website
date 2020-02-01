@@ -17,6 +17,8 @@ tags:
     "rsync",
   ]
 firstImgUrl: "https://viktorbarzin.me/images/12-filesystem-snapshots-made-easy-1-01-39-44.png"
+sitemap:
+  priority: 0.3
 draft: false
 ---
 

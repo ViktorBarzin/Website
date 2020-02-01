@@ -4,11 +4,32 @@ date: 2019-05-18T14:24:22Z
 draft: false
 author: "Viktor Barzin"
 description: "Setting up a home face recognition using OpenCV, raspberry pi and an IP camera. Not focusing on the face recognition part but on linking the python app with the camera which proved to be way more difficult."
-tags: ["OpenCV", "python", "machine learning", "raspberry pi", "RTSP", "character devices", "block devices", "kernel modules", "mknod", "virtual camera", "ffmpeg", "vlc", "IP Camera", "v4l2", "video4linux2 loopback", "dummy device"]
+tags:
+  [
+    "OpenCV",
+    "python",
+    "machine learning",
+    "raspberry pi",
+    "RTSP",
+    "character devices",
+    "block devices",
+    "kernel modules",
+    "mknod",
+    "virtual camera",
+    "ffmpeg",
+    "vlc",
+    "IP Camera",
+    "v4l2",
+    "video4linux2 loopback",
+    "dummy device",
+  ]
+sitemap:
+  priority: 0.3
 firstImgUrl: "https://viktorbarzin.me/images/10-preview-resized.png"
 ---
 
 # Pre-Intro
+
 It's been a long time since my last blog post.
 
 I've been quite busy recently, playing around with [Go](https://golang.org/),
@@ -61,7 +82,7 @@ Next thing is to make it read the **RTSP stream** which shouldn't be too hard ri
 
 # The issue
 
-[According to StackOverflow](https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python) OpenCV *does* support RTSP, however, this was **not the case** for my setup.
+[According to StackOverflow](https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python) OpenCV _does_ support RTSP, however, this was **not the case** for my setup.
 
 It is possible that I've done something wrong so if anyone figures out how to make it work I'll get him a beer.
 Upon running `recognize_video.py` it reaches the point of reading from the camera and after a little timeout it errors out:
@@ -71,13 +92,15 @@ Upon running `recognize_video.py` it reaches the point of reading from the camer
 Yes, I've triple-checked the URI so the issue lies somewhere else.
 
 ### My build info that DOESN'T allow OpenCV to read from a RTSP source
+
 Here's my setup info if anyone fancies a try to debug with me:
+
 ```
 fedora 30 with latest updates
 python --version -> python 3.7.3
 cv2.__version__ -> 4.1.0
 
-cv2.getBuildConfiguration() (Video I/O section) ->  
+cv2.getBuildConfiguration() (Video I/O section) ->
 
     DC1394:                      NO
     FFMPEG:                      YES
@@ -119,15 +142,16 @@ I did try some bash-fu to make OpenCV read from a constantly changing file but c
 
 After a bit of google-ing on [character devices and block devices](https://www.quora.com/What-is-the-difference-between-character-and-block-device-drivers-in-UNIX), soon enough I arrived at the `mknod` command.
 
-Turns out that `/dev/videoX` devices as well as some other such as `/dev/null`, `/dev/random` etc. are all [*character devices*](https://www.win.tue.nl/~aeb/linux/lk/lk-11.html).
+Turns out that `/dev/videoX` devices as well as some other such as `/dev/null`, `/dev/random` etc. are all [_character devices_](https://www.win.tue.nl/~aeb/linux/lk/lk-11.html).
 
 The command to make one and let the kernel know it should treat it as a camera device is:
+
 ```Bash
 $ sudo mknod test_cam c 81 0
 ```
 
 The `c` tells it's a character device, `81` and `0` tell the kernel what modules to use for that specific device ([list of all device major minor numbers](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/devices.txt) - 81 is char device, the 0 is `/dev/video0`).
-Now running `file` on the new *file* confirms it is a character device:
+Now running `file` on the new _file_ confirms it is a character device:
 
 ```Bash
 $ file test_cam
@@ -143,27 +167,31 @@ Let's see how to write to it now.
 My initial idea was to basically do something similar to `sudo cat video.mp4 > test_cam` and afterwards read from `test_cam`.
 
 Well surprise, surprise writing to character devices isn't that straightforward.
+
 ```Bash
 [root@yuhu]: cat kek.mp4 > test_cam
 cat: write error: Invalid argument
 [root@yuhu]: echo 1 > test_cam
 -bash: echo: write error: Invalid argument
 ```
-They expect data in *characters* as opposed to *blocks* with which we are used to.
+
+They expect data in _characters_ as opposed to _blocks_ with which we are used to.
 So **outputting a file into a character devices wouldn't make much sense** the way I was trying to do it.
 [This](https://unix.stackexchange.com/questions/409874/how-to-write-to-a-character-special-device#answer-409879) answer explains it in **greater detail**.
 
 I decided bothering with kernel IO would be too much for 1am so I started **looking elsewhere**.
 
 ### v4l2loopback module
+
 At some point it started to get a bit depressing since **forwarding a RTSP video source to a local virtual camera isn't something people do every day** and therefore not much is online about how to go about it.
 
 On the edge of despair (opening sites that I've already gone through) I found [v4l2loopback](https://github.com/umlaeute/v4l2loopback) module.
-*Lord and saviour!*
+_Lord and saviour!_
 
 This is a kernel module that enables us to creating virtual video devices that normal [video4linux2](https://en.wikipedia.org/wiki/Video4Linux) (v4l2) applications can read as capture device, but also allows writing to it which is what I was after!
 
 Next step was to start writing to it.
+
 # FFMPeg magic
 
 The tool of choice for me was the infamous [ffmpeg](https://ffmpeg.org/) which is like a Swiss knife for media.
@@ -183,7 +211,7 @@ You can see some silhouettes here and there so there was light at the end of the
 
 # At last
 
-Finally, on the following day by continuing to tweak parameters of *ffmpeg* I finally had success reading the stream with the correct settings. Running the face recognition python app afterwards was as simple as changing the id it uses for the camera input.
+Finally, on the following day by continuing to tweak parameters of _ffmpeg_ I finally had success reading the stream with the correct settings. Running the face recognition python app afterwards was as simple as changing the id it uses for the camera input.
 
 <img style="width:40%" src="/images/10-face-recog-working-ip-cam.jpg" />
 
@@ -201,7 +229,8 @@ The magic steps that made all this possible were:
 ```Bash
 $ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p /dev/video2
 ```
-Finally change the source code of the application to use camera id *2* instead of *0* (default) and it magically works!
+
+Finally change the source code of the application to use camera id _2_ instead of _0_ (default) and it magically works!
 
 ![](/images/10-home-face-recognizer-0c438cd8.png)
 
@@ -218,10 +247,10 @@ Setup on the raspberry was tricky due to the **limited resources**.
 **All 4 virtual cpus ran on 100%** eating up all of the 1GB of memory causing the pi to render useless for the time being.
 
 This meant I had to come up with an alternative way to pip install all the needed requirements.
-**The main issue was the compilation of the Cython-related libraries** like *numpy* and *matplotlib*.
+**The main issue was the compilation of the Cython-related libraries** like _numpy_ and _matplotlib_.
 
 Fortunately **`pip install`-ing them separately did the trick**.
-After installing the last few system packages like *python-dev* and the *raspberry-kernel-headers* for the video4linux2loobpack module everything worked!
+After installing the last few system packages like _python-dev_ and the _raspberry-kernel-headers_ for the video4linux2loobpack module everything worked!
 The compilation of the latter was trouble-free and the pi started recognizing images.
 
 The next issue was performance - **with full FPS, the pi was struggling quite hard** to deal with the incoming frames, process them and produce some output.
@@ -248,7 +277,7 @@ Yes, I could have made it simpler with a simple SOHO router running OpenWRT, unf
 
 # Future plans
 
-Currently, I am the only person that can be recognized by the application, and once it does *see* me, it says hi to me which is cute.
+Currently, I am the only person that can be recognized by the application, and once it does _see_ me, it says hi to me which is cute.
 I have to add some more pictures of myself and some other people to improve the accuracy of the SVM and that's pretty much it.
 
 P.S: Oh btw, it recognizes people in full darkness as well using it's IR camera which is pretty cool!

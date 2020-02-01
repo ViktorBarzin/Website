@@ -1,10 +1,24 @@
 ---
-author : "Viktor Barzin"
+author: "Viktor Barzin"
 title: "07 Going musical - Setting up an improvised home audio system"
 date: 2018-12-20T13:01:54Z
 description: "In this blogpost I share my experience setting up an improvised audio system that consists of a raspberry pi and 2 bluetooth speakers"
-tags: ["raspberrypi", "bluetooth", "logitech", "speakers", "linux", "systemd", "rc.local", "volumio", "flask", "expect"]
+tags:
+  [
+    "raspberrypi",
+    "bluetooth",
+    "logitech",
+    "speakers",
+    "linux",
+    "systemd",
+    "rc.local",
+    "volumio",
+    "flask",
+    "expect",
+  ]
 draft: false
+sitemap:
+  priority: 0.3
 firstImgUrl: "https://viktorbarzin.me/images/07-raspberry-bluetooth-aux-setup-6c366282.png"
 ---
 
@@ -20,16 +34,19 @@ without having an external bluetooth adapter one could not easily play the same 
 In this blog post I'll show you how with a raspberry pi, some clever thinking and a fair amount of patience I managed to stream music simultaneously onto both.
 
 # What's the issue?
+
 The thing with bluetooth is that if you have 1 adapter - you can connect to 1 receiver and that's it.
 There isn't much room for doing hacky stuff like connecting to multiple receivers with 1 adapter.
 
 As you can imagine, playing music on 2 speakers is always better than playing it on 1 only so measures had to be taken.
 
 # What options are there?
+
 The speakers also have an AUX input. Add a [simple aux splitter](https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=aux+splitter) and it's problem solved at that point.
 However, it is quite inconvenient to walk around the room with an aux cable hanging from whatever device I'm using to stream music from so I had to come up with something cleverer.
 
 # Perhaps make use of the raspberry pi?
+
 The next thing that came to my mind was to use my flatmate's raspberry pi for a media server to which I could stream music.
 There's plenty of media server software out there for raspberries so not after long I had a [Volumio](https://volumio.org/) instance up and running.
 
@@ -37,15 +54,18 @@ It was somewhat ok - the web interface is a misbehaves rather often (perhaps bec
 There are plugins available for Youtube, Spotify and what not so you can listen music from a variety of sources.
 
 # Raspberry + Volumio + AUX splitter - the solution?
+
 Unfortunately the implementation is quite hacky so it is not as usable as I want it to be.
 Say I wanted to play some online radio that wasn't in Volumio's list or perhaps play a youtube playlist (yes Volumio allows playing videos 1 by 1 only) - with Volumio I am somewhat limited.
 
 #### What I'd like is to be able to play media from whatever source to the raspberry and it would then forward it to its aux output.
+
 Simple right?
 
 Volumio was not the solution for me. I tried other media servers such as [Kodi](https://kodi.tv/) but it wasn't what I wanted either.
 
 # Meh, let's replace the Volumio part
+
 So I had to go closer to the metal. I opened the specs of the raspberry and it turned out that it has a bluetooth adapter as well!
 
 ![](/images/07-raspberry-bluetooth-aux-setup-3ecd27a1.png)
@@ -55,10 +75,9 @@ This would work regardless of the media source I use!
 
 # Raspberry pi as a bluetooth speaker
 
-I came across this promising [guide](https://www.raspberrypi.org/forums/viewtopic.php?t=68779
-) that began with the words:
+I came across this promising [guide](https://www.raspberrypi.org/forums/viewtopic.php?t=68779) that began with the words:
 
-*"I spent a lot of time to get information from different sources and use a part of each to make my raspberry doing what I wanted. I didn't find any complete tutorial to do it and I think it can be interesting for people who want to have the same use of their raspberry PIs."*
+_"I spent a lot of time to get information from different sources and use a part of each to make my raspberry doing what I wanted. I didn't find any complete tutorial to do it and I think it can be interesting for people who want to have the same use of their raspberry PIs."_
 
 This was exactly what I needed. At that point I had my fingers crossed that it's descriptive enough and fairly recent.
 
@@ -80,7 +99,8 @@ Basically the 101 on linux cli bluetooth :D
 Once my device tries to pair with the raspberry, the casual bluetooth pairing process occurs so nothing unusual there.
 
 ## Pi would not find its bluetooth adapter
-However, I had some issues starting the bluetooth - the raspberry kept denying it had a bluetooth adapter. I restarted the *bluetooth systemd service*, restarted the pi several times and what not and it just kept refusing to admit it has a bluetooth adapter available.
+
+However, I had some issues starting the bluetooth - the raspberry kept denying it had a bluetooth adapter. I restarted the _bluetooth systemd service_, restarted the pi several times and what not and it just kept refusing to admit it has a bluetooth adapter available.
 
 Since it didn't have any important data on it and because it had some nasty dependency issues with apt I decided to reflash it a brand new [raspbian](https://www.raspberrypi.org/downloads/raspbian/) image.
 If you know me personally, you know that I'm not much of a GUI user so I just installed the plain terminal version of raspbian without a desktop environment.
@@ -91,11 +111,11 @@ There was something more to this...
 
 I went deeper to figure out what's going on. After a few hours of debugging I finally found the root cause - it turned out that the [D-BUS message bus daemon](https://dbus.freedesktop.org/doc/dbus-daemon.1.html) would not autostart without having a `$DISPLAY` set for X11:
 
- ![](/images/07-raspberry-bluetooth-aux-setup-5bf6ecb0.png)
+![](/images/07-raspberry-bluetooth-aux-setup-5bf6ecb0.png)
 
 #### TL;DR - bluetooth daemon does not start because it cannot communicate to dbus daemon which does not start because it is missing a desktop environment...
 
- ![](/images/07-raspberry-bluetooth-aux-setup-53ee2e8e.png)
+![](/images/07-raspberry-bluetooth-aux-setup-53ee2e8e.png)
 
 Next thing I do:
 
@@ -107,6 +127,7 @@ Having a desktop environment fixed all the dbus issues.
 Suddenly `hciconfig -a` started showing the bluetooth adapter as expected!
 
 # Back to the plan
+
 While debugging bluetooth issues, I came across this lovely [gist](https://gist.github.com/oleq/24e09112b07464acbda1) that described the entire process and summarised it neatly:
 
     Audio source (i.e. smartphone)
@@ -135,6 +156,7 @@ Once everything was working, pulseaudio started seeing the bluez (bluetooth) aud
 ![](/images/07-raspberry-bluetooth-aux-setup-18ce4bce.png)
 
 # Automate the world
+
 There are 2 things to automate before calling it a day.
 Firstly, I had to make sure it is persistent - rebooting the raspberry is not uncommon at all and I want to make sure I'll skip the struggle of pairing again.
 
@@ -142,6 +164,7 @@ Secondly, the pairing process is a quite inconvenient - to pair, one has to ssh 
 My flatmates that are studying computer science are afraid to do these steps to connect let alone anyone else...
 
 # Let's see if it's persistent - reboot the pi
+
 As expected, it is not :/ - after the pi booted, I could not connect back to it to start playing music.
 For some odd reason pulseaudio would not load its bluetooth module, hence I could not pair to it.
 
@@ -177,7 +200,9 @@ It doesn't hurt to have a service running rc.local for you (this might be how it
 
 Here is how a service file looks like:
 {{< highlight bash >}}
+
 # rc-local.service
+
 [Unit]
 Description=Start rc.local
 
@@ -209,31 +234,33 @@ sudo apt install python3-pip && pip3 install flask
 This is what my python web server looks like:
 
 {{< highlight python >}}
+
 # webserver.py
+
 import os
 
 from flask import Flask
-app = Flask(__name__)
+app = Flask(**name**)
 
 @app.route("/")
-def index():
-        # Pait with device
-        os.system("/home/pi/start_pairing.sh")
-        # Add device to trusted devices
-        cmd = "echo 'trust '$(echo 'paired-devices' | bluetoothctl 2>/dev/null | grep paired-devices -A 1 | awk '{print $2}'| tail -n 1) | bluetoothctl"
-        os.system(cmd)
-        return "Started pairing"
+def index(): # Pait with device
+os.system("/home/pi/start_pairing.sh") # Add device to trusted devices
+cmd = "echo 'trust '$(echo 'paired-devices' | bluetoothctl 2>/dev/null | grep paired-devices -A 1 | awk '{print $2}'| tail -n 1) | bluetoothctl"
+os.system(cmd)
+return "Started pairing"
 {{< / highlight >}}
 
 The aim of this server is to run the pairing script upon receiving a request.
 It is the "button" you would normally press on a regular bluetooth device.
 
-# You didn't *expect* that
+# You didn't _expect_ that
+
 The pairing script is a simple [expect](https://linux.die.net/man/1/expect) script that handles the pairing procedure within the [bluetoothctl](http://www.linux-magazine.com/Issues/2017/197/Command-Line-bluetoothctl) cli.
 That's what it's like:
 
 {{< highlight bash >}}
 #!/usr/bin/expect -f
+
 # start_pairing.sh
 
 set prompt "#"
@@ -250,12 +277,12 @@ sleep 1
 expect "Default agent request successful*"
 #expect -re "$prompt"
 expect "Request confirmation\r"
-expect "*Confirm passkey*"
+expect "_Confirm passkey_"
 sleep 5
 send "yes\r"
 sleep 3
 #expect "Authorize service\r\n"
-expect "yes/no*"
+expect "yes/no\*"
 sleep 5
 send "yes\r"
 sleep 1
@@ -263,7 +290,7 @@ send "quit\r"
 
 {{< / highlight >}}
 
-The script is quite hacky with all the *sleeps* and what not but I reckon that's how expect scripts look like anyway and, oh well, *it works on my machine ™*.
+The script is quite hacky with all the _sleeps_ and what not but I reckon that's how expect scripts look like anyway and, oh well, _it works on my machine ™_.
 If you've written similar scripts you know what a pain they are, and the bluetoothctl cli doesn't make it any easier with all the color encodings as well...
 
 One thing I found very useful while writing the script is the debug option - run your script with `expect -d script.sh`.
@@ -271,7 +298,8 @@ The good thing is there is plenty of resources online for writing expect scripts
 Most issues I had were using the '\*' in inappropriate places and that caused me some headaches, but apart from that it's quite straightforward.
 
 # Trust issues...
-A fun thing I learned at this point was that *pairing* with a device does not mean that you *trust* this device.
+
+A fun thing I learned at this point was that _pairing_ with a device does not mean that you _trust_ this device.
 So once you pair, you need to add yourself to the trusted devices list on both sides.
 Otherwise each time you connect to the pi, you would need to open bluetoothctl and confirm the identity of the device.
 
@@ -295,7 +323,7 @@ Unfortunately, I couldn't spend more time fixing this because of coursework due 
 
 # Conclusion
 
-Overall, it was quite a fun experience and I learned a lot about bluetooth and gained some valuable *expect* experience.
+Overall, it was quite a fun experience and I learned a lot about bluetooth and gained some valuable _expect_ experience.
 
 Making a raspberry pi act as a bluetooth speaker is a good way to practice your linux skills and also it is quite satisfying once you get it working. Here are some of the resources I found most useful while setting the raspberry up:
 

@@ -3,8 +3,32 @@ title: "08 Defeating Censorship And Improving Security With OpenVPN"
 date: 2019-01-12T10:10:13Z
 author: "Viktor Barzin"
 description: "In this blogpost I show you how I set up multiple OpenVPN instances - one running on port 443/tcp to mask it as regular HTTPS traffic and avoid being blocked. I show how to do it and also some neat tricks about systemd and debugging openvpn-related networking issues."
-tags: ["OpenVPN", "tcp OpenVPN", "port 443/tcp", "iptables", "SSL/TLS", "TLS", "multiple openvpn", "systemd", "service files", "systemd services", "openvpn-server@.service", "OpenWRT tunneling openvpn traffic", "firewall", "routing", "learn-address", "static routes", "sudoers", "/sbin/ip", "linux capabilities", "CapabilityBoundingSet"]
+tags:
+  [
+    "OpenVPN",
+    "tcp OpenVPN",
+    "port 443/tcp",
+    "iptables",
+    "SSL/TLS",
+    "TLS",
+    "multiple openvpn",
+    "systemd",
+    "service files",
+    "systemd services",
+    "openvpn-server@.service",
+    "OpenWRT tunneling openvpn traffic",
+    "firewall",
+    "routing",
+    "learn-address",
+    "static routes",
+    "sudoers",
+    "/sbin/ip",
+    "linux capabilities",
+    "CapabilityBoundingSet",
+  ]
 firstImgUrl: "https://viktorbarzin.me/images/08-defeating-censorship-with-tcp-openvpn-072ee9b6-ln.png"
+sitemap:
+  priority: 0.3
 draft: false
 ---
 
@@ -19,6 +43,7 @@ That's all great, however, more and more network administrators put effort into 
 That annoys the heck out of me so in this post I'll show you how I've essentially bypassed any VPN filtering with some simple tweaks.
 
 ### Prerequisites
+
 Now before reading this blogpost, I recommend getting yourself familiar with basic [OpenVPN](https://openvpn.net/community-resources/how-to/) as well as [systemd](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal) concepts.
 
 My setup consists of a OpenVPN instance so whenever I say "vpn" I refer to OpenVPN entity.
@@ -31,12 +56,14 @@ Having a quick look at the network traffic, we can easily spot the OpenVPN traff
 
 ![](/images/08-defeating-censorship-with-tcp-openvpn-bbd7bf06.png)
 
-The image shows the beginning of the communication - firstly the *DNS* query, followed by the OpenVPN TLS handshake and finishing with the first packets of encrypted data sent over the secure channel.
+The image shows the beginning of the communication - firstly the _DNS_ query, followed by the OpenVPN TLS handshake and finishing with the first packets of encrypted data sent over the secure channel.
 
-By default, OpenVPN runs on port *1194/UDP* so filtering it can be as simple as
+By default, OpenVPN runs on port _1194/UDP_ so filtering it can be as simple as
 
 {{< highlight bash >}}
+
 # iptables -A FORWARD -p udp --destination-port 1194 -j DROP
+
 {{< /highlight >}}
 
 Nowadays, network admins would probably use a more GUI-like user interface to do that, but that's essentially what it boils down to.
@@ -69,13 +96,14 @@ I really didn't want to go the bridging way so I kept on looking for an alternat
 
 # systemd hidden gems
 
-
 I looked for a more Linux-y way of solving this issue so I had a think - OpenVPN is just a daemon ran by systemd. By default it has the following config:
 
 {{< highlight bash >}}
+
 # /lib/systemd/system/openvpn.service
 
 # This service is actually a systemd target,
+
 # but we are using a service since targets cannot be reloaded.
 
 [Unit]
@@ -92,7 +120,6 @@ WorkingDirectory=/etc/openvpn
 [Install]
 WantedBy=multi-user.target
 
-
 {{< / highlight >}}
 
 I had a second look at the directory where the service file lives (`/lib/systemd/system/`) and I noticed there are several openvpn related service files:
@@ -100,38 +127,37 @@ I had a second look at the directory where the service file lives (`/lib/systemd
 {{< highlight bash >}}
 
 root@vpn:/lib/systemd/system# ls openvpn
-openvpn-client@.service  openvpn-server@.service  openvpn.service          openvpn@.service
+openvpn-client@.service openvpn-server@.service openvpn.service openvpn@.service
 root@vpn:/lib/systemd/system# ls openvpn
 {{< / highlight >}}
 
-When managing the OpenVPN service I've always used the *openvpn* unit file, but what's that fancy `openvpn-server@.service` thingy?
+When managing the OpenVPN service I've always used the _openvpn_ unit file, but what's that fancy `openvpn-server@.service` thingy?
 
 That "**@**" looks dodgy, let's see what it stands for in the unit file name.
 
 The answer lies in section 5 of the systemd manpage (`man 5 systemd.service`)
 
-
 {{< highlight bash >}}
 
 Table 1. Special executable prefixes
 ┌───────┬───────────────────────────────────────────┐
-│Prefix │ Effect                                    │
+│Prefix │ Effect │
 ├───────┼───────────────────────────────────────────┤
-│"@"    │ If the executable path is prefixed with   │
-│       │ "@", the second specified token will be   │
-│       │ passed as "argv[0]" to the executed       │
-│       │ process (instead of the actual filename), │
-│       │ followed by the further arguments         │
-│       │ specified.                                │
+│"@" │ If the executable path is prefixed with │
+│ │ "@", the second specified token will be │
+│ │ passed as "argv[0]" to the executed │
+│ │ process (instead of the actual filename), │
+│ │ followed by the further arguments │
+│ │ specified. │
 ├───────┼───────────────────────────────────────────┤
 {{< / highlight >}}
 
-Woah! *systemd* can pass arguments to the daemon executables it runs, how awesome is that!
+Woah! _systemd_ can pass arguments to the daemon executables it runs, how awesome is that!
 
 Having a look at the `openvpn-server@.service` file we can see that it's more complicated that the first one:
 
-
 {{< highlight bash "linenos=inline,hl_lines=15">}}
+
 # /lib/systemd/system/openvpn-server@.service
 
 [Unit]
@@ -171,23 +197,24 @@ Having a look at `man 5 systemd.unit` shows a neat table that explains is well:
 
 Table 4. Specifiers available in unit files
 ┌──────────┬────────────────────────────┬─────────────────────────────┐
-│Specifier │ Meaning                    │ Details                     │
+│Specifier │ Meaning │ Details │
 ├──────────┼────────────────────────────┼─────────────────────────────┤
-│"%i"      │ Instance name              │ For instantiated units this │
-│          │                            │ is the string between the   │
-│          │                            │ first "@" character and the │
-│          │                            │ type suffix. Empty for      │
-│          │                            │ non-instantiated units.     │
+│"%i" │ Instance name │ For instantiated units this │
+│ │ │ is the string between the │
+│ │ │ first "@" character and the │
+│ │ │ type suffix. Empty for │
+│ │ │ non-instantiated units. │
 ├──────────┼────────────────────────────┼─────────────────────────────┤
 {{< / highlight >}}
 
 Aha! So I could start a openvpn-server@**some_name**.service and that would start an OpenVPN instance using **some_name**.conf as a config file.
 
-By default, there is no *server* directory in */etc/openvpn* so after we make that we should get our hands on creating the new tcp config file:
-
+By default, there is no _server_ directory in _/etc/openvpn_ so after we make that we should get our hands on creating the new tcp config file:
 
 {{< highlight bash >}}
+
 # mkdir /etc/openvpn/server && cp /etc/openvpn/openvpn.conf /etc/openvpn/server/tcp.conf
+
 {{< / highlight >}}
 
 We want to have the same config, to make use of the same client certificates and what not, but run on port 443/tcp.
@@ -198,7 +225,7 @@ So the config has to be mostly the same with only a few changes :
 Let me explain why each of the changes is needed:
 
 - server directive - instances need to have different IPs otherwise routing would get messed up and the kernel would not know which interface to use when sending data to clients
-- proto directive - we want a *tcp* instance so that's quite obvious
+- proto directive - we want a _tcp_ instance so that's quite obvious
 - port - same reason
 - dev - we need to setup a different interface that would handle clients connecting to the tcp instance. If we let both instances use the same interface we might get quite odd networking issues
 - status - can be the same though it's handy to have separate log files for each instance
@@ -206,7 +233,9 @@ Let me explain why each of the changes is needed:
 The rest of the config is the same. So let's start the second instance and keep our fingers crossed:
 
 {{< highlight bash >}}
+
 # systemctl start openvpn-server@tcp
+
 {{< / highlight >}}
 
 That seemed to have done the trick since the vpn instance was up and running.
@@ -236,20 +265,18 @@ Let's step back and see what that means. Hopefully this picture clarifies things
 
 ![](/images/08-defeating-censorship-with-tcp-openvpn-072ee9b6.png)
 
-
 Firstly, UDP clients are not affected in any way.
 My home router is one and I use its udp vpn connection to send tcp vpn traffic from the client on the left.
 When that nested conenction reaches the server, the udp one is stripped away and then the tcp connection afterwards so in the traffic logs on the server you could tell both clients appart even though one carries the traffic of the other.
 
 Let's see if this even works:
 
-
 {{< highlight bash "hl_lines=20" >}}
 ╭─viktor@yuhu 11:31:25 ~/
-╰─$ sudo openvpn viktor-tcp.ovpn
-Tue Jan 08 19:09:02 2019 OpenVPN 2.4.6 x86_64-redhat-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO]
-[AEAD] built on Oct  6 2018
-Tue Jan 08 19:09:02 2019 library versions: OpenSSL 1.1.1 FIPS  11 Sep 2018, LZO 2.08
+╰─\$ sudo openvpn viktor-tcp.ovpn
+Tue Jan 08 19:09:02 2019 OpenVPN 2.4.6 x86_64-redhat-linux-gnu [SSL (OpenSSL)][lzo] [LZ4][epoll] [PKCS11][mh/pktinfo]
+[AEAD] built on Oct 6 2018
+Tue Jan 08 19:09:02 2019 library versions: OpenSSL 1.1.1 FIPS 11 Sep 2018, LZO 2.08
 Tue Jan 08 19:09:02 2019 TCP/UDP: Preserving recently used remote address: [AF_INET]213.191.184.70:443
 Tue Jan 08 19:09:02 2019 Attempting to establish TCP connection with [AF_INET]213.191.184.70:443 [nonblock]
 Tue Jan 08 19:09:03 2019 TCP connection established with [AF_INET]213.191.184.70:443
@@ -272,7 +299,7 @@ Ehm, not quite:
 
 {{< highlight bash >}}
 ╭─viktor@yuhu 19:09:20 ~/
-╰─$ ping 192.168.254.1
+╰─\$ ping 192.168.254.1
 PING 192.168.254.1 (192.168.254.1) 56(84) bytes of data.
 ^C
 --- 192.168.254.1 ping statistics ---
@@ -298,7 +325,9 @@ Firing up `tcpdump` everywhere yeilded an odd result - the ping is being receive
 So it's probably `iptables` that's stopping my traffic isn't it?
 Let's stop it for a moment:
 {{< highlight bash >}}
+
 # iptables -P {INPUT,OUTPUT,FORWARD} ACCEPT
+
 {{< / highlight >}}
 
 Nope, still no ping back.
@@ -310,27 +339,36 @@ This took a good couple of days to figure out.
 
 # OpenVPN routing quirks
 
-I found this nice [blog post](https://thomas.gouverneur.name/2014/02/openvpn-listen-on-tcp-and-udp-with-tun/) from 2014 that explained how to do the entire thing - run a tcp and an udp instances of OpenVPN with the same config and without using a *tap* interface.
+I found this nice [blog post](https://thomas.gouverneur.name/2014/02/openvpn-listen-on-tcp-and-udp-with-tun/) from 2014 that explained how to do the entire thing - run a tcp and an udp instances of OpenVPN with the same config and without using a _tap_ interface.
 
 I had done most of the stuff the guy explained, I've just missed the last part - the routing.
 There is this simple script that I'd missed. It takes care of the routing whenever a client connects and disconnects.
-Basically, each time a client (dis)connects a static /32 route is being added   /removed that would tell the kernel to route the client via the according interface - if the client connected via tcp aka tun1 - then route him via that interface.
+Basically, each time a client (dis)connects a static /32 route is being added /removed that would tell the kernel to route the client via the according interface - if the client connected via tcp aka tun1 - then route him via that interface.
 Otherwise route the client via the default tun0 interface:
 
 {{< highlight bash >}}
 #!/bin/bash
+
 # /etc/openvpn/scripts/learn-address.sh
+
 ##
+
 # learn-address script which allow
+
 # OpenVPN to run on both TCP and UDP
+
 # with the same range of address on both
+
 # protocol.
+
 #
+
 # tgouverneur -- 2014
+
 ##
 
 if [ $# -lt 2 ]; then
-  exit 0;
+exit 0;
 fi
 action=$1;
 addr=$2;
@@ -339,14 +377,14 @@ case ${action} in
         add|update)
                 echo "[-] ${addr} logged in to ${dev}" >> /etc/openvpn/server/tcp-vpn.log
                 /usr/bin/sudo /sbin/ip ro del ${addr}/32
-                /usr/bin/sudo /sbin/ip ro add ${addr}/32 dev ${dev};
-        ;;
-        delete)
-               echo "[-] Deleting addr ${addr} -> ${dev}" >> /etc/openvpn/server/tcp-vpn.log
-               /usr/bin/sudo /sbin/ip ro del ${addr}/32
-        ;;
-        *)
-        ;;
+/usr/bin/sudo /sbin/ip ro add ${addr}/32 dev ${dev};
+;;
+delete)
+echo "[-] Deleting addr ${addr} -> ${dev}" >> /etc/openvpn/server/tcp-vpn.log
+/usr/bin/sudo /sbin/ip ro del \${addr}/32
+;;
+\*)
+;;
 esac
 
 exit 0;
@@ -359,17 +397,22 @@ We want this script to be executed each time a client (dis)connects.
 There is a special directive in the OpenVPN server config for that (have to put it in both configs):
 
 {{< highlight bash >}}
+
 # /etc/openvpn/openvpn.conf
+
 # /etc/openvpn/server/tcp.conf
- --- snip ---
+
+--- snip ---
 learn-address /etc/openvpn/scripts/learn-address.sh
 {{< / highlight >}}
 
-#### PS: Remember to add your vpn daemon user to sudoers and allow him to execute */sbin/ip* as root - it needs to be able to change system routes:
+#### PS: Remember to add your vpn daemon user to sudoers and allow him to execute _/sbin/ip_ as root - it needs to be able to change system routes:
 
 {{< highlight bash >}}
+
 # /etc/sudoers
- --- snip ---
+
+--- snip ---
 vpn ALL=(ALL:ALL) NOPASSWD: /sbin/ip
 {{< / highlight >}}
 
@@ -381,7 +424,6 @@ Alas even with this tweak there was no connection going out of the vpn server to
 
 This time I decided to have a look at the server logs - something must have gone wrong server-side!
 
-
 {{< highlight bash "linenos=inline,hl_lines=4 6 9-13 15-17 20-22" >}}
 
 root@vpn:/etc/openvpn/server# journalctl -f -u openvpn-server@tcp -b
@@ -392,34 +434,34 @@ Jan 10 21:52:51 vpn openvpn[28814]: Listening for incoming TCP connection on [AF
 Jan 10 21:52:57 vpn openvpn[28814]: 10.3.2.9:13131 [sgs7] Peer Connection Initiated with [AF_INET]10.3.2.9:13131
 Jan 10 21:52:57 vpn openvpn[28814]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /etc/openvpn/ccd/sgs7
 Jan 10 21:52:57 vpn openvpn[28814]: sgs7/10.3.2.9:13131 OPTIONS IMPORT: reading client specific options from: /tmp/openvpn_cc_2550293368432e205dcedc71562a78a3.tmp
-Jan 10 21:52:57 vpn sudo[28844]:      vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
+Jan 10 21:52:57 vpn sudo[28844]: vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: unable to send audit message
 Jan 10 21:52:57 vpn sudo[28844]: PAM audit_log_acct_message() failed: Operation not permitted
 Jan 10 21:52:57 vpn sudo[28844]: pam_unix(sudo:session): session opened for user root by (uid=0)
-Jan 10 21:52:57 vpn sudo[28844]:      vpn : pam_open_session: System error ; TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
+Jan 10 21:52:57 vpn sudo[28844]: vpn : pam_open_session: System error ; TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: pam_open_session: System error
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: policy plugin failed session initialization
-Jan 10 21:52:57 vpn sudo[28845]:      vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
+Jan 10 21:52:57 vpn sudo[28845]: vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
 Jan 10 21:52:57 vpn sudo[28845]: PAM audit_log_acct_message() failed: Operation not permitted
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: unable to send audit message
 Jan 10 21:52:57 vpn sudo[28845]: pam_unix(sudo:session): session opened for user root by (uid=0)
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: pam_open_session: System error
 Jan 10 21:52:57 vpn openvpn[28814]: sudo: policy plugin failed session initialization
-Jan 10 21:52:57 vpn sudo[28845]:      vpn : pam_open_session: System error ; TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
+Jan 10 21:52:57 vpn sudo[28845]: vpn : pam_open_session: System error ; TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
 Jan 10 21:52:57 vpn openvpn[28814]: sgs7/10.3.2.9:13131 MULTI: Learn: 10.3.2.5 -> sgs7/10.3.2.9:13131
 Jan 10 21:52:57 vpn openvpn[28814]: sgs7/10.3.2.9:13131 MULTI: primary virtual IP for sgs7/10.3.2.9:13131: 10.3.2.5
 --- snip ---
 {{< / highlight >}}
 
-From this log snippet I could tell that the daemon has started listening successfully (line 4), client has connected without any problems either (line 6) but then when running the *learn-address* script there is this **"Operation not permitted"** on multiple instances.
+From this log snippet I could tell that the daemon has started listening successfully (line 4), client has connected without any problems either (line 6) but then when running the _learn-address_ script there is this **"Operation not permitted"** on multiple instances.
 
-You could cleary see that **root** is executing the `/sbin/ip` command (so */etc/sudoers* is read properly) but then why does it still get permission denied?
+You could cleary see that **root** is executing the `/sbin/ip` command (so _/etc/sudoers_ is read properly) but then why does it still get permission denied?
 
 Debugging this issue was a hard one.
 
 Eventually I found the answer in a [debian bug report logs on openvpn](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792653).
 
-The issue was in the *.service* file of the openvpn tcp instance.
+The issue was in the _.service_ file of the openvpn tcp instance.
 The **[CapabilityBoundingSet](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Capabilities)** directive controls what capabilities the started process will run with.
 
 Apparently the default set does not include the capability for changing routes (or some other, I haven't figure it out).
@@ -427,8 +469,10 @@ Apparently the default set does not include the capability for changing routes (
 The easiest way to fix it is just to comment out that line:
 
 {{< highlight bash "hl_lines=8" >}}
+
 # /lib/systemd/system/openvpn-server@.service
- --- snip ---
+
+--- snip ---
 [Service]
 Type=notify
 PrivateTmp=true
@@ -443,7 +487,7 @@ ProtectHome=true
 KillMode=process
 RestartSec=5s
 Restart=on-failure
- --- snip ---
+--- snip ---
 {{< / highlight >}}
 
 Obviously the best way to fix it, is to find out what capability it is missing and add it to the list.
@@ -451,18 +495,17 @@ In my case it's not mission critical given that I run my default OpenVPN with de
 
 #### After restarting the services I finally got it working properly:
 
-
 {{< highlight bash >}}
 root@vpn:/etc/openvpn/server# journalctl -f -u openvpn-server@tcp -b
 --- snip ---
 Jan 10 21:56:14 vpn openvpn[29039]: 10.3.2.9:28118 [sgs7] Peer Connection Initiated with [AF_INET]10.3.2.9:28118
 Jan 10 21:56:14 vpn openvpn[29039]: sgs7/10.3.2.9:28118 OPTIONS IMPORT: reading client specific options from: /etc/openvpn/ccd/sgs7
 Jan 10 21:56:14 vpn openvpn[29039]: sgs7/10.3.2.9:28118 OPTIONS IMPORT: reading client specific options from: /tmp/openvpn_cc_1fd11ab8ec0f2dad7ebbc6eb4de16a8a.tmp
-Jan 10 21:56:14 vpn sudo[29072]:      vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
+Jan 10 21:56:14 vpn sudo[29072]: vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro del 10.3.2.5/32
 Jan 10 21:56:14 vpn sudo[29072]: pam_unix(sudo:session): session opened for user root by (uid=0)
 Jan 10 21:56:14 vpn openvpn[29039]: RTNETLINK answers: No such process
 Jan 10 21:56:14 vpn sudo[29072]: pam_unix(sudo:session): session closed for user root
-Jan 10 21:56:14 vpn sudo[29074]:      vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
+Jan 10 21:56:14 vpn sudo[29074]: vpn : TTY=unknown ; PWD=/etc/openvpn/server ; USER=root ; COMMAND=/sbin/ip ro add 10.3.2.5/32 dev tun1
 Jan 10 21:56:14 vpn sudo[29074]: pam_unix(sudo:session): session opened for user root by (uid=0)
 Jan 10 21:56:14 vpn sudo[29074]: pam_unix(sudo:session): session closed for user root
 Jan 10 21:56:14 vpn openvpn[29039]: sgs7/10.3.2.9:28118 MULTI: Learn: 10.3.2.5 -> sgs7/10.3.2.9:28118
@@ -471,7 +514,6 @@ Jan 10 21:56:14 vpn openvpn[29039]: sgs7/10.3.2.9:28118 MULTI: primary virtual I
 {{< / highlight >}}
 
 .. with the appropriate route being set for tcp:
-
 
 {{< highlight bash >}}
 10.3.2.5 dev tun0 scope link

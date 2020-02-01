@@ -198,7 +198,7 @@
 People associate changing workstations with OS reinstall, setting up everything from scratch etc.</p>
 
 <p>I&rsquo;d rather put my <a href="https://www.samsung.com/us/computing/memory-storage/solid-state-drives/ssd-860-evo-2-5--sata-iii-1tb-mz-76e1t0b-am/">old disk</a> in my new machine and continue as is.
-However, due to the age of my old laptop, I had formatted the disk with a <em>Master Boot Record (MBR)</em> and used <em>Legacy Boot</em>  mode, which <a href="https://www.dell.com/support/article/hr/en/hrbsdt1/sln309720/newer-dell-systems-unable-to-boot-to-internal-boot-device-in-legacy-boot-mode?lang=en">turned out, is not supported on new DELL laptops</a>.</p>
+However, due to the age of my old laptop, I had formatted the disk with a <em>Master Boot Record (MBR)</em> and used <em>Legacy Boot</em> mode, which <a href="https://www.dell.com/support/article/hr/en/hrbsdt1/sln309720/newer-dell-systems-unable-to-boot-to-internal-boot-device-in-legacy-boot-mode?lang=en">turned out, is not supported on new DELL laptops</a>.</p>
 
 <p>Reformatting the disk without losing the data turned out to be harder that expected and was also quite interesting to explore in even greater detail the booting process on a <em>bare-metal</em> level.</p>
 
@@ -219,7 +219,7 @@ Once the kernel is executed, depending on its type (Windows vs Unix), it will <s
 <h2 id="what-is-a-bios">What is a BIOS?</h2>
 
 <p>Now, I&rsquo;m sure that you have an idea of what&rsquo;s the BIOS.
-Here&rsquo;s some more detail -  it&rsquo;s a small non-volatile chip that lives on your motherboard whose purpose is to initialize system hardware, run some checks on whether everything is fine (<a href="https://whatis.techtarget.com/definition/POST-Power-On-Self-Test">POST</a>) and provide some way to execute programs on your machine (in the general case a bootloader).</p>
+Here&rsquo;s some more detail - it&rsquo;s a small non-volatile chip that lives on your motherboard whose purpose is to initialize system hardware, run some checks on whether everything is fine (<a href="https://whatis.techtarget.com/definition/POST-Power-On-Self-Test">POST</a>) and provide some way to execute programs on your machine (in the general case a bootloader).</p>
 
 <h3 id="booting-using-bios-mbr">Booting using BIOS/MBR</h3>
 
@@ -321,7 +321,7 @@ Number  Start   End     Size    File system  Name                  Flags
 1      1049kB  1075MB  1074MB  ext4         Linux filesystem      boot, esp
 2     ********************************************************************************
 3      881GB   881GB   554MB   fat32                              boot, esp
-5     ******************************************************************************** 
+5     ********************************************************************************
 </code></pre>
 
 <p>I previously mentioned that all we are going to need for EFI booting is some files, so how do we get them?</p>
@@ -346,7 +346,7 @@ Number  Start   End     Size    File system  Name                  Flags
 
 <p><code>grub2-efi-modules</code> contains some libraries that are installed in <code>/usr/lib/</code>.</p>
 
-<p>What you need to know about the  <code>shim</code> package is that it is a bit of a hack to enable <a href="https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-secure-boot">Secure Boot</a> on Linux systems.
+<p>What you need to know about the <code>shim</code> package is that it is a bit of a hack to enable <a href="https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-secure-boot">Secure Boot</a> on Linux systems.
 You can read more about it <a href="https://docs.fedoraproject.org/en-US/Fedora/18/html/UEFI_Secure_Boot_Guide/sect-UEFI_Secure_Boot_Guide-Implementation_of_UEFI_Secure_Boot-Shim.html">online</a>.
 The files that it provides are:</p>
 

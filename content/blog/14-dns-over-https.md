@@ -21,6 +21,8 @@ tags:
     "trusted recursive resolver",
   ]
 firstImgUrl: "https://viktorbarzin.me/images/14-dns-over-https-linkedin.png"
+sitemap:
+  priority: 0.3
 draft: false
 ---
 

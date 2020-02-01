@@ -1,11 +1,29 @@
 ---
-author : "Viktor Barzin"
+author: "Viktor Barzin"
 title: "06 In the big 4! - Facebook Application Experience"
 date: 2018-11-18T19:31:50Z
 draft: false
+sitemap:
+  priority: 0.3
 firstImgUrl: "/images/06-Facebook-Application-Feedback-5fbb016d.png"
 description: "In this blogpost I share my experience from my application process with Facebook which resulted with an offer and some tips and tricks on what I believe made me a successful candidate."
-tags: ["Facebook", "Production Engineer Internship", "London", "2019", "CV", "Online test", "technical interview", "Coding interview", "Systems interview", "Big O complexity", "Clean code", "Uncle Bob", "Cracking the coding interview", "Data structures and algorithms"]
+tags:
+  [
+    "Facebook",
+    "Production Engineer Internship",
+    "London",
+    "2019",
+    "CV",
+    "Online test",
+    "technical interview",
+    "Coding interview",
+    "Systems interview",
+    "Big O complexity",
+    "Clean code",
+    "Uncle Bob",
+    "Cracking the coding interview",
+    "Data structures and algorithms",
+  ]
 ---
 
 # Introduction
@@ -25,7 +43,7 @@ I'll share what, from my point of view, made me a successful candidate.
 
 # First things first - get that CV right
 
-Right, so obviously to get to the interview phase, you'll need a *rather shiny* CV to impress the recruiters with.
+Right, so obviously to get to the interview phase, you'll need a _rather shiny_ CV to impress the recruiters with.
 
 [Here](/images/06-cv.pdf) you can find my CV to get some inspiration.
 
@@ -34,9 +52,9 @@ Now **I am not by any means a CV expert** or something but here are **my thought
 What's more, there are plenty of guides and tutorials on how to make a good CV so I won't turn this post into one.
 
 Just spend some time choosing an appropriate and **good looking template** and then just fill in!
-Something quite important I see people don't get is the way you **word your experience section** - you should **use active verbs** like *led*, *managed*, *was responsible for*... - instead of passive ones.
+Something quite important I see people don't get is the way you **word your experience section** - you should **use active verbs** like _led_, _managed_, _was responsible for_... - instead of passive ones.
 
-Now you can, and probably should, have a *Skills* section where you list what your skills are but what I feel attracts more attention is a *Personal Projects* section.
+Now you can, and probably should, have a _Skills_ section where you list what your skills are but what I feel attracts more attention is a _Personal Projects_ section.
 **I can't stress enough the importance of having projects that are not related to school or university.**
 **The more, the better** but also **the more completed the better - quality over quantity!**
 
@@ -53,7 +71,7 @@ Furthermore, I feel like it is a big plus if you spend that extra time **to setu
 
 For the [**Production Engineering Internship**](https://www.facebook.com/careers/jobs/513843009077435/) I had to do an **online test** before getting to the one-to-one interview.
 
-The online test was more of a **sanity check** on simple linux and unix commands so if you *use* linux on a daily basis (I mean **the terminal part**, not the gui stuff) and occasionally write simple bash scripts you won't have any trouble passing this stage.
+The online test was more of a **sanity check** on simple linux and unix commands so if you _use_ linux on a daily basis (I mean **the terminal part**, not the gui stuff) and occasionally write simple bash scripts you won't have any trouble passing this stage.
 
 ![](/images/06-Facebook-Application-Feedback-f34e0ea6.png)
 
@@ -61,14 +79,13 @@ The online test was more of a **sanity check** on simple linux and unix commands
 
 I've spoken to some recruiting people at Facebook and I've been told that regardless of the position you apply for, **surely there will a coding interview**.
 
-
 The Production Engineer Intern role includes two **45 minute technical interviews**
 
 - A coding interview
 - A systems interview
 
-
 ## The Coding Interview
+
 Recently, I've focused more on the [OPS](https://en.wikipedia.org/wiki/Information_technology_operations)-y side of things and, well you know, **coding interviews at tech giants are supposed to be very hard**.
 
 The main resource I used to prepare myself for this interview was **The Bible of coding interview books** - [**Cracking the Coding Interview**](https://www.amazon.co.uk/Cracking-Coding-Interview-6th-Programming/dp/0984782850).
@@ -85,8 +102,8 @@ What's more, **do ask questions!** Ask about **input data size**, ask about **er
 
 Finally, maintaining **good code quality is always important** so put a comment whenever you write something not quite clear and you don't have time to refactor but still **make your interviewer aware that you know what you've written could be improved** and **ask** whether you should spend time on improving it or not.
 
-
 ## The Systems Interview
+
 I was way more confident for the systems interview that I was for the coding one.
 
 Now that's a tricky one. Unless you've gone through some **system administration courses** or tinkered around with **low-level kernel-y like stuff you'll probably struggle here**.
@@ -121,9 +138,9 @@ This strategy is described, of course way better, in the book and **I highly rec
 
 Regarding the systems part, the only way of learning these stuff is by **doing them** - pick that old PC at home your not using, **setup virtualization** on it, **run some VMs**, configure **any services that come up to your mind**, tinker with them thoroughly, **break them, fix them** - that's how you'll **understand and learn them for good**.
 
-Doing the last one also fits *quite neatly in your CV as extracurricular projects* as well so it's again a **win-win.**
+Doing the last one also fits _quite neatly in your CV as extracurricular projects_ as well so it's again a **win-win.**
 
-Of course, if you are a **book-lover**, *there are tons of great books on linux/unix system administration* but that's only **half of the story** - **none of this knowledge matters unless you can put it in practice**.
+Of course, if you are a **book-lover**, _there are tons of great books on linux/unix system administration_ but that's only **half of the story** - **none of this knowledge matters unless you can put it in practice**.
 
 In general, if you are **curious about technology and stubborn enough - you'll succeed**.
 

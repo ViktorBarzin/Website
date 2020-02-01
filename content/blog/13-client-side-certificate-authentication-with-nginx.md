@@ -18,6 +18,8 @@ tags:
     "docker",
   ]
 firstImgUrl: "https://viktorbarzin.me/images/13-client-side-certificate-authentication-with-nginx-6-17-36-09.png"
+sitemap:
+  priority: 0.3
 draft: false
 ---
 

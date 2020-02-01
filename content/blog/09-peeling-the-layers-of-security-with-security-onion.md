@@ -3,10 +3,37 @@ title: "09 Peeling the layers of security with Security Onion"
 date: 2019-01-23T10:18:44Z
 author: "Viktor Barzin"
 description: "In this blogpost I share my experience of integrating Security Onion appliance in my home environment. I faced some quite interesting netowrking issues and learned quite a lot including how Security Onion sensors work, how exactly the promiscuous mode on VMware vSwitch works and lots more."
-tags: ["pfSense", "security onion", "vmware esxi", "vmware vSwitch", "vSwitch", "Elasticsearch", "Logstash", "Kibana", "Snort", "Suricata", "Bro", "Wazuh", "Sguil", "Squert", "CyberChef", "OpenWRT", "pfSense logging", "tcpdump", "packetbeat", "vSwitch promiscuous mode", "vSwitch", "pfSense bridge"]
+tags:
+  [
+    "pfSense",
+    "security onion",
+    "vmware esxi",
+    "vmware vSwitch",
+    "vSwitch",
+    "Elasticsearch",
+    "Logstash",
+    "Kibana",
+    "Snort",
+    "Suricata",
+    "Bro",
+    "Wazuh",
+    "Sguil",
+    "Squert",
+    "CyberChef",
+    "OpenWRT",
+    "pfSense logging",
+    "tcpdump",
+    "packetbeat",
+    "vSwitch promiscuous mode",
+    "vSwitch",
+    "pfSense bridge",
+  ]
 firstImgUrl: "https://viktorbarzin.me/images/09-security-onion-setup-37c20ba2.png"
+sitemap:
+  priority: 0.3
 draft: false
 ---
+
 # Introduction
 
 This time round, I'll share my experience with [Security Onion](https://securityonion.net/) and the journey of setting it up in my environment.
@@ -62,13 +89,15 @@ I gave it a try to see whether it really logs only header data or does it perfor
 
 Running
 {{< highlight bash >}}
+
 # tcpdump -qni tun0 dst port 80 -w log.pcap
+
 {{< /highlight >}}
 
 in one shell, and
 
 {{< highlight bash >}}
-$ curl testmyids.com
+\$ curl testmyids.com
 {{< /highlight >}}
 
 in another resulted in the following pcap:
@@ -95,7 +124,7 @@ One solution would be to install packetbeat on every endpoint I'd like to monito
 
 It's not the most elegant solution but I already had [playbooks](https://docs.ansible.com/ansible/latest/user_guide/playbooks.html) to install and setup packetbeat so it's an okay-ish solution.
 
-Unfortunately, when I started reading about integrating Security Onion with  packetbeat, I was slapped in the face by the [Security Onions's documentation](https://github.com/Security-Onion-Solutions/security-onion/wiki/Beats) that says that the only supported \*beats are **Filebeat** and **Winlogbeat**.
+Unfortunately, when I started reading about integrating Security Onion with packetbeat, I was slapped in the face by the [Security Onions's documentation](https://github.com/Security-Onion-Solutions/security-onion/wiki/Beats) that says that the only supported \*beats are **Filebeat** and **Winlogbeat**.
 
 ![](/images/09-security-onion-setup-75cec2db.png)
 
@@ -106,7 +135,6 @@ Things didn't look great at this point. The neat and elegant solutions didn't re
 I had a little play with the configuration of the Security Onion appliance.
 When configuring it wants an interface to sniff traffic from.
 That's an interface without and actual IP address assigned to it, just sitting there in promiscuous mode listening for traffic.
-
 
 # Back to the drawing board...
 
@@ -142,10 +170,11 @@ What's more interesting is that this can be applied at the **portgroup level**!
 So I could perhaps create a portgroup that acts like a hub?
 
 # Then it hit me
+
 I came up with the following plan - create a bridge interface on the pfSense appliance, that would bridge all of the interfaces that I want to monitor.
 Create a new portgroup on the vSwitch that would act like a hub and add 2 members to it - the bridged interface from the pfSense and the other one would be the listening interface from the Security Onion appliance.
 
-This way, all of the traffic would be basically broadcasted in a portgroup in which the only other member would be the Security Onion that would happily look at it all  and do its thing.
+This way, all of the traffic would be basically broadcasted in a portgroup in which the only other member would be the Security Onion that would happily look at it all and do its thing.
 
 That idea may be a bit hard to grasp especially if you're a beginner in networking so I'll throw in this picture because images always help:
 
@@ -155,17 +184,18 @@ The main idea is to create a separate portgroup (think of it as a separate LAN) 
 Then forward all of the traffic the pfSense sees to this portgroup. From then onwards, the Security Onion appliance would see all the packets as they are, without being changed at all!
 
 # Sounds like a plan!
+
 Let's build the picture above then.
 
-
 ## Firstly, let's create the portgroup.
+
 This is what it should look like:
 
 ![](/images/09-security-onion-setup-47063c4d.png)
 
 The hidden options are not too important - just keep the defaults.
 
-It is **very** important that the *VLAN ID* is set to **4095**.
+It is **very** important that the _VLAN ID_ is set to **4095**.
 This tells the vSwitch to create a portgroup that acts as a trunk group which would accept all VLAN traffic.
 Initially I had this to 0 and nothing was sent.
 
@@ -174,9 +204,10 @@ The other **very** important setting is the promiscuous mode - it needs to be ac
 Lastly, we need to add 2 network intefaces one to the pfSense VM and one to the Security Onion one. Both interfaces of course need to be connected to the portgroup we've just created.
 
 # pfSense bridging
+
 Creating a bridge interface is done from `Interfaces > Bridges`. It is quite trivial, just select all the interfaces you want to be member of the bridge and then the important part is to choose the Span Port in the `Advanced` section.
 
-The span sport should be the one that is member of the *hub* portgroup that we just made.
+The span sport should be the one that is member of the _hub_ portgroup that we just made.
 
 # Aaaand success!
 
@@ -205,15 +236,13 @@ If you're interested to see what's happening in your network, I recomment settin
 - [ELSA](https://github.com/Security-Onion-Solutions/security-onion/wiki/ELSA)
 - [Sguil](https://github.com/Security-Onion-Solutions/security-onion/wiki/Sguil)
 
-
 #### Network Visibility
 
 - [NIDS](https://github.com/Security-Onion-Solutions/security-onion/wiki/NIDS)
-    - [Snort](https://github.com/Security-Onion-Solutions/security-onion/wiki/Snort)
-    - [Suricata](https://github.com/Security-Onion-Solutions/security-onion/wiki/Suricata)
+  - [Snort](https://github.com/Security-Onion-Solutions/security-onion/wiki/Snort)
+  - [Suricata](https://github.com/Security-Onion-Solutions/security-onion/wiki/Suricata)
 - [Bro](https://github.com/Security-Onion-Solutions/security-onion/wiki/Bro)
 - [Full Packet Capture](https://github.com/Security-Onion-Solutions/security-onion/wiki/netsniff-ng)
-
 
 # Caveats
 
