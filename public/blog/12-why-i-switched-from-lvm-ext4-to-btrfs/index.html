@@ -190,49 +190,33 @@
             <h1><a href="https://viktorbarzin.me/blog/12-why-i-switched-from-lvm-ext4-to-btrfs/">12 Why I switched from LVM&#43;EXT4 to BTRFS</a></h1>
             <span class="post-date">Jan 13, 2020 </span>
             <div class="post-content">
-                
-
-<h1 id="introduction">Introduction</h1>
-
+                <h1 id="introduction">Introduction</h1>
 <p>Happy 2020 chaps!</p>
-
 <p>It&rsquo;s January again, and it&rsquo;s exam time for me, which means procrastination.
 And what better way to procrastinate than exploring something awesome like <strong>BTRFS snapshots</strong>?</p>
-
 <p>In this blog post I&rsquo;ll share why I migrated from <strong>LVM + EXT4</strong> to <strong>BTRFS</strong> and the benefits I found.
 I&rsquo;ll go briefly through my experience with <a href="https://wiki.archlinux.org/index.php/Btrfs">BTRFS</a> and I&rsquo;ll also share a tool I found recently - <a href="http://snapper.io/">Snapper</a> - which makes snapshotting even easier so let&rsquo;s get started!</p>
-
 <h1 id="my-experience-with-ext-and-lvm">My experience with EXT and LVM</h1>
-
 <p>Most, if not all modern linux distributions use <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">EXT4</a> as a <strong>default</strong> filesystem for their installation.</p>
-
 <p>EXT4 came out in 2006 as an <em>upgrade</em> to EXT3.
 It added some optimizations and &ldquo;<a href="https://en.wikipedia.org/wiki/Trim_(computing)">trim</a>&rdquo; changes but nothing sensational.
 EXT3 came out in November 2001 and, similarly to EXT4, was an upgrade to the previous generation - EXT2.
 EXT2 is the father of all EXT filesystems (there is just EXT but you&rsquo;ll probably never see one in use anymore) and it has come out in 1993!</p>
-
 <p>Now, maturity is a very good thing to have when speaking about filesystems - after all, you don&rsquo;t want to invest millions in changing the filesystem on all of your production servers only to find out that it&rsquo;s unstable or its performance is not as good as you expected.
 Even if you don&rsquo;t have millions of servers, why should you bother to change the filesystem on your laptop with a filesystem still considered &ldquo;unstable&rdquo; by some when EXT is working just fine?</p>
-
 <p>Personally, I have been an EXT user for years.
 Initially, I was using plain EXT, back when I was dual-booting Windows but then I never quite got disk partitioning right.
 I always found myself with a least a dozen of partitions which was quite annoying.
 What&rsquo;s more, EXT4 supports <strong>only offline</strong> shrinking which is quite annoying because even if you use LVM, you still have to unmount the EXT4 partition to reduces its size!
 Here&rsquo;s a neat table comparing some of the features of the hottest filesystems right now:</p>
-
-<p><img src="/images/12-filesystem-snapshots-made-easy-0-18-29-42.png" alt="" /></p>
-
-<h3 id="mini-rant-on-ext4-and-lvm-ext4">Mini rant on EXT4 and LVM + EXT4</h3>
-
+<p><img src="/images/12-filesystem-snapshots-made-easy-0-18-29-42.png" alt=""></p>
+<h3 id="mini-rant-on-ext4-and-lvm--ext4">Mini rant on EXT4 and LVM + EXT4</h3>
 <p>For some time I was using <a href="https://wiki.archlinux.org/index.php/LVM">LVM</a> + EXT4.
 This solved the many partitions problem as I could just <em>extend</em> the volumes with the new free space that I had added and then run a simple <code>resize2fs</code> on the EXT partition.</p>
-
 <p>Following that I started using <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system">LUKS</a> for <strong>full disk encryption</strong> which is <strong>a must have nowadays</strong>.
 Resizing partitions got even more difficult as to simply add more space to my EXT partition, I had to boot into a live environment, extend the LUKS-encrypted partition, then increase the size of the physical LVM volume, then increase the size of the logical LVM volume and finally <code>resize2fs</code> the EXT partition.
 What a pain that was!</p>
-
 <p>At this point doing anything on the filesystem level was an enormous pain.</p>
-
 <p>The final thing the made me look for alternatives was <strong>backups</strong>.
 I started doing regular backups of my work and I wanted to keep my backup procedure as simple as possible.
 Plain <code>rsync</code>-ing was doing sort of alright.
@@ -240,39 +224,29 @@ I used a wrapper application - <a href="https://github.com/bit-team/backintime">
 For most of the time this approach was doing well.
 It had occasional misfortunes - <em>backintime</em> hardlinks all files to represent a full directory tree on the backup location and only copies the changes
 which works well, however, if the backup is interrupted, sometimes it cannot continue and starts copying over <em>all files</em> from scratch.</p>
-
 <p>This made backups clumsy and always made me think twice before putting my computer to sleep.
 Furthermore, how do you restore restore the backups with <strong>no</strong> downtime?
 Another feature I was missing was being able to restore from bad commands - sometimes I run commands or scripts that happen to misbehave and there was no easy way to revert their actions.
 Doing a full backup just for that single script is not really worth it.
 Sure, LVM supports snapshots but then again restoring snapshots can only be done when the LVM partition is not mounted and that&rsquo;s a pain&hellip;</p>
-
-<h1 id="some-light-in-the-end-of-the-filesystems-tunnel-btrfs">Some light in the end of the filesystems tunnel - BTRFS</h1>
-
+<h1 id="some-light-in-the-end-of-the-filesystems-tunnel---btrfs">Some light in the end of the filesystems tunnel - BTRFS</h1>
 <p>After checking out a few filesystems I decided to onboard the BTRFS hype train!</p>
-
 <p><strong>BTRFS solves all the problems I had so far</strong>:</p>
-
 <ul>
 <li>supports <em>online</em> resizing - both extending and shrinking</li>
 <li>has built-in support for snapshots - useful for both backups and &ldquo;testing out&rdquo; scripts</li>
 <li>removes the need for LVM and thus eliminates 1 layer for filesystem-ing (if that&rsquo;s a word)</li>
 </ul>
-
 <p>On top of that, in 2008, the principal developer of EXT3 and EXT4 - <a href="https://en.wikipedia.org/wiki/Theodore_Ts%27o">Theodore Ts&rsquo;o</a> stated that although ext4 has improved features, it is not a major advance; it uses old technology and is a stop-gap. Ts&rsquo;o said that BTRFS is the better direction because &ldquo;it offers improvements in scalability, reliability, and ease of management&rdquo;.</p>
-
 <p>On the downsides, there isn&rsquo;t a built-in support for encryption so LUKS has to stay for now, although that feature is planned to come at some point in the future.
 Another question mark was performance - from the research I did, BTRFS was doing as good as EXT4 and ZFS, if not better on some benchmarks.
 It seemed to be struggling on RAIDs and on spinning hard drives because of fragmentation.
 But it&rsquo;s 2020 - if you&rsquo;re still using such a drive you have bigger issues that the performance of the filesystem&hellip;</p>
-
 <h1 id="you-said-btrfs-snapshots">You said BTRFS snapshots?</h1>
-
 <p>Now onto the good stuff.
 The <a href="https://wiki.archlinux.org/index.php/Btrfs">arch wiki contains some excellent documentation</a> (as always) on BTRFS and everything that you might want to do with it.
 I highly recommend going through it.
 There&rsquo;s no point of copying the commands from there since I probably won&rsquo;t do better at explaining them than they have so definitely have a read.</p>
-
 <p>BTRFS (B-Tree Filesystem) utilizes B-Trees and there are some interesting consequences from that.
 For example, every node in the filesystem is either a <em>leaf</em> or a <em>tree</em>.
 If you are familiar with <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)">Trees</a>, you have an idea about their recursive nature.
@@ -282,59 +256,50 @@ Snapshots are also a type of subvolumes.
 Snapshots represent the current state of the filesystem and essentially are just another node in the tree.
 Since BTRFS is a <a href="https://en.wikipedia.org/wiki/Copy-on-write">CoW</a> filesystem, snapshots are cheap to create and maintain and you can easily go back to a snapshot if you like.
 Creating a snapshot is easy as</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo btrfs subvolume snapshot /&lt;some subvolume name&gt; /&lt;snapshots subvolume destination&gt;</code></pre></div>
-<p>You can find what subvolumes you have by running:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo btrfs subvolume list /</code></pre></div>
-<p>You can <strong>mount</strong> and <strong>browse</strong> your snapshots as if it was the real subvolume!
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo btrfs subvolume snapshot /&lt;some subvolume name&gt; /&lt;snapshots subvolume destination&gt;
+</code></pre></div><p>You can find what subvolumes you have by running:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo btrfs subvolume list /
+</code></pre></div><p>You can <strong>mount</strong> and <strong>browse</strong> your snapshots as if it was the real subvolume!
 Any changes you make on the original subvolume is not reflected on the snapshot effectively giving you a way to <strong>go back in time for free</strong>!
 What&rsquo;s even more awesome is that you can <code>diff</code> two snapshots!
 For instance, if you want to run some dodgy script, or install some application, you can snapshot before doing the operation, do the operation and snapshot again.
 Then you can <code>diff</code> the <em>before</em> and <em>after</em> snapshots to see what&rsquo;s changed.
 How awesome is that!</p>
-
 <p>The CLI tool for managing BTRFS is called, logically, <code>btrfs</code> and has loads of options.
 If you can&rsquo;t be bothered to learn all of them, there is a pretty neat tool called <a href="http://snapper.io/">snapper</a> which manages snapshots for you.
 I&rsquo;d recommend reading the manpage for <code>snapper</code>.</p>
-
 <p>I&rsquo;ll share the getting started part and the way I&rsquo;m using it on my machine.</p>
-
-<h1 id="let-s-play-with-snapper-and-snapshots">Let&rsquo;s play with Snapper and snapshots</h1>
-
+<h1 id="lets-play-with-snapper-and-snapshots">Let&rsquo;s play with Snapper and snapshots</h1>
 <p>Firstly install snapper.
 Snapper is included in dnf&rsquo;s repositories:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo dnf install -y snapper</code></pre></div>
-<p>To operate, <code>snapper</code> makes use of configs.
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo dnf install -y snapper
+</code></pre></div><p>To operate, <code>snapper</code> makes use of configs.
 Each BTRFS subvolume that you want to snapshot with <code>snapper</code> must have a corresponding config.
 I have my <code>/home</code> directory in a separate BTRFS subvolume.
 To create config for it, you can run</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo snapper create-config /home</code></pre></div>
-<p>(optional) Now if you want to run all the snapper commands on that config, without sudo, you&rsquo;ll need to add your user to the <code>ALLOWED_USERS</code> list in <code>/etc/snapper/configs/home</code> file.
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo snapper create-config /home
+</code></pre></div><p>(optional) Now if you want to run all the snapper commands on that config, without sudo, you&rsquo;ll need to add your user to the <code>ALLOWED_USERS</code> list in <code>/etc/snapper/configs/home</code> file.
 Mine looks like this:</p>
-
 <pre><code>...
 # users and groups allowed to work with config
 ALLOW_USERS=&quot;viktor&quot;
 ALLOW_GROUPS=&quot;viktor&quot;
 ...
 </code></pre>
-
 <p>Now you can use <code>snapper</code> to manage snapshots for the <code>/home</code> config without sudo.
 Every time you use <code>snapper</code> with the non-default config (root) you need to specify it with <code>-c</code> argument.
 To see available snapshots on the <code>/home</code> config we just made, run</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home list</code></pre></div>
-<p>This command prints the following table:</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home list
+</code></pre></div><p>This command prints the following table:</p>
 <pre><code>#  | Type   | Pre # | Date | User | Cleanup | Description | Userdata
 ---+--------+-------+------+------+---------+-------------+---------
 0  | single |       |      | root |         | current     |
 </code></pre>
-
 <p>When you make snapshots, more entries will appear in this table.
 You can add new snapshots by running</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home create</code></pre></div>
-<p>Easy as that!
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home create
+</code></pre></div><p>Easy as that!
 Now a <em>copy</em> of your <code>/home</code> subvolume has appeared in <code>/home/.snapshots</code></p>
-
 <pre><code>$ tree /home/.snapshots -L 3
 
 /home/.snapshots
@@ -343,25 +308,19 @@ Now a <em>copy</em> of your <code>/home</code> subvolume has appeared in <code>/
     └── snapshot
         └── viktor
 </code></pre>
-
 <p>Listing available snapshots now shows the new snapshot we just added:</p>
-
 <pre><code>#  | Type   | Pre # | Date                            | User   | Cleanup | Description | Userdata
 ---+--------+-------+---------------------------------+--------+---------+-------------+---------
 0  | single |       |                                 | root   |         | current     |
 1  | single |       | Sun 12 Jan 2020 11:23:01 PM GMT | viktor |         |             |
 </code></pre>
-
 <p>You can delete a snapshot with <code>snapper -c home delete &lt;snapshot number&gt;</code> e.g:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home delete <span style="color:#3677a9">1</span></code></pre></div>
-<h4 id="note-i-don-t-recomment-deleting-the-snapshot-with-id-0-as-that-s-your-current-tree-and-wil-result-in-data-loss">Note: I don&rsquo;t recomment deleting the snapshot with id 0 as that&rsquo;s your current tree and wil result in data loss</h4>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home delete <span style="color:#3677a9">1</span>
+</code></pre></div><h4 id="note-i-dont-recomment-deleting-the-snapshot-with-id-0-as-thats-your-current-tree-and-wil-result-in-data-loss">Note: I don&rsquo;t recomment deleting the snapshot with id 0 as that&rsquo;s your current tree and wil result in data loss</h4>
 <p>You can use these snapshots as backups at any single point of time.
 Also you can <code>rsync</code> them to a remote server if you want to be safe in case your disk fails.</p>
-
 <p>I wrote the following wrapper around <code>snapper</code> to wrap a command in snapshots.
 The idea being is - let me see what happens if I run this command.</p>
-
 <pre><code>function snp(){
     # Runs a command wrapped in btrfs snapper pre-post snapshots.
     # Usage: $ snp &lt;commands&gt;
@@ -376,53 +335,41 @@ The idea being is - let me see what happens if I run this command.</p>
     snapshot_nbr=$(snapper -c home create --type=post --cleanup-algorithm=number --print-number --pre-number=&quot;$snapshot_nbr&quot;)
 }
 </code></pre>
-
 <p>This function creates a <code>pre</code> type snapshot before running the command, runs the command you give it and then does a <code>post</code> type snapshot.
 Running</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">snp <span style="color:#ed9d13">&#39;echo &#34;World&#34; &gt;&gt; /home/viktor/test&#39;</span></code></pre></div>
-<p>creates the following snapshots</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">snp <span style="color:#ed9d13">&#39;echo &#34;World&#34; &gt;&gt; /home/viktor/test&#39;</span>
+</code></pre></div><p>creates the following snapshots</p>
 <pre><code>#  | Type   | Pre # | Date                            | User   | Cleanup | Description                       | Userdata
 ---+--------+-------+---------------------------------+--------+---------+-----------------------------------+---------
 0  | single |       |                                 | root   |         | current                           |
 1  | pre    |       | Mon 13 Jan 2020 12:06:16 AM GMT | viktor | number  | echo &quot;World&quot; &gt;&gt; /home/viktor/test |
 2  | post   |     1 | Mon 13 Jan 2020 12:06:16 AM GMT | viktor | number  |                                   |
 </code></pre>
-
 <p>What&rsquo;s great is I can see what files have changed by running:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home status <span style="color:#3677a9">1</span>..2
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home status 1..2
 
-c..... /home/viktor/test</code></pre></div>
-<p>We can even diff the 2 snapshots!</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home diff <span style="color:#3677a9">1</span>..2</code></pre></div>
-<p>which literally runs <code>/usr/bin/diff</code> (or anything you tell it to) on the 2 snapshots:</p>
-
+c..... /home/viktor/test
+</code></pre></div><p>We can even diff the 2 snapshots!</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home diff 1..2
+</code></pre></div><p>which literally runs <code>/usr/bin/diff</code> (or anything you tell it to) on the 2 snapshots:</p>
 <pre><code>--- /home/.snapshots/1/snapshot/viktor/test     2020-01-13 00:06:03.081757300 +0000
 +++ /home/.snapshots/2/snapshot/viktor/test     2020-01-13 00:06:16.589780114 +0000
 @@ -1 +1,2 @@
 Hello
 +World
 </code></pre>
-
 <p>You can undo the changes made by running:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home undochange <span style="color:#3677a9">1</span>..2
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ snapper -c home undochange 1..2
 
-create:0 modify:1 delete:0</code></pre></div>
-<p>and now all the changes we made are reversed - how awesome is that!
+create:0 modify:1 delete:0
+</code></pre></div><p>and now all the changes we made are reversed - how awesome is that!
 You can even specify which files to revert if you don&rsquo;t want to revert all changes.</p>
-
 <p>With all those features, literally the sky is the limit to what you can do!</p>
-
 <h1 id="useful-materials">Useful materials</h1>
-
 <p>I really liked this talk on BTRFS - <a href="https://www.youtube.com/watch?v=-m01x3gHNjg&amp;t=0s">https://www.youtube.com/watch?v=-m01x3gHNjg&amp;t=0s</a></p>
-
 <p>The Arch wiki has a good guide on BTRFS - <a href="https://wiki.archlinux.org/index.php/Btrfs">https://wiki.archlinux.org/index.php/Btrfs</a></p>
-
 <p>The snapper docs have a decent tutorial on what you can do how - I recommend going through it - <a href="http://snapper.io/tutorial.html">http://snapper.io/tutorial.html</a></p>
-
 <p>Also, the arch wiki has a tutorial on <code>snapper</code> that&rsquo;s also worth a read - <a href="https://wiki.archlinux.org/index.php/Snapper">https://wiki.archlinux.org/index.php/Snapper</a></p>
-
 <p>I&rsquo;ll leave it up to you to experiment with and share your experience in the comments.
 Thank you for reading and till next time :)</p>
 

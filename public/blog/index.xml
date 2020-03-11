@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>15 Arpspoofing Exploitation, Detection and Prevention</title>
+      <link>https://viktorbarzin.me/blog/15-arpspoofing-exploitation-detection-prevention/</link>
+      <pubDate>Wed, 11 Mar 2020 17:10:29 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/15-arpspoofing-exploitation-detection-prevention/</guid>
+      <description>Introduction ARP spoofing is a rather nasty network attack which is not very popular because the attacker needs to be on the same LAN as the victim. This is impractical in most cases, however, if that happens to be the case, a malicious user can easily perform attacks such as Man-In-The-Middled(MitM) and/or Denied of Service(DoS).
+Recently I have been working on creating a attack-defense style CTF environment and ARP spoofing in the challenge network is definitely a concern.</description>
+    </item>
+    
+    <item>
       <title>14 DNS Over HTTPS</title>
       <link>https://viktorbarzin.me/blog/14-dns-over-https/</link>
       <pubDate>Wed, 29 Jan 2020 09:40:13 +0000</pubDate>

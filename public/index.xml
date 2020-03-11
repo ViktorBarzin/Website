@@ -6,10 +6,20 @@
     <description>Recent content on Viktor Barzin (Viktor Barzin&#39;s Website)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jan 2020 09:40:13 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 May 2019 14:24:22 +0000</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>15 Arpspoofing Exploitation, Detection and Prevention</title>
+      <link>https://viktorbarzin.me/blog/15-arpspoofing-exploitation-detection-prevention/</link>
+      <pubDate>Wed, 11 Mar 2020 17:10:29 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/15-arpspoofing-exploitation-detection-prevention/</guid>
+      <description>Introduction ARP spoofing is a rather nasty network attack which is not very popular because the attacker needs to be on the same LAN as the victim. This is impractical in most cases, however, if that happens to be the case, a malicious user can easily perform attacks such as Man-In-The-Middled(MitM) and/or Denied of Service(DoS).
+Recently I have been working on creating a attack-defense style CTF environment and ARP spoofing in the challenge network is definitely a concern.</description>
+    </item>
     
     <item>
       <title>14 DNS Over HTTPS</title>
@@ -71,8 +81,8 @@ I won&amp;rsquo;t focus on the face recognition part that much since the code I 
       <pubDate>Sat, 18 May 2019 14:24:22 +0000</pubDate>
       
       <guid>https://viktorbarzin.me/donate/</guid>
-      <description> Thanks for coming here! If you fancy helping out, hopefully there will be an ad below that you can click.
-  (adsbygoogle = window.adsbygoogle || []).push({});  Cheers! </description>
+      <description>Thanks for coming here! If you fancy helping out, hopefully there will be an ad below that you can click.
+Cheers! </description>
     </item>
     
     <item>

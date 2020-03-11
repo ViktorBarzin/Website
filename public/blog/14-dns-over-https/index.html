@@ -190,92 +190,58 @@
             <h1><a href="https://viktorbarzin.me/blog/14-dns-over-https/">14 DNS Over HTTPS</a></h1>
             <span class="post-date">Jan 29, 2020 </span>
             <div class="post-content">
-                
-
-<h1 id="introduction">Introduction</h1>
-
+                <h1 id="introduction">Introduction</h1>
 <p>This post is mainly about me sharing some very useful resources and bringing light onto the cool idea behind DNS-over-HTTPS (aka. DoH).</p>
-
 <p>I&rsquo;ll also share a simple setup on how to run your own DoH server to hide your DNS lookups from spying eyes.</p>
-
 <h1 id="what-is-dns-over-https-and-why-do-i-need-it">What is DNS-over-HTTPS and why do I need it?</h1>
-
 <p>As you know, DNS is a rather simple protocol, used for resolving domain names to IP addresses.
 It&rsquo;s been around for some time now (<a href="https://en.wikipedia.org/wiki/Domain_Name_System">since 1985</a>) and it is not going anywhere anytime soon.</p>
-
 <p>Unfortunately, the DNS queries (where you ask for an IP address of something) are <strong>not</strong> encrypted and hence all sort of bad things can happen to them - being seen (breaking <strong>confidentiality</strong>), being modified (breaking <strong>integrity</strong>) or being dropped all together (breaking <strong>availability</strong>) (read more about the <a href="https://whatis.techtarget.com/definition/Confidentiality-integrity-and-availability-CIA">CIA triad here</a>).</p>
-
 <p>Basically it has all the issues that plain HTTP has.
 To solve these issues, HTTP<strong>S</strong> was introduced which adds an entire layer of encryption magic that ensures that none of these horrible things can happen to your packets.</p>
-
 <p>Unfortunately, the DNS protocol does <strong>not</strong> have a way to encrypt the queries (<a href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC</a> just provides means to authorize the response but does <strong>not</strong> hide it and it is still in plain text, hence people can analyze it).
 Due to this, if someone was between you and the service you want to access (say your service provider) they could easily sniff your DNS requests and roughly figure out what and where you are doing something (<em>and of course monetize this information</em>).
 In fact, if you&rsquo;ve done any network forensics, one of the first things you would look at is DNS traffic in order to gain the big picture of the traffic that has been seen.</p>
-
 <h1 id="ways-to-encrypt-dns-traffic">Ways to encrypt DNS traffic</h1>
-
 <p>To tackle these issues, there have been some attempts at encrypting DNS payload and in general there are 2 mainstream ways to do so - <strong>DNS-over-TLS</strong> and <strong>DNS-over-HTTPS</strong>.</p>
-
 <h2 id="dns-over-tls-dot">DNS-over-TLS (DoT)</h2>
-
 <p>tl;dr is that DoT is similar to how people have secured other protocols such as</p>
-
 <ul>
 <li>Web HTTP (tcp/80) -&gt; HTTPS (tcp/443)</li>
 <li>Sending email SMTP (tcp/25) -&gt; SMTPS (tcp/465)</li>
 <li>Receiving email IMAP (tcp/143) -&gt; IMAPS (tcp/993)</li>
 <li>Now: DNS (tcp/53 or udp/53) -&gt; DoT (tcp/853)</li>
 </ul>
-
 <p>Essentially DoT is TLS packet, with DNS payload:</p>
-
-<p><img src="/images/14-dns-over-https-2-22-30-13.png" alt="" /></p>
-
+<p><img src="/images/14-dns-over-https-2-22-30-13.png" alt=""></p>
 <p>The issue with introducing a new port is that existing firewalls may block it.
 This means that if clients want to resolve names they will have to downgrade to plain DNS which could allow attackers to perform downgrading attacks (example for a downgrade attack is <a href="https://blog.cloudflare.com/performing-preventing-ssl-stripping-a-plain-english-primer/">SSL Stripping</a>).</p>
-
 <h2 id="dns-over-https-doh">DNS-over-HTTPS (DoH)</h2>
-
 <p>DNS-over-HTTPS (DoH) on the other hand, uses regular HTTPS traffic to transport the DNS queries:</p>
-
-<p><img src="/images/14-dns-over-https-2-21-44-28.png" alt="" /></p>
-
+<p><img src="/images/14-dns-over-https-2-21-44-28.png" alt=""></p>
 <p>This is very smart because it reuses the already existing infrastructure of HTTPS (including allowed port tcp/443) to send encrypted DNS requests.
 This makes it as easy as adding a route to your webserver that will handle that traffic and send it to its upstream resolver effectively anonimizing the user doing the DNS query.</p>
-
 <p>I would <strong>strongly</strong> recommend reading <a href="https://blog.cloudflare.com/dns-encryption-explained/">this article from Cloudflare&rsquo;s blog</a> about encrypted DNS.
 Basically the existence of this post is the reason why I&rsquo;m not going into details as it has been explained very well with the right amount of details and images and I&rsquo;ll definitely won&rsquo;t be able to write it in a better way.
 So go now, read that blog post and come back to finish mine.</p>
-
-<h3 id="once-you-ve-read-the-cloudflare-post">Once you&rsquo;ve read the cloudflare post&hellip;</h3>
-
+<h3 id="once-youve-read-the-cloudflare-post">Once you&rsquo;ve read the cloudflare post&hellip;</h3>
 <p>Open Wireshark and start filtering to see only your DNS traffic.
 Open a browser and go to a website.
 You&rsquo;ll be surprised the amount of DNS lookups you make just to <strong>open</strong> any site.</p>
-
 <p>The cloudflare blog post mentions that there are ways to configure all of your devices to use DoH and a public DoH provider and solve your issue with the unencrypted DNS traffic.
 To do so, you effectively set your DNS lookups to use a particular service provider e.g Cloudflare or Google.</p>
-
 <p>However, <strong>do you trust them?</strong>
 This would mean that they would know <strong>all</strong> of your lookups, including the client you are using to do them, which, if you are a privacy-concerned person like me, may not sound like the best idea.
 Surely, much better than using no encryption at all but we can do better.</p>
-
 <h1 id="hosting-a-dns-over-https-server">Hosting a DNS-over-HTTPS server</h1>
-
 <p>Parsing the HTTP payload for the DNS data and then doing the appropriate query manually might be a painful process to do in a secure and reliable manner.
 Luckily, somebody has already done such a service and it&rsquo;s under the MIT license so you can use it and self host it!</p>
-
 <p><a href="https://github.com/m13253/dns-over-https">This is a simple DNS-over-HTTPS server</a> written in go, that complies with the respective RFCs and is quite easy to setup.
 If you want the <strong>full</strong> details of setting up the DoH server, with an upstream resolver, a frontend nginx server and what not, you can have a read at <a href="https://www.bentasker.co.uk/documentation/linux/407-building-and-running-your-own-dns-over-https-server">this</a> rather long post.</p>
-
 <p>In the end of the day, what you need to do is compile and run the DoH server on some port, setup an HTTP<strong>S</strong> nginx site with a path (by convention <code>/dns-query</code>) that is forwarded to the DoH server and finally (optionally) you can setup your own DNS resolver or use someoneelse&rsquo;s (This way they will still know you do these queries, but will be unable to identify the end device that requests them so if you&rsquo;re multiple people using the DoH resolver, it&rsquo;ll be very hard to determine who is querying what)</p>
-
 <p>What follows is a brief description of what I did to setup a DoH server in my environment so you can follow the steps to setup one on your own.</p>
-
 <h1 id="setting-up-doh-in-my-environment">Setting up DoH in my environment</h1>
-
 <p>In my environment, most stuff run in docker containers so the first thing I did was to create a <code>Dockerfile</code> that sets up the dns-over-https server:</p>
-
 <pre><code>FROM golang
 
 WORKDIR /
@@ -284,25 +250,18 @@ COPY doh-server.conf /doh-server.conf
 
 CMD [&quot;/doh-server&quot;]
 </code></pre>
-
 <p>I had the <code>doh-server</code> binary already compiled locally.
 It is a better idea to compile the <code>doh-server</code> code inside the container, but since my containers run on <code>x86</code> architecture it&rsquo;s fine to just copy over the binary.</p>
-
 <p>To compile the binary run</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make</code></pre></div>
-<p>inside the root directory of the project (where the <code>Makefile</code> is).</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make
+</code></pre></div><p>inside the root directory of the project (where the <code>Makefile</code> is).</p>
 <p>This creates a bunch of files as well as the <code>doh-server</code> binary which is inside the <code>doh-server</code> directory.</p>
-
 <p>Another file you will need is the <code>doh-server.conf</code> config where we specify 2 important things -</p>
-
 <ul>
 <li>Port to listen onto (the DoH server is still an HTTP server)</li>
 <li>The upstream DNS resolver that we are going to use</li>
 </ul>
-
 <p>My config looks like this (upstream DNS server IP intentionally hidden, you can use <code>1.1.1.1</code> or your own DNS service like I do)</p>
-
 <pre><code># HTTP listen port
 listen = [
     &quot;0.0.0.0:8053&quot;,
@@ -344,10 +303,8 @@ verbose = true
 # Note: http uri/useragent log cannot be controlled by this config
 log_guessed_client_ip = false
 </code></pre>
-
 <p>With that up and running, all is left is to setup an HTTPS nginx web server that will forward requests to the DoH container.
 I have automated the bootstrapping process of the nginx container and the result config (with trimmed optimizations for simplicity) looks like this:</p>
-
 <pre><code>events { }
 
 http {
@@ -363,12 +320,9 @@ http {
     }
 }
 </code></pre>
-
 <p>Note that this container has mounted the <code>fullchain.pem</code> and <code>privkey.pem</code> in <code>/etc</code>.
 I&rsquo;d recommend getting a valid SSL certificate to avoid invalid certificate issues.</p>
-
 <p>The <code>docker-compose.yml</code> file has:</p>
-
 <pre><code>version: '3.1'
 services:
     nginx:
@@ -398,24 +352,16 @@ services:
 networks:
     dns-over-https-server-network:
 </code></pre>
-
 <p>With that setup up and running, we can now start serving DNS over HTTPS!</p>
-
 <h1 id="testing-the-setup">Testing the setup</h1>
-
 <p>The <a href="https://blog.cloudflare.com/dns-encryption-explained/#deployment-of-dot-and-doh">Cloudflare post</a> I mentioned earlier has a section on how to setup DoH on your clients.</p>
-
 <p>I tested the setup on latest Firefox (72.0.2) by going to <code>about:config</code>, then searched for <code>trr</code> (Trusted Recursive Resolver) and set <code>network.trr.mode = 2</code> and <code>network.trr.uri = https://dns.viktorbarzin.me/dns-query</code>.</p>
-
 <p>There&rsquo;s 2 things to note about these 2 settings - firstly, the trr modes are explained in the <a href="https://wiki.mozilla.org/Trusted_Recursive_Resolver#network.trr.mode">mozilla wiki</a>.
 Essentially <code>2</code> is <em>opportunistic</em> which means that it will try to use DoH if possible, but if the server is unavailable it will fallback to standard DNS.
 <code>3</code> is strict, which results in DNS errors if the server is unavailable for any reason (resistant to downgrading attacks) and <code>0</code> and <code>5</code> is not to use <code>trr</code> at all.</p>
-
 <p>The simple test you can do to see that everything is working properly and you are not leaking your DNS queries is to set the mode to <code>2</code> and sniff you DNS traffic in Wireshark - it will be empty despite the fact that you are looking up domains when you browse the internet.
 If you set the mode to <code>0</code> or <code>5</code>, you will instantly see all the DNS traffic generated by ads and what have you.</p>
-
 <h1 id="conclusion">Conclusion</h1>
-
 <p>I hope that you enjoyed this post as much as I enjoyed writing it.
 You can share your thoughts in the comments section and share it with your friends to let them know about DNS-over-HTTPS!</p>
 

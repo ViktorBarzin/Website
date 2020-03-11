@@ -190,75 +190,42 @@
             <h1><a href="https://viktorbarzin.me/blog/10-now-you-see-me/">10 Now you see me...</a></h1>
             <span class="post-date">May 18, 2019 </span>
             <div class="post-content">
-                
-
-<h1 id="pre-intro">Pre-Intro</h1>
-
+                <h1 id="pre-intro">Pre-Intro</h1>
 <p>It&rsquo;s been a long time since my last blog post.</p>
-
 <p>I&rsquo;ve been quite busy recently, playing around with <a href="https://golang.org/">Go</a>,
 <a href="https://www.haskell.org/">Haskell</a>, <a href="https://www.haskell.org/alex/">Alex parser</a>,
 <a href="http://dinosaur.compilertools.net/">Lex lexer</a>, <a href="https://shop.hak5.org/products/usb-rubber-ducky-deluxe">home-made Rubber Duckies</a> and plenty of other interesting stuff I may blog about at some point.</p>
-
 <h1 id="introduction">Introduction</h1>
-
 <p>This post is about setting up a <strong>home face recognition system</strong> using an <a href="https://www.amazon.co.uk/VSTARCAM-C7824WIP-Wireless-Camera-Network/dp/B00W17WWWE">IP Camera</a>, OpenCV and a raspberry pi.</p>
-
 <p>I <strong>won&rsquo;t</strong> focus on the face recognition part that much since the code I used <strong>was not written by me</strong> but instead was sourced from <a href="https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/">this</a> <strong>awesome</strong> blog post that I <strong>highly</strong> recommend reading if you&rsquo;re into ML with python.</p>
-
 <p>My post will be mostly about <strong>glueing together the <a href="https://opencv.org/">OpenCV</a> with my IP Camera</strong> and making the latter read it&rsquo;s input from a <a href="https://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol">RTSP source</a> which <a href="https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python">apperently works</a> if you have the right OpenCV (more on this later).</p>
-
 <h1 id="aim-of-project">Aim of project</h1>
-
 <p>In my home automation journey, after <a href="/blog/07-raspberry-bluetooth-aux-setup/">setting up an audio system</a> next thing on the list is to control the music played in some way that&rsquo;s simple (basically making a home-made alexa thingy).</p>
-
 <p>We spend a lot of time in our living room listening to music. Unfortunately I didn&rsquo;t simplify the audio system enough so that less tech-savvy people (Windows guys) could use it so I wondered - <strong>wouldn&rsquo;t it be cool if every time someone enters the room, he would be recognized by a camera a play some music based on their taste?</strong></p>
-
 <p>Hell yeah, sounds like a fun pre-exam project to do while procrastinating revision right?</p>
-
 <h1 id="doing-reading-on-ml-and-face-detection-and-recognition">Doing reading on ML and face detection and recognition</h1>
-
 <p>Image processing has become quite a trending topic recently which is probably the reason why there is such an abundance of libraries for it.</p>
-
 <p>Unfortunately (for me) most are written in C++ and people who know me know that <strong>I&rsquo;m not a fan of writing excessive amounts of code</strong> for simple tasks (such as face detection lol).</p>
-
 <p>Happily, there is python for the lazy people and what&rsquo;s even better is that most of the C++ libraries (<a href="http://dlib.net/">dlib</a>, <a href="https://opencv.org/">OpenCV</a>, etc) have their Python implementations. Yay!</p>
-
 <p>Even though, I was genuinely interested in the topic so I did some reading on <a href="https://www.datacamp.com/community/tutorials/face-detection-python-opencv">using opencv with python</a>. This blog post was quite useful and shows the 101 of OpenCV with Python (loading images, drawing stuff onto images etc.).</p>
-
 <p>The main source for my code was mentioned previously. Here&rsquo;s the <a href="https://www.pyimagesearch.com/2018/09/24/opencv-face-recognition/">link</a> again because it&rsquo;s so great - do read the blog.
 They describe how the code they&rsquo;ve posted works and how to train the support vector machine for your face from new images.
 As a bonus, they even added face recognition using a video source!</p>
-
-<p><img src="/images/opencv_face_reco_animation.gif" alt="" /></p>
-
+<p><img src="/images/opencv_face_reco_animation.gif" alt=""></p>
 <h1 id="so-if-the-code-is-online-what-did-i-do-exactly">So&hellip; if the code is online what did I do exactly?</h1>
-
 <p>Getting the the code to work is the easy part.</p>
-
-<p><img style="width:35%" src="/images/viktor-face-rec.gif" /></p>
-
+<p><!-- raw HTML omitted --></p>
 <p>That&rsquo;s fair and square, however, it&rsquo;s using my laptop camera.</p>
-
 <p>Next thing is to make it read the <strong>RTSP stream</strong> which shouldn&rsquo;t be too hard right?</p>
-
-<p><img style="width:20%" src="/images/10-home-face-recognizer-eba99d00.png" /></p>
-
+<p><!-- raw HTML omitted --></p>
 <h1 id="the-issue">The issue</h1>
-
 <p><a href="https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python">According to StackOverflow</a> OpenCV <em>does</em> support RTSP, however, this was <strong>not the case</strong> for my setup.</p>
-
 <p>It is possible that I&rsquo;ve done something wrong so if anyone figures out how to make it work I&rsquo;ll get him a beer.
 Upon running <code>recognize_video.py</code> it reaches the point of reading from the camera and after a little timeout it errors out:</p>
-
-<p><img src="/images/10-home-face-recognizer-95fd877e.png" alt="" /></p>
-
+<p><img src="/images/10-home-face-recognizer-95fd877e.png" alt=""></p>
 <p>Yes, I&rsquo;ve triple-checked the URI so the issue lies somewhere else.</p>
-
-<h3 id="my-build-info-that-doesn-t-allow-opencv-to-read-from-a-rtsp-source">My build info that DOESN&rsquo;T allow OpenCV to read from a RTSP source</h3>
-
+<h3 id="my-build-info-that-doesnt-allow-opencv-to-read-from-a-rtsp-source">My build info that DOESN&rsquo;T allow OpenCV to read from a RTSP source</h3>
 <p>Here&rsquo;s my setup info if anyone fancies a try to debug with me:</p>
-
 <pre><code>fedora 30 with latest updates
 python --version -&gt; python 3.7.3
 cv2.__version__ -&gt; 4.1.0
@@ -275,156 +242,97 @@ cv2.getBuildConfiguration() (Video I/O section) -&gt;
     GStreamer:                   NO
     v4l/v4l2:                    YES (linux/videodev2.h)
 
-</code></pre>
-
-<p>The reason might be because of the missing <code>GStreamer</code> option, even though I tried <strong>compiling it manually</strong> with that option included - <strong>still didn&rsquo;t work</strong>.</p>
-
+</code></pre><p>The reason might be because of the missing <code>GStreamer</code> option, even though I tried <strong>compiling it manually</strong> with that option included - <strong>still didn&rsquo;t work</strong>.</p>
 <h1 id="planning-a-workaround">Planning a workaround</h1>
-
 <p>I did look into a few libraries like <a href="https://pypi.org/project/rtsp/">this one</a>, <a href="https://github.com/jrosebr1/imutils">this one</a> and a some others but <strong>none of them</strong> seemed to do the trick and read from the IP Cam.
 Furthermore, I had my doubts that even if I managed to read a frame from it, it <strong>would still go wrong when passing it to OpenCV</strong> (image format, pixel format etc, FPS, etc.).</p>
-
 <p>Before jumping on me saying I&rsquo;m an idiot and got the URI wrong, that&rsquo;s not the case - adequate <strong>tools like VLC, FFMpeg</strong> and similar media playing software <strong>did read the stream correctly</strong>.</p>
-
 <p>So the 2 options were either to <strong>keep looking for a library</strong> that manages to read the RTSP, or <strong>do something hacky-er</strong> - <strong>I could read from a local web cam, so why not make the IP camera look like a local camera?</strong> After all if powerful tools such as FFMpeg can read from it, surely they can do other magic as well.</p>
-
 <h1 id="workaround-sketch">Workaround sketch</h1>
-
-<p><img src="/images/10-home-face-recognizer-2a46e123.png" alt="" /></p>
-
+<p><img src="/images/10-home-face-recognizer-2a46e123.png" alt=""></p>
 <p>First step is to make another <code>/dev/video</code> device so that I could stream to it.</p>
-
 <p>To admit, my first attempt was <strong>waaay off target</strong>:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo touch /dev/video5</code></pre></div>
-<p>Sure, I could write to it, but it was <strong>nowhere near a capture device</strong> that I could read from afterwards.
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo touch /dev/video5
+</code></pre></div><p>Sure, I could write to it, but it was <strong>nowhere near a capture device</strong> that I could read from afterwards.
 I did try some bash-fu to make OpenCV read from a constantly changing file but couldn&rsquo;t manage to trick it to.</p>
-
 <p>After a bit of google-ing on <a href="https://www.quora.com/What-is-the-difference-between-character-and-block-device-drivers-in-UNIX">character devices and block devices</a>, soon enough I arrived at the <code>mknod</code> command.</p>
-
 <p>Turns out that <code>/dev/videoX</code> devices as well as some other such as <code>/dev/null</code>, <code>/dev/random</code> etc. are all <a href="https://www.win.tue.nl/~aeb/linux/lk/lk-11.html"><em>character devices</em></a>.</p>
-
 <p>The command to make one and let the kernel know it should treat it as a camera device is:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ sudo mknod test_cam c <span style="color:#3677a9">81</span> <span style="color:#3677a9">0</span></code></pre></div>
-<p>The <code>c</code> tells it&rsquo;s a character device, <code>81</code> and <code>0</code> tell the kernel what modules to use for that specific device (<a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/devices.txt">list of all device major minor numbers</a> - 81 is char device, the 0 is <code>/dev/video0</code>).
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ sudo mknod test_cam c <span style="color:#3677a9">81</span> <span style="color:#3677a9">0</span>
+</code></pre></div><p>The <code>c</code> tells it&rsquo;s a character device, <code>81</code> and <code>0</code> tell the kernel what modules to use for that specific device (<a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/devices.txt">list of all device major minor numbers</a> - 81 is char device, the 0 is <code>/dev/video0</code>).
 Now running <code>file</code> on the new <em>file</em> confirms it is a character device:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ file test_cam
-test_cam: character special (<span style="color:#3677a9">81</span>/0)</code></pre></div>
-<p><strong>That&rsquo;s cool! Now I have a virtual camera as a file on my hard disk!</strong></p>
-
+test_cam: character special (81/0)
+</code></pre></div><p><strong>That&rsquo;s cool! Now I have a virtual camera as a file on my hard disk!</strong></p>
 <p>Let&rsquo;s see how to write to it now.</p>
-
 <h1 id="fighting-character-devices">Fighting character devices</h1>
-
 <p>My initial idea was to basically do something similar to <code>sudo cat video.mp4 &gt; test_cam</code> and afterwards read from <code>test_cam</code>.</p>
-
 <p>Well surprise, surprise writing to character devices isn&rsquo;t that straightforward.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">[root@yuhu]: cat kek.mp4 &gt; test_cam
 cat: write error: Invalid argument
 [root@yuhu]: <span style="color:#24909d">echo</span> <span style="color:#3677a9">1</span> &gt; test_cam
--bash: echo: write error: Invalid argument</code></pre></div>
-<p>They expect data in <em>characters</em> as opposed to <em>blocks</em> with which we are used to.
+-bash: echo: write error: Invalid argument
+</code></pre></div><p>They expect data in <em>characters</em> as opposed to <em>blocks</em> with which we are used to.
 So <strong>outputting a file into a character devices wouldn&rsquo;t make much sense</strong> the way I was trying to do it.
 <a href="https://unix.stackexchange.com/questions/409874/how-to-write-to-a-character-special-device#answer-409879">This</a> answer explains it in <strong>greater detail</strong>.</p>
-
 <p>I decided bothering with kernel IO would be too much for 1am so I started <strong>looking elsewhere</strong>.</p>
-
 <h3 id="v4l2loopback-module">v4l2loopback module</h3>
-
 <p>At some point it started to get a bit depressing since <strong>forwarding a RTSP video source to a local virtual camera isn&rsquo;t something people do every day</strong> and therefore not much is online about how to go about it.</p>
-
 <p>On the edge of despair (opening sites that I&rsquo;ve already gone through) I found <a href="https://github.com/umlaeute/v4l2loopback">v4l2loopback</a> module.
 <em>Lord and saviour!</em></p>
-
 <p>This is a kernel module that enables us to creating virtual video devices that normal <a href="https://en.wikipedia.org/wiki/Video4Linux">video4linux2</a> (v4l2) applications can read as capture device, but also allows writing to it which is what I was after!</p>
-
 <p>Next step was to start writing to it.</p>
-
 <h1 id="ffmpeg-magic">FFMPeg magic</h1>
-
 <p>The tool of choice for me was the infamous <a href="https://ffmpeg.org/">ffmpeg</a> which is like a Swiss knife for media.
 It can do all kind of crazy stuff like streaming the active X (Desktop) via network stream, or convert input/output media&rsquo;s pixel formats, RGB values and many many other funky stuff.</p>
-
 <p>Having hundreds of options is a two edged sword though, especially for someone who doesn&rsquo;t understand in great detail how media is converted and all the different types of codecs and the differences between each.
 I spent the next few hours trying to figure out all the correct input/output options to stream the IP cam to my virtual one.</p>
-
 <p>The main issue was that <strong>I didn&rsquo;t understand much</strong> about how moving pictures (aka videos) are seen from the computers&rsquo; point of view.
 There are quite a few moving parts that I had to basically brute-force to make the thing work since <strong>it either works or you see no picture whatsoever</strong>. There is no other state.</p>
-
 <p>By the end of the night this was the best output I ever got:</p>
-
-<p><img src="/images/10-home-face-recognizer-4c065cf3.png" alt="" /></p>
-
+<p><img src="/images/10-home-face-recognizer-4c065cf3.png" alt=""></p>
 <p>You can see some silhouettes here and there so there was light at the end of the tunnel.</p>
-
 <h1 id="at-last">At last</h1>
-
 <p>Finally, on the following day by continuing to tweak parameters of <em>ffmpeg</em> I finally had success reading the stream with the correct settings. Running the face recognition python app afterwards was as simple as changing the id it uses for the camera input.</p>
-
-<p><img style="width:40%" src="/images/10-face-recog-working-ip-cam.jpg" /></p>
-
-<h4 id="this-is-me-taking-a-photo-with-my-phone-of-my-laptop-screen-which-is-showing-the-output-of-the-opencv-face-recognition-app-which-gets-its-input-from-the-virtual-camera-device-which-is-getting-its-input-from-the-video4linux-loopback-module-which-is-being-written-to-by-ffmpeg-s-rtsp-input">This is me taking a photo with my phone of my laptop screen which is showing the output of the OpenCV face recognition app which gets its input from the virtual camera device which is getting its input from the video4linux loopback module which is being written to by ffmpeg&rsquo;s RTSP input.</h4>
-
+<p><!-- raw HTML omitted --></p>
+<h4 id="this-is-me-taking-a-photo-with-my-phone-of-my-laptop-screen-which-is-showing-the-output-of-the-opencv-face-recognition-app-which-gets-its-input-from-the-virtual-camera-device-which-is-getting-its-input-from-the-video4linux-loopback-module-which-is-being-written-to-by-ffmpegs-rtsp-input">This is me taking a photo with my phone of my laptop screen which is showing the output of the OpenCV face recognition app which gets its input from the virtual camera device which is getting its input from the video4linux loopback module which is being written to by ffmpeg&rsquo;s RTSP input.</h4>
 <p>That ^^ described quite well what the goal result was.</p>
-
 <p>Now <strong>I have a programmatic way to do whatever I want once a face is detected</strong> and even when a specific person is recognized.</p>
-
 <p>The magic steps that made all this possible were:</p>
-
 <ol>
 <li>Firstly, install the <code>v4l2loopback</code> module and load it - it will create the virtual camera devices.</li>
 <li>Stream to the virtual camera (in my case <code>/dev/video2</code>) using ffmpeg:</li>
 </ol>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p /dev/video2</code></pre></div>
-<p>Finally change the source code of the application to use camera id <em>2</em> instead of <em>0</em> (default) and it magically works!</p>
-
-<p><img src="/images/10-home-face-recognizer-0c438cd8.png" alt="" /></p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Bash" data-lang="Bash">$ ffmpeg -i rtsp://USER:PASS@CAMERA_IP:10554/udp/av0_0 -f v4l2 -pix_fmt yuv420p /dev/video2
+</code></pre></div><p>Finally change the source code of the application to use camera id <em>2</em> instead of <em>0</em> (default) and it magically works!</p>
+<p><img src="/images/10-home-face-recognizer-0c438cd8.png" alt=""></p>
 <h1 id="upcoming-improvements">Upcoming improvements</h1>
-
 <p>Next step is to put all this setup on the raspberry pi and run some scripts based on who the detected person is.
 Still have to gather all my housemates&rsquo; consent but you know, people are easier to handle with than computers :D</p>
-
 <h1 id="update">Update</h1>
-
 <p>Setup on the raspberry was tricky due to the <strong>limited resources</strong>.
 <code>pip install -r requirements.txt</code> failed because of <strong>insufficient ram</strong>.</p>
-
 <p><strong>All 4 virtual cpus ran on 100%</strong> eating up all of the 1GB of memory causing the pi to render useless for the time being.</p>
-
 <p>This meant I had to come up with an alternative way to pip install all the needed requirements.
 <strong>The main issue was the compilation of the Cython-related libraries</strong> like <em>numpy</em> and <em>matplotlib</em>.</p>
-
 <p>Fortunately <strong><code>pip install</code>-ing them separately did the trick</strong>.
 After installing the last few system packages like <em>python-dev</em> and the <em>raspberry-kernel-headers</em> for the video4linux2loobpack module everything worked!
 The compilation of the latter was trouble-free and the pi started recognizing images.</p>
-
 <p>The next issue was performance - <strong>with full FPS, the pi was struggling quite hard</strong> to deal with the incoming frames, process them and produce some output.
 So a necessary hack was needed - I added an extra <code>sleep</code> before rendering each frame, whose purpose is to <strong>drop the FPS</strong> and let the pi some air to breathe.</p>
-
 <p>Now there was some tweaking to find the best balance between latency and performance, but soon enough I had a <strong>latency at around 1-2s for 50% load average</strong> which is reasonable.</p>
-
 <h1 id="privacy-concerns">Privacy concerns</h1>
-
 <p>Now obviously there are some <strong>privacy concerns with having an IP camera streaming</strong> all the time.</p>
-
 <p>Excluding myself, it is reasonable to consider the opportunity of <strong>a third party watching the stream as well</strong> (I would be surprised if a chinese ip camera wasn&rsquo;t monitored).</p>
-
 <p>It is disturbing to know that someone might be watching on the other side so I took some precautionary actions to ensure that myself and noone else is watching that live feed.</p>
-
 <p>I simply put the camera to a network without an uplink and connected the pi&rsquo;s wlan interface to it.
 Also made sure that the pi is dropping everything from the camera&rsquo;s ip address except for the RTSP traffic.</p>
-
 <p>So this is what the final setup looks like network-wise:</p>
-
-<p><img src="/images/10-now-you-see-me-4d94ba6b.png" alt="" /></p>
-
+<p><img src="/images/10-now-you-see-me-4d94ba6b.png" alt=""></p>
 <p>Yes, I could have made it simpler with a simple SOHO router running OpenWRT, unfortunately the devices I had weren&rsquo;t supported so I had to physically block the camera&rsquo;s internet access.</p>
-
 <h1 id="future-plans">Future plans</h1>
-
 <p>Currently, I am the only person that can be recognized by the application, and once it does <em>see</em> me, it says hi to me which is cute.
 I have to add some more pictures of myself and some other people to improve the accuracy of the SVM and that&rsquo;s pretty much it.</p>
-
 <p>P.S: Oh btw, it recognizes people in full darkness as well using it&rsquo;s IR camera which is pretty cool!</p>
 
             </div>

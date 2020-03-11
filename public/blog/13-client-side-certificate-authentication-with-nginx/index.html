@@ -190,258 +190,178 @@
             <h1><a href="https://viktorbarzin.me/blog/13-client-side-certificate-authentication-with-nginx/">13 Client Side Certificate Authentication With Nginx</a></h1>
             <span class="post-date">Jan 18, 2020 </span>
             <div class="post-content">
-                
-
-<h1 id="introduction">Introduction</h1>
-
+                <h1 id="introduction">Introduction</h1>
 <p>Authentication is hard.
 Application-level authentication is even tougher and most of the time, when prototyping something, people (unfortunately) don&rsquo;t think about security and leave wide-open apps listening on the internet.</p>
-
 <p>A simple solution to that could be to use the production web server as an authentication entity that decides whether or not you are allowed to view the upstream application.
 Both apache and nginx support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic authentication</a> which is essentially a header that your client sends with each request that has your username and password for the system.
 That&rsquo;s the simplest mechanism of protection you can enable but it has 2 drawbacks</p>
-
 <ul>
 <li>You have to manage credentials for each user and <strong>per each web server instance</strong>. Remember, reusing passwords is a <strong>bad idea</strong>.</li>
 <li>That may be just me, but I don&rsquo;t like the idea of sending credentials in clear text with each request to the server.</li>
 </ul>
-
 <p>In my opinion, the less passwords we have to deal with, the more secure a system is.
 So, what is the alternative?</p>
-
 <h1 id="what-are-client-side-certificates">What are Client-Side Certificates?</h1>
-
 <p>Well, the same way we use server side certificates (usually you see them in the &ldquo;<strong>S</strong>&rdquo; part of <strong>HTTPS</strong>) to prove that the webserver is indeed who they say they are, we can use client-side certificates to prove that the client is who they say they are.
 Moreover, apart from authentication, you can also do authorization and delegate permissions based on the certificate the client presents.</p>
-
 <p>The best part is that you can have a centralized authority that signs certificate signing requests (CSR, more on this later) that can manage all of that for you and you just have to equip your devices with a certificate file.</p>
-
 <p><a href="https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake">This wiki article on TLS</a> does an excellent job of explaining how client certificate authentication works in details.</p>
-
 <h2 id="a-quick-reminder-on-tls">A Quick reminder on TLS</h2>
-
 <p>TLS, the successor of SSL is a crypto protocol that lies on top of a transport protocol and provides secure communication over an insecure network.
 There&rsquo;s plenty of resource online about TLS that explain it better than I could so I won&rsquo;t spend time on it.
 Instead, here is a good visualization on where TLS fits in the OSI model:</p>
-
-<p><img src="/images/13-client-side-certificate-authentication-with-nginx-5-17-41-33.png" alt="" /></p>
-
+<p><img src="/images/13-client-side-certificate-authentication-with-nginx-5-17-41-33.png" alt=""></p>
 <h3 id="tls-resources">TLS resources</h3>
-
 <p><a href="https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/">https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/</a></p>
-
 <p><a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">https://en.wikipedia.org/wiki/Transport_Layer_Security</a></p>
-
 <p><a href="https://tools.ietf.org/html/rfc5246">https://tools.ietf.org/html/rfc5246</a></p>
-
 <h3 id="learn-by-doing">Learn by doing</h3>
-
 <p>For my use case, authentication is enough.
 I don&rsquo;t need to do any checks on who a user is - I&rsquo;ll allow them through as long as they provide a valid client-side certificate so for the rest of the article I&rsquo;ll share only the &ldquo;can access&rdquo; portion of the authentication.</p>
-
 <h1 id="overview-of-the-process">Overview of the process</h1>
-
 <p>Before delving into the process, here is what the process looks like:</p>
-
 <h4 id="server">Server:</h4>
-
 <ul>
 <li>Create a Certificate Authority(CA) Key</li>
 <li>Create a CA Certificate</li>
 </ul>
-
 <h4 id="client">Client:</h4>
-
 <ul>
 <li>Create a Client Key</li>
 <li>Create a Certificate Signing Request (CSR)</li>
 <li>Send CSR to server to sign it and produce the signed certificate</li>
 </ul>
-
 <h4 id="server-1">Server:</h4>
-
 <ul>
 <li>Sign the CSR</li>
 <li>Configure Nginx to require client-side certificates</li>
 </ul>
-
 <h1 id="creating-the-certificate-authority-server">Creating the Certificate Authority (server)</h1>
-
 <p>First, we need to create a key for the CA.
 This key is used to create the server certificate and sign all certificate signing requests (CSRs) later on.
 Another way to put it - <strong>keep this safe</strong>.</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl genrsa -aes256 -out ca.key <span style="color:#3677a9">4096</span></code></pre></div>
-<p>You&rsquo;ll be prompt for a password to encrypt the key.
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl genrsa -aes256 -out ca.key <span style="color:#3677a9">4096</span>
+</code></pre></div><p>You&rsquo;ll be prompt for a password to encrypt the key.
 Make sure you don&rsquo;t forget it, as you will use this password to decrypt the key which is everytime you want to create a new certificate or sign a CSR.</p>
-
 <p>For those of you who are into crypto, the algorithm of choice (<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">aes265</a>) is the preferred option.
 Other available options are <code>-des</code> (<a href="https://en.wikipedia.org/wiki/Data_Encryption_Standard">des</a>) and <code>-des3</code> (<a href="https://en.wikipedia.org/wiki/Triple_DES">des3</a>) which are <em>not as modern</em> to put it that way compared to AES.
 They are the predecessors of AES.
 <a href="https://security.stackexchange.com/questions/26179/security-comparsion-of-3des-and-aes">Here&rsquo;s</a> a comparison of the 3 and why you should use AES.</p>
-
 <h2 id="creating-a-ca-certificate">Creating a CA Certificate</h2>
-
 <p>Now that we have a key, we can create a CA certificate.
 This is the certificate that will be used to verity client certificates against.
 It is <strong>not</strong> a replacement for the typical HTTPS certificate so <strong>don&rsquo;t</strong> remove your let&rsquo;s encrypt certificate!</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># sign the certificate for the appropriate time</span>
 <span style="color:#999;font-style:italic"># 365 days suites my environment</span>
-openssl req -new -x509 -days <span style="color:#3677a9">365</span> -key ca.key -out ca.crt</code></pre></div>
-<p>You&rsquo;ll be prompted a few questions.
+openssl req -new -x509 -days <span style="color:#3677a9">365</span> -key ca.key -out ca.crt
+</code></pre></div><p>You&rsquo;ll be prompted a few questions.
 <a href="https://fardog.io/blog/2017/12/30/client-side-certificate-authentication-with-nginx/">This guide</a> suggests the following:</p>
-
 <ul>
 <li>Note what you’ve entered for Country, State, Locality, and Organization; you’ll want these to match later when you renew the certificate.</li>
 <li>Do not enter a common name (CN) for the certificate; I’m unsure why, but I had problems when I entered one.</li>
 </ul>
-
 <p>and it works well.</p>
-
 <p>Renewing a certificate is done by creating a new one so depending on how often you can be bothered vs what&rsquo;s the impact of the certificate being compromised ratio, you may tune the <code>-days</code> parameter on the previous command.</p>
-
 <p>Reviewing the current certificate details can be done with</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl x509 -in ca.crt -noout -text</code></pre></div>
-<h1 id="creating-a-client-certificate-client">Creating a Client Certificate (client)</h1>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl x509 -in ca.crt -noout -text
+</code></pre></div><h1 id="creating-a-client-certificate-client">Creating a Client Certificate (client)</h1>
 <p>Similarly to the server certificate, each client will have their own <strong>private</strong> certificate.
 This certificate is effectively a <em>password</em> for that particular user to the system so it must be kept <strong>private</strong> by each client.</p>
-
 <p>Typically, the steps here should be performed by the client.
 When done, clients will send the CSR to the server (admin) and receive the client certificate back.</p>
-
 <h3 id="create-a-user-key">Create a User Key</h3>
-
 <p>Same command as we used to create the server key:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl genrsa -aes256 -out user.key <span style="color:#3677a9">4096</span></code></pre></div>
-<h3 id="create-a-certificate-signing-request-csr">Create a Certificate Signing Request (CSR)</h3>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl req -new -key user.key -out user.csr</code></pre></div>
-<p>The answers to the questions <em>should</em> match the CA file of the server we created earlier.</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl genrsa -aes256 -out user.key <span style="color:#3677a9">4096</span>
+</code></pre></div><h3 id="create-a-certificate-signing-request-csr">Create a Certificate Signing Request (CSR)</h3>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl req -new -key user.key -out user.csr
+</code></pre></div><p>The answers to the questions <em>should</em> match the CA file of the server we created earlier.</p>
 <h4 id="note-make-sure-you-put-common-name-on-the-csr">NOTE: Make sure you put Common Name on the CSR!</h4>
-
 <p>The common name can be a name of the device/user you are issuing the CSR for.
 I did not put CN initially and nginx returned a very unhelpful error message so make sure you don&rsquo;t put a blank CN.
 Looks like this:</p>
-
-<p><center>
-<img src="/images/13-client-side-certificate-authentication-with-nginx-6-00-23-07.png" alt="" />
-</center></p>
-
+<!-- raw HTML omitted -->
 <h1 id="signing-the-csr">Signing the CSR</h1>
-
 <p>After we have created the CSR, we need to send it to the server to sign it.
 In this step, the server <em>verifies</em> they know the user/device and trust them when they say who they are.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># sign the csr to a certificate with validity of 365 days</span>
-openssl x509 -req -days <span style="color:#3677a9">365</span> -in user.csr -CA ca.crt -CAkey ca.key -set_serial <span style="color:#3677a9">01</span> -out user.crt</code></pre></div>
-<p>Good practices suggest to increment the <code>-set_serial</code> parameter with each signing.
+openssl x509 -req -days <span style="color:#3677a9">365</span> -in user.csr -CA ca.crt -CAkey ca.key -set_serial <span style="color:#3677a9">01</span> -out user.crt
+</code></pre></div><p>Good practices suggest to increment the <code>-set_serial</code> parameter with each signing.
 Once the certificate expires, a new one can be created with the same CSR.</p>
-
 <p>Finally, the server sends back the <code>user.crt</code> certificate.</p>
-
 <h1 id="installing-the-client-certificate-on-a-user-device">Installing the Client Certificate on a User Device</h1>
-
 <p>Now to install the certificate, we need to bundle it with the client keys.
 The resulting archive must be kept private as anyone who has it, can effectively authenticate as the user holding this certificate.</p>
-
 <p>To bundle it in a PKCS #12 (PFX) run:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl pkcs12 -export -out user.pfx -inkey user.key -in user.crt -certfile ca.crt</code></pre></div>
-<h5 id="note-if-a-client-is-creating-the-archive-they-won-t-have-access-to-the-ca-crt-directly-however-they-can-export-it-from-the-tls-connection-with-the-server-as-the-cert-is-sent-while-the-tls-negotiation-is-happening">Note: If a client is creating the archive, they won&rsquo;t have access to the <code>ca.crt</code> directly, however, they can export it from the TLS connection with the server, as the cert is sent while the TLS negotiation is happening.</h5>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">openssl pkcs12 -export -out user.pfx -inkey user.key -in user.crt -certfile ca.crt
+</code></pre></div><h5 id="note-if-a-client-is-creating-the-archive-they-wont-have-access-to-the-cacrt-directly-however-they-can-export-it-from-the-tls-connection-with-the-server-as-the-cert-is-sent-while-the-tls-negotiation-is-happening">Note: If a client is creating the archive, they won&rsquo;t have access to the <code>ca.crt</code> directly, however, they can export it from the TLS connection with the server, as the cert is sent while the TLS negotiation is happening.</h5>
 <p>When exporting the <code>.pfx</code>, you&rsquo;ll be prompted for a password.
 I recommend setting one simply because you need to transfer the archive to your device in some way and you don&rsquo;t want that archive to sit not encrypted anywhere.</p>
-
 <p>The <code>.pfx</code> can now be imported into your client browser.
 And that&rsquo;s it!
 You now have client authentication without mentioning usernames or passwords and everything happens even before the application has loaded!</p>
-
 <p>The final part to do is to setup our frontend service (nginx or a load-balancing proxy).</p>
-
-<h5 id="p-s-if-you-don-t-like-the-pfx-format-you-can-easily-convert-it-here-s-a-good-cheat-sheet-https-knowledge-digicert-com-solution-so26449-html">P.S: if you don&rsquo;t like the <code>pfx</code> format, you can easily convert it. Here&rsquo;s a good cheat sheet - <a href="https://knowledge.digicert.com/solution/SO26449.html">https://knowledge.digicert.com/solution/SO26449.html</a></h5>
-
+<h5 id="ps-if-you-dont-like-the-pfx-format-you-can-easily-convert-it-heres-a-good-cheat-sheet---httpsknowledgedigicertcomsolutionso26449html">P.S: if you don&rsquo;t like the <code>pfx</code> format, you can easily convert it. Here&rsquo;s a good cheat sheet - <a href="https://knowledge.digicert.com/solution/SO26449.html">https://knowledge.digicert.com/solution/SO26449.html</a></h5>
 <h1 id="nginx-setup">Nginx setup</h1>
-
 <p>A minimal <code>nginx</code> config that checks for client certificates follows.
 There are 2 things to note:</p>
-
 <ul>
 <li>To keep it brief, I have omitted a lot of optimization options as well as logging options</li>
+<li>You <strong>must</strong> provide valid TLS certificates (self-signed certs are fine) - client side certificate authentication works <strong>only with SSL servers!</strong></li>
+</ul>
+<pre><code>    user nginx;
+    worker_processes 1;
+    pid /var/run/nginx.pid;
 
-<li><p>You <strong>must</strong> provide valid TLS certificates (self-signed certs are fine) - client side certificate authentication works <strong>only with SSL servers!</strong></p>
+    events {
+        worker_connections  1024;
+    }
 
-<pre><code>user nginx;
-worker_processes 1;
-pid /var/run/nginx.pid;
+    http {
+        server {
+            server_name nginx;
+            listen 443 ssl;
+            # make sure those exist!
+            ssl_certificate /etc/nginx/fullchain.pem;
+            ssl_certificate_key /etc/nginx/privkey.pem;
 
-events {
-    worker_connections  1024;
-}
+            # client certificate
+            ssl_client_certificate /etc/nginx/client_certs/ca.crt;
+            # make verification optional, so we can display a 403 message to those
+            # who fail authentication
+            ssl_verify_client optional;
 
-http {
-    server {
-        server_name nginx;
-        listen 443 ssl;
-        # make sure those exist!
-        ssl_certificate /etc/nginx/fullchain.pem;
-        ssl_certificate_key /etc/nginx/privkey.pem;
-
-        # client certificate
-        ssl_client_certificate /etc/nginx/client_certs/ca.crt;
-        # make verification optional, so we can display a 403 message to those
-        # who fail authentication
-        ssl_verify_client optional;
-
-        location / {
-            # if the client-side certificate failed to authenticate, show a 403
-            # message to the client
-            if ($ssl_client_verify != SUCCESS) {
-                return 403;
+            location / {
+                # if the client-side certificate failed to authenticate, show a 403
+                # message to the client
+                if ($ssl_client_verify != SUCCESS) {
+                    return 403;
+                }
+                root /usr/share/nginx/html;
+                index index.html;
             }
-            root /usr/share/nginx/html;
-            index index.html;
         }
     }
-}
-</code></pre></li>
-</ul>
-
-<h2 id="demo">Demo</h2>
-
+</code></pre><h2 id="demo">Demo</h2>
 <p>To test this config, I ran a <code>docker</code> container and mounting the certificate files:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker run --rm -p <span style="color:#3677a9">443</span>:443 --name nginx -v <span style="color:#40ffff">$PWD</span>/nginx.conf:/etc/nginx/nginx.conf -v <span style="color:#40ffff">$PWD</span>/ca.crt:/etc/nginx/client_certs/ca.crt -v <span style="color:#40ffff">$PWD</span>/fullchain.pem:/etc/nginx/fullchain.pem -v <span style="color:#40ffff">$PWD</span>/privkey.pem:/etc/nginx/privkey.pem nginx</code></pre></div>
-<p>This command needs the following files to be present in the current dir:</p>
-
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker run --rm -p 443:443 --name nginx -v <span style="color:#40ffff">$PWD</span>/nginx.conf:/etc/nginx/nginx.conf -v <span style="color:#40ffff">$PWD</span>/ca.crt:/etc/nginx/client_certs/ca.crt -v <span style="color:#40ffff">$PWD</span>/fullchain.pem:/etc/nginx/fullchain.pem -v <span style="color:#40ffff">$PWD</span>/privkey.pem:/etc/nginx/privkey.pem nginx
+</code></pre></div><p>This command needs the following files to be present in the current dir:</p>
 <ul>
 <li><code>nginx.conf</code> - <code>nginx</code> config. The one above works.</li>
 <li><code>ca.crt</code> - the CA server certificate for the client-certificate auth.</li>
 <li><code>fullchain.pem</code>, <code>privkey.pem</code> - You HTTPS certificate files.</li>
 </ul>
-
 <p>Simply navigating to <code>https://localhost</code> returns a <code>403</code> error:</p>
-
-<p><center>
-<img src="/images/13-client-side-certificate-authentication-with-nginx-5-19-32-57.png" alt="" />
-</center></p>
-
+<!-- raw HTML omitted -->
 <p>To import your client certificate in Chrome, go to <code>chrome://settings/certificates</code> and upload your <code>.pfx</code>.</p>
-
 <p>Then when you visit the page again, you will be prompted to provide a client cert like so</p>
-
-<p><center>
-<img src="/images/13-client-side-certificate-authentication-with-nginx-5-19-36-34.png" alt="" />
-</center></p>
-
+<!-- raw HTML omitted -->
 <p>Once you select the certificate, you will be allowed to visit nginx&rsquo;s index</p>
-
-<p><center>
-<img src="/images/13-client-side-certificate-authentication-with-nginx-5-19-37-38.png" alt="" />
-</center></p>
-
+<!-- raw HTML omitted -->
 <h1 id="conclusion">Conclusion</h1>
-
 <p>There you have it - client side certificate authentication with Nginx.
 I hope the information you read was useful.
 If you have any questions pop them in the comments section below.</p>
-
 <p>If you&rsquo;re looking for project ideas with this knowledge here&rsquo;s what I&rsquo;ve done in my environment - I&rsquo;ve created a pipeline that takes an app and a Dockerfile to run the app and deploys it behind an nginx and haproxy requiring client certificates. This helps me for hosting sites publicly, but limiting who can view the site e.g a personal project.</p>
 
             </div>

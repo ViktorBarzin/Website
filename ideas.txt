@@ -164,3 +164,25 @@ pcaps in /nsm/sensor_data/so-ens36/dailylogs
 http://mjmohebbi.com/en/blog/How-to-monitor-your-VMware-vSphere-infrastructure-using-Zabbix-&-Grafana
 https://www.zabbix.com/documentation/3.4/manual/vm_monitoring
 https://techexpert.tips/zabbix/zabbix-monitor-vmware-esxi/
+
+
+----------------------- Cracking Mifare cards for fun -----------------------
+http://www.cs.ru.nl/~rverdult/Ciphertext-only_Cryptanalysis_on_Hardened_Mifare_Classic_Cards-CCS_2015.pdf - hardnested attack
+https://github.com/vk496/mfoc/tree/hardnested - mfoc with hardnested attack
+
+----------------------- arptables and preventing apspoof attacks -----------------------
+#/etc/NetworkManager/dispatcher.d/up
+#!/bin/bash
+if [[ "$1" == "wlp59s0" ]]; then
+        gw_ip=$(arp -a | grep _gateway | awk '{print $2}' | sed 's/(//' | sed 's/)//')
+        gw_mac=$(arp -a | grep _gateway | awk '{print $4}')
+        arptables -A INPUT --source-mac \! $gw_mac -s $gw_ip -j DROP
+fi
+
+allow arps only from gw trusted in the beginning
+https://developer.gnome.org/NetworkManager/stable/NetworkManager.html
+
+
+----------------------- ssh forward docker socket -----------------------
+https://medium.com/@dperny/forwarding-the-docker-socket-over-ssh-e6567cfab160
+https://serverfault.com/questions/127794/forward-local-port-or-socket-file-to-remote-socket-file

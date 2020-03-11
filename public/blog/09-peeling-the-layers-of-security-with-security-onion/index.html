@@ -61,7 +61,7 @@
     "datePublished": "2019-01-23T10:18:44Z",
     "dateModified" : "2019-01-23T10:18:44Z",
     "url" : "https:\/\/viktorbarzin.me\/blog\/09-peeling-the-layers-of-security-with-security-onion\/",
-    "wordCount" : "1768",
+    "wordCount" : "1765",
     "image": 	"https:\/\/viktorbarzin.me\/images\/09-security-onion-setup-37c20ba2.png",
     "keywords" : [ "pfSense","security onion","vmware esxi","vmware vSwitch","vSwitch","Elasticsearch","Logstash","Kibana","Snort","Suricata","Bro","Wazuh","Sguil","Squert","CyberChef","OpenWRT","pfSense logging","tcpdump","packetbeat","vSwitch promiscuous mode","vSwitch","pfSense bridge","Blog" ]
 }
@@ -190,201 +190,115 @@
             <h1><a href="https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/">09 Peeling the layers of security with Security Onion</a></h1>
             <span class="post-date">Jan 23, 2019 </span>
             <div class="post-content">
-                
-
-<h1 id="introduction">Introduction</h1>
-
+                <h1 id="introduction">Introduction</h1>
 <p>This time round, I&rsquo;ll share my experience with <a href="https://securityonion.net/">Security Onion</a> and the journey of setting it up in my environment.</p>
-
 <p>I will skip the dull installation process (everyone can click next at the prompts) and rather show you how it fits in my increasingly complex network topology.
 The focus of this blogpost will be on the interconnection between pfSense, VMWare ESXi and Security Onion.</p>
-
 <h2 id="prerequisites">Prerequisites</h2>
-
 <p>Before reading further on, I&rsquo;d recommend familiarizing yourself with <a href="https://en.wikipedia.org/wiki/PfSense">pfSense</a> and the <a href="https://www.pfsense.org/about-pfsense/features.html">awesome stuff it can do</a>. Also, knowing what <a href="https://en.wikipedia.org/wiki/VMware_ESXi">VMWare ESXi hypervisor</a> is having a bit of knowledge on the <a href="https://www.nakivo.com/blog/esxi-network-concepts/">networking part</a> would be beneficial.</p>
-
 <p>If you&rsquo;ve never heard about Security Onion before:</p>
-
 <blockquote>
 <p>Security Onion is a free and open source Linux distribution for intrusion detection, enterprise security monitoring, and log management. It includes Elasticsearch, Logstash, Kibana, Snort, Suricata, Bro, Wazuh, Sguil, Squert, CyberChef, NetworkMiner, and many other security tools.</p>
-
-<p>&ndash;<cite> Security Onion&rsquo;s <a href="https://securityonion.net/">website</a> </cite></p>
 </blockquote>
-
+<blockquote>
+<p>&ndash;<!-- raw HTML omitted --> Security Onion&rsquo;s <a href="https://securityonion.net/">website</a> <!-- raw HTML omitted --></p>
+</blockquote>
 <p>I am going to show you how it all fits in my lab so let&rsquo;s get started!</p>
-
-<h4 id="p-s-this-is-not-intended-to-be-a-guide-rather-it-s-the-path-i-took-to-get-it-done-if-you-need-a-guide-or-help-pm-me-somewhere">P.S: This is not intended to be a guide, rather it&rsquo;s the path I took to get it done. If you need a guide or help, pm me somewhere.</h4>
-
+<h4 id="ps-this-is-not-intended-to-be-a-guide-rather-its-the-path-i-took-to-get-it-done-if-you-need-a-guide-or-help-pm-me-somewhere">P.S: This is not intended to be a guide, rather it&rsquo;s the path I took to get it done. If you need a guide or help, pm me somewhere.</h4>
 <h1 id="how-i-did-network-monitoring-so-far">How I did network monitoring so far</h1>
-
 <p>Previously, I monitored my network with a mix of an <a href="https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/#elk-stack">ELK stack VM</a> that collects and analyzes the
 <a href="https://viktorbarzin.me/blog/03-a-walk-down-infrastructure-lane/#logical-topology">pfSense</a> firewall logs along with the firewall logs on my <a href="https://openwrt.org/">OpenWRT</a> router at home.</p>
-
 <p>Cool thing about pfSense&rsquo;s firewall is that you can explicitly say which rules you&rsquo;d like to log by ticking the <strong>Log</strong> checkbox in the rule&rsquo;s page:</p>
-
-<p><img src="/images/09-security-onion-setup-027aaec1.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-027aaec1.png" alt=""></p>
 <p>Furthermore, you can forward these logs to an external log server (in my case Logstash) via <code>Status &gt; System Logs &gt; Settings &gt; Remote Logging Options</code> like so:</p>
-
-<p><img src="/images/09-security-onion-setup-9bac23ea.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-9bac23ea.png" alt=""></p>
 <p>It utilizes <a href="https://www.rsyslog.com/">rsyslog</a> which is stable and behaves quite adequate.</p>
-
 <p>Now parsing the logs on the Logstash end is a different story. I&rsquo;ve done it and writing those <a href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html">grok files</a> is pretty ugly but it is out of the scope for this post.</p>
-
 <p>It can be done and it sort of works.
 It&rsquo;s not perfect because it logs only the IP header and the stuff it can do are solely based on the packet&rsquo;s header fields - <code>source_ip</code>, <code>dest_ip</code> &hellip;</p>
-
 <p>Unfortunately it does not log the packet body.
 This means that the only data you can see is basically where it&rsquo;s coming from and where it&rsquo;s headed to.</p>
-
 <p>I&rsquo;d like to know all about the traffic passing though my network and the headers do not suffice so the search for another solution solution continued.</p>
-
 <h1 id="but-but">But, but&hellip;</h1>
-
 <p>I&rsquo;d really wanted to make use of the existing logging features that pfSense provides and avoid any unnecessary complications.</p>
-
 <p>My guess is that underneath, logging is done via something <code>tcpdump</code>-like.
 I gave it a try to see whether it really logs only header data or does it perform a full packet capture.</p>
-
 <p>Running
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#999;font-style:italic"># tcpdump -qni tun0 dst port 80 -w log.pcap</span></code></pre></div></p>
-
 <p>in one shell, and</p>
-
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ed9d13">\$</span> curl testmyids.com</code></pre></div>
-
 <p>in another resulted in the following pcap:</p>
-
-<p><img src="/images/09-security-onion-setup-6370368c.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-6370368c.png" alt=""></p>
 <p>Obviously, <code>tcpdump</code> logs more than just headers.
 So the pfSense logging issue should be a click away right?</p>
-
 <p>Wrong!</p>
-
 <p>Turns out that <a href="https://forum.netgate.com/topic/38397/best-way-to-log-all-traffic/2">full packet capture is not supported out of the box</a>.
 This means that if I want HTTP traffic I&rsquo;ll have to install some web content filter, if I want dns traffic some dns filter&hellip;</p>
-
 <p>That&rsquo;s definitely a no-no so the hunt for a better solution continued.</p>
-
 <h1 id="an-elastic-solution">An Elastic solution?</h1>
-
 <p>Newer versions of Security Onion come with the ELK stack as log processing backend.</p>
-
 <p>There is this thing called <a href="https://www.elastic.co/products/beats/packetbeat">Packetbeat</a> which is an Elastic product whose purpose is to log network traffic and send it to Logstash for instance.</p>
-
 <p>One solution would be to install packetbeat on every endpoint I&rsquo;d like to monitor and then make Security Onion make sense of the packetbeat data.</p>
-
 <p>It&rsquo;s not the most elegant solution but I already had <a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks.html">playbooks</a> to install and setup packetbeat so it&rsquo;s an okay-ish solution.</p>
-
 <p>Unfortunately, when I started reading about integrating Security Onion with packetbeat, I was slapped in the face by the <a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Beats">Security Onions&rsquo;s documentation</a> that says that the only supported *beats are <strong>Filebeat</strong> and <strong>Winlogbeat</strong>.</p>
-
-<p><img src="/images/09-security-onion-setup-75cec2db.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-75cec2db.png" alt=""></p>
 <h1 id="dead-end">Dead end?</h1>
-
 <p>Things didn&rsquo;t look great at this point. The neat and elegant solutions didn&rsquo;t really work so next on the line was try something more network-y.</p>
-
 <p>I had a little play with the configuration of the Security Onion appliance.
 When configuring it wants an interface to sniff traffic from.
 That&rsquo;s an interface without and actual IP address assigned to it, just sitting there in promiscuous mode listening for traffic.</p>
-
 <h1 id="back-to-the-drawing-board">Back to the drawing board&hellip;</h1>
-
 <p>Let&rsquo;s have a look at the network and try to come up with something smart.</p>
-
-<p><img src="/images/net-topology.png" alt="" /></p>
-
-<p><sup>(open image in new tab for better quality)</sup></p>
-
+<p><img src="/images/net-topology.png" alt=""></p>
+<p><!-- raw HTML omitted -->(open image in new tab for better quality)<!-- raw HTML omitted --></p>
 <p>The problem I had to solve was: <strong>Where should I put the monitoring appliance so that all the other VMs could send their traffic to the it, but at the same time they shouldn&rsquo;t be able to directly communicate to it since that would be a security concern?</strong></p>
-
-<p><img src="/images/09-security-onion-setup-af5947bf.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-af5947bf.png" alt=""></p>
 <p>An option could be the following:</p>
-
 <ul>
 <li>At each host, setup some traffic copying software</li>
 <li>It would then forward a copy of each sent and received packet to the Security Onion appliance.</li>
 <li>I&rsquo;ll have to add rules at the pfSense firewall to allow that traffic and it may work.</li>
 </ul>
-
 <p>Definitely no - too much hassle, there must be an easier way.</p>
-
 <h1 id="down-the-abstraction-tree">Down the abstraction tree</h1>
-
 <p>Going closer to the bare metal, the next stop is the <a href="https://pubs.vmware.com/vsphere-51/index.jsp?topic=%2Fcom.vmware.wssdk.pg.doc%2FPG_Networking.11.4.html">ESXi vSwitch</a>.
 Wandering its settings, a particular one caught my attention - <strong>promiscuous mode</strong>:</p>
-
-<p><img src="/images/09-security-onion-setup-64ef1407.png" alt="" /></p>
-
-<p>Doing a <a href="https://kb.vmware.com/s/article/1002934">bit of reading</a> on this setting, it turned out that if set, it makes the vSwitch act like a <strong>hub</strong>.<sub>(Plot twist incoming)</sub></p>
-
+<p><img src="/images/09-security-onion-setup-64ef1407.png" alt=""></p>
+<p>Doing a <a href="https://kb.vmware.com/s/article/1002934">bit of reading</a> on this setting, it turned out that if set, it makes the vSwitch act like a <strong>hub</strong>.<!-- raw HTML omitted -->(Plot twist incoming)<!-- raw HTML omitted --></p>
 <p>What&rsquo;s more interesting is that this can be applied at the <strong>portgroup level</strong>!</p>
-
 <p>So I could perhaps create a portgroup that acts like a hub?</p>
-
 <h1 id="then-it-hit-me">Then it hit me</h1>
-
 <p>I came up with the following plan - create a bridge interface on the pfSense appliance, that would bridge all of the interfaces that I want to monitor.
 Create a new portgroup on the vSwitch that would act like a hub and add 2 members to it - the bridged interface from the pfSense and the other one would be the listening interface from the Security Onion appliance.</p>
-
 <p>This way, all of the traffic would be basically broadcasted in a portgroup in which the only other member would be the Security Onion that would happily look at it all and do its thing.</p>
-
 <p>That idea may be a bit hard to grasp especially if you&rsquo;re a beginner in networking so I&rsquo;ll throw in this picture because images always help:</p>
-
-<p><img src="/images/09-security-onion-setup-37c20ba2.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-37c20ba2.png" alt=""></p>
 <p>The main idea is to create a separate portgroup (think of it as a separate LAN) that will have only 2 members - the pfSense and the Security Onion&rsquo;s sniffing interface.
 Then forward all of the traffic the pfSense sees to this portgroup. From then onwards, the Security Onion appliance would see all the packets as they are, without being changed at all!</p>
-
 <h1 id="sounds-like-a-plan">Sounds like a plan!</h1>
-
 <p>Let&rsquo;s build the picture above then.</p>
-
-<h2 id="firstly-let-s-create-the-portgroup">Firstly, let&rsquo;s create the portgroup.</h2>
-
+<h2 id="firstly-lets-create-the-portgroup">Firstly, let&rsquo;s create the portgroup.</h2>
 <p>This is what it should look like:</p>
-
-<p><img src="/images/09-security-onion-setup-47063c4d.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-47063c4d.png" alt=""></p>
 <p>The hidden options are not too important - just keep the defaults.</p>
-
 <p>It is <strong>very</strong> important that the <em>VLAN ID</em> is set to <strong>4095</strong>.
 This tells the vSwitch to create a portgroup that acts as a trunk group which would accept all VLAN traffic.
 Initially I had this to 0 and nothing was sent.</p>
-
 <p>The other <strong>very</strong> important setting is the promiscuous mode - it needs to be accepted, otherwise the portgroup would act as a normal switch and we want it to behave like a hub.</p>
-
 <p>Lastly, we need to add 2 network intefaces one to the pfSense VM and one to the Security Onion one. Both interfaces of course need to be connected to the portgroup we&rsquo;ve just created.</p>
-
 <h1 id="pfsense-bridging">pfSense bridging</h1>
-
 <p>Creating a bridge interface is done from <code>Interfaces &gt; Bridges</code>. It is quite trivial, just select all the interfaces you want to be member of the bridge and then the important part is to choose the Span Port in the <code>Advanced</code> section.</p>
-
 <p>The span sport should be the one that is member of the <em>hub</em> portgroup that we just made.</p>
-
 <h1 id="aaaand-success">Aaaand success!</h1>
-
-<p><img src="/images/09-security-onion-setup-d19d9097.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-d19d9097.png" alt=""></p>
 <p>Logs started appearing.</p>
-
 <p>What&rsquo;s more I can see full data!</p>
-
-<p><img src="/images/09-security-onion-setup-9638b7e5.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-9638b7e5.png" alt=""></p>
 <p>There&rsquo;s plenty of data and analysis to do with <a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Squert">Squert</a>:</p>
-
-<p><img src="/images/09-security-onion-setup-7ca5e078.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-7ca5e078.png" alt=""></p>
 <p>There is also plenty of stuff to play with in Kibana as well as there&rsquo;s tons of data.</p>
-
 <p>If you&rsquo;re interested to see what&rsquo;s happening in your network, I recomment setting up a Security Onion instance and tinker around with the tools it provides:</p>
-
 <h4 id="analyst-tools">Analyst Tools</h4>
-
 <ul>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Kibana">Kibana</a></li>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/CapMe">CapME</a></li>
@@ -393,53 +307,35 @@ Initially I had this to 0 and nothing was sent.</p>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/ELSA">ELSA</a></li>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Sguil">Sguil</a></li>
 </ul>
-
 <h4 id="network-visibility">Network Visibility</h4>
-
 <ul>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/NIDS">NIDS</a>
-
 <ul>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Snort">Snort</a></li>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Suricata">Suricata</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Bro">Bro</a></li>
 <li><a href="https://github.com/Security-Onion-Solutions/security-onion/wiki/netsniff-ng">Full Packet Capture</a></li>
 </ul>
-
 <h1 id="caveats">Caveats</h1>
-
 <p>Before closing off, I was interested to learn more about how that bridging thing exactly work, because it behaved a bit dodgy.</p>
-
 <p>I started messing with pfSense&rsquo;s span port and I found out that it wasn&rsquo;t actually needed.</p>
-
 <p>Yes! The Security Onion appliance kept receiving traffic even when pfSense was not sending data to it!</p>
-
-<p><img src="/images/09-security-onion-setup-3cd1762c.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-3cd1762c.png" alt=""></p>
 <p>How did it keep receiving traffic if it wasn&rsquo;t connected to the pfSense???</p>
-
 <p>Where was this traffic coming from then?</p>
-
 <p>I deleted the bridge interface and removed the additional network interface I had added to the pfSense appliance, but that still didn&rsquo;t stop the traffic to the Security Onion(SO) appliance.</p>
-
 <p>I pondered quite hard at this for some time. I started debugging from the ground up - disconnecting the monitoring interface on the SO VM seemed to cut the traffic so that&rsquo;s something.
 Disabling the promiscuous mode on the portgroup also seems to have the same effect so the solution must be somewhere in here!</p>
-
 <p>Remember that <a href="https://kb.vmware.com/s/article/1002934">piece of documentation</a> I linked to earlier? Well I had a second read at it and it all made sense:</p>
-
-<p><img src="/images/09-security-onion-setup-65adeea4.png" alt="" /></p>
-
+<p><img src="/images/09-security-onion-setup-65adeea4.png" alt=""></p>
 <p>My understanding of how the promiscuous mode works was wrong!</p>
-
 <p>A portgroup that has promiscuous mode enabled not only sees everyone else&rsquo;s traffic in that portgroup, but also everyone else&rsquo;s traffic on that vSwitch!
 So being part of this portgroup, the SO appliance can see everyone&rsquo;s traffic regardless of whether it is connected to the pfSense or not.</p>
-
 <h1 id="conclusion">Conclusion</h1>
-
 <p>The Security Onion appliance is a huge playground that I&rsquo;m having a go at.
 Setting it up in my environment was quite fun especially debugging the networking issues.</p>
-
 <p>If you&rsquo;d like to have a deeper insight on how networks work in general and what&rsquo;s more, what communicates with what in your own environment, I recommend setting up a Security Onion instance yourself and give it a go!</p>
 
             </div>
