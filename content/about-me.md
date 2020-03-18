@@ -14,7 +14,6 @@ I'm {{ whatever year we are currently }} - 1998 years old and I'm currently doin
 
 You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin), [linkedin](https://linkedin.com/in/viktor-barzin) and [twitter](https://twitter.com/ViktorBarzin).
 
-
 I'm all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.
 
 In my free time I watch Formula 1, play chess, go and soon I'll be jumping out of planes
@@ -26,7 +25,9 @@ In my free time I watch Formula 1, play chess, go and soon I'll be jumping out o
 Occasionally I go [axe throwing](https://whistlepunks.com/)
 
 <!-- ![](/images/index-cf7e7d2d.png) -->
+
 ![](https://github.com/ViktorBarzin/Website/blob/master/static/images/index-cf7e7d2d.png?raw=true)
+
 <!-- download from github because upload at home is shit -->
 
 <sup>(08-2018)</sup>
@@ -52,4 +53,11 @@ I also enjoy programming so I often find myself at various Hackatons winning stu
 <sup>(05-2016)</sup>
 
 ### <h3>What information can you find on this site?</h3>
+
 The website will mostly be me sharing my experience with various technologies. I'll post new articles every now and then on various technologies I've come across.
+
+<!-- Calendly badge widget begin -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
+<script type="text/javascript">Calendly.initBadgeWidget({ url: 'https://calendly.com/viktorbarzin', text: 'Schedule time with me', color: '#00a2ff', textColor: '#ffffff', branding: true });</script>
+<!-- Calendly badge widget end -->

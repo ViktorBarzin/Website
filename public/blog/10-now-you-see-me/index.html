@@ -214,10 +214,10 @@ As a bonus, they even added face recognition using a video source!</p>
 <p><img src="/images/opencv_face_reco_animation.gif" alt=""></p>
 <h1 id="so-if-the-code-is-online-what-did-i-do-exactly">So&hellip; if the code is online what did I do exactly?</h1>
 <p>Getting the the code to work is the easy part.</p>
-<p><!-- raw HTML omitted --></p>
+<p><img style="width:35%" src="/images/viktor-face-rec.gif" /></p>
 <p>That&rsquo;s fair and square, however, it&rsquo;s using my laptop camera.</p>
 <p>Next thing is to make it read the <strong>RTSP stream</strong> which shouldn&rsquo;t be too hard right?</p>
-<p><!-- raw HTML omitted --></p>
+<p><img style="width:20%" src="/images/10-home-face-recognizer-eba99d00.png" /></p>
 <h1 id="the-issue">The issue</h1>
 <p><a href="https://stackoverflow.com/questions/20891936/rtsp-stream-and-opencv-python">According to StackOverflow</a> OpenCV <em>does</em> support RTSP, however, this was <strong>not the case</strong> for my setup.</p>
 <p>It is possible that I&rsquo;ve done something wrong so if anyone figures out how to make it work I&rsquo;ll get him a beer.
@@ -294,7 +294,7 @@ There are quite a few moving parts that I had to basically brute-force to make t
 <p>You can see some silhouettes here and there so there was light at the end of the tunnel.</p>
 <h1 id="at-last">At last</h1>
 <p>Finally, on the following day by continuing to tweak parameters of <em>ffmpeg</em> I finally had success reading the stream with the correct settings. Running the face recognition python app afterwards was as simple as changing the id it uses for the camera input.</p>
-<p><!-- raw HTML omitted --></p>
+<p><img style="width:40%" src="/images/10-face-recog-working-ip-cam.jpg" /></p>
 <h4 id="this-is-me-taking-a-photo-with-my-phone-of-my-laptop-screen-which-is-showing-the-output-of-the-opencv-face-recognition-app-which-gets-its-input-from-the-virtual-camera-device-which-is-getting-its-input-from-the-video4linux-loopback-module-which-is-being-written-to-by-ffmpegs-rtsp-input">This is me taking a photo with my phone of my laptop screen which is showing the output of the OpenCV face recognition app which gets its input from the virtual camera device which is getting its input from the video4linux loopback module which is being written to by ffmpeg&rsquo;s RTSP input.</h4>
 <p>That ^^ described quite well what the goal result was.</p>
 <p>Now <strong>I have a programmatic way to do whatever I want once a face is detected</strong> and even when a specific person is recognized.</p>

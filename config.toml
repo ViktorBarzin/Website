@@ -7,6 +7,12 @@ pygmentsstyle = "native"
 disqusShortname = "viktorbarzin"
 googleAnalytics = "UA-132992428-1"
 
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+      
 disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
 
 [taxonomies]

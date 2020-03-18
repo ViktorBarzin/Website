@@ -61,7 +61,7 @@
     "datePublished": "2019-01-23T10:18:44Z",
     "dateModified" : "2019-01-23T10:18:44Z",
     "url" : "https:\/\/viktorbarzin.me\/blog\/09-peeling-the-layers-of-security-with-security-onion\/",
-    "wordCount" : "1765",
+    "wordCount" : "1768",
     "image": 	"https:\/\/viktorbarzin.me\/images\/09-security-onion-setup-37c20ba2.png",
     "keywords" : [ "pfSense","security onion","vmware esxi","vmware vSwitch","vSwitch","Elasticsearch","Logstash","Kibana","Snort","Suricata","Bro","Wazuh","Sguil","Squert","CyberChef","OpenWRT","pfSense logging","tcpdump","packetbeat","vSwitch promiscuous mode","vSwitch","pfSense bridge","Blog" ]
 }
@@ -201,7 +201,7 @@ The focus of this blogpost will be on the interconnection between pfSense, VMWar
 <p>Security Onion is a free and open source Linux distribution for intrusion detection, enterprise security monitoring, and log management. It includes Elasticsearch, Logstash, Kibana, Snort, Suricata, Bro, Wazuh, Sguil, Squert, CyberChef, NetworkMiner, and many other security tools.</p>
 </blockquote>
 <blockquote>
-<p>&ndash;<!-- raw HTML omitted --> Security Onion&rsquo;s <a href="https://securityonion.net/">website</a> <!-- raw HTML omitted --></p>
+<p>&ndash;<cite> Security Onion&rsquo;s <a href="https://securityonion.net/">website</a> </cite></p>
 </blockquote>
 <p>I am going to show you how it all fits in my lab so let&rsquo;s get started!</p>
 <h4 id="ps-this-is-not-intended-to-be-a-guide-rather-its-the-path-i-took-to-get-it-done-if-you-need-a-guide-or-help-pm-me-somewhere">P.S: This is not intended to be a guide, rather it&rsquo;s the path I took to get it done. If you need a guide or help, pm me somewhere.</h4>
@@ -250,7 +250,7 @@ That&rsquo;s an interface without and actual IP address assigned to it, just sit
 <h1 id="back-to-the-drawing-board">Back to the drawing board&hellip;</h1>
 <p>Let&rsquo;s have a look at the network and try to come up with something smart.</p>
 <p><img src="/images/net-topology.png" alt=""></p>
-<p><!-- raw HTML omitted -->(open image in new tab for better quality)<!-- raw HTML omitted --></p>
+<p><sup>(open image in new tab for better quality)</sup></p>
 <p>The problem I had to solve was: <strong>Where should I put the monitoring appliance so that all the other VMs could send their traffic to the it, but at the same time they shouldn&rsquo;t be able to directly communicate to it since that would be a security concern?</strong></p>
 <p><img src="/images/09-security-onion-setup-af5947bf.png" alt=""></p>
 <p>An option could be the following:</p>
@@ -264,7 +264,7 @@ That&rsquo;s an interface without and actual IP address assigned to it, just sit
 <p>Going closer to the bare metal, the next stop is the <a href="https://pubs.vmware.com/vsphere-51/index.jsp?topic=%2Fcom.vmware.wssdk.pg.doc%2FPG_Networking.11.4.html">ESXi vSwitch</a>.
 Wandering its settings, a particular one caught my attention - <strong>promiscuous mode</strong>:</p>
 <p><img src="/images/09-security-onion-setup-64ef1407.png" alt=""></p>
-<p>Doing a <a href="https://kb.vmware.com/s/article/1002934">bit of reading</a> on this setting, it turned out that if set, it makes the vSwitch act like a <strong>hub</strong>.<!-- raw HTML omitted -->(Plot twist incoming)<!-- raw HTML omitted --></p>
+<p>Doing a <a href="https://kb.vmware.com/s/article/1002934">bit of reading</a> on this setting, it turned out that if set, it makes the vSwitch act like a <strong>hub</strong>.<sub>(Plot twist incoming)</sub></p>
 <p>What&rsquo;s more interesting is that this can be applied at the <strong>portgroup level</strong>!</p>
 <p>So I could perhaps create a portgroup that acts like a hub?</p>
 <h1 id="then-it-hit-me">Then it hit me</h1>

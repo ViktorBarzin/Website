@@ -61,7 +61,7 @@
     "datePublished": "2020-01-18T16:03:57Z",
     "dateModified" : "2020-01-18T16:03:57Z",
     "url" : "https:\/\/viktorbarzin.me\/blog\/13-client-side-certificate-authentication-with-nginx\/",
-    "wordCount" : "1639",
+    "wordCount" : "1643",
     "image": 	"https:\/\/viktorbarzin.me\/images\/13-client-side-certificate-authentication-with-nginx-6-17-36-09.png",
     "keywords" : [ "tls","certificates","nginx","ca","certificate authority","csr","certificate signing request","aes","openssl","x509","docker","Blog" ]
 }
@@ -280,7 +280,9 @@ When done, clients will send the CSR to the server (admin) and receive the clien
 <p>The common name can be a name of the device/user you are issuing the CSR for.
 I did not put CN initially and nginx returned a very unhelpful error message so make sure you don&rsquo;t put a blank CN.
 Looks like this:</p>
-<!-- raw HTML omitted -->
+<center>
+![](/images/13-client-side-certificate-authentication-with-nginx-6-00-23-07.png)
+</center>
 <h1 id="signing-the-csr">Signing the CSR</h1>
 <p>After we have created the CSR, we need to send it to the server to sign it.
 In this step, the server <em>verifies</em> they know the user/device and trust them when they say who they are.</p>
@@ -352,12 +354,18 @@ There are 2 things to note:</p>
 <li><code>fullchain.pem</code>, <code>privkey.pem</code> - You HTTPS certificate files.</li>
 </ul>
 <p>Simply navigating to <code>https://localhost</code> returns a <code>403</code> error:</p>
-<!-- raw HTML omitted -->
+<center>
+![](/images/13-client-side-certificate-authentication-with-nginx-5-19-32-57.png)
+</center>
 <p>To import your client certificate in Chrome, go to <code>chrome://settings/certificates</code> and upload your <code>.pfx</code>.</p>
 <p>Then when you visit the page again, you will be prompted to provide a client cert like so</p>
-<!-- raw HTML omitted -->
+<center>
+![](/images/13-client-side-certificate-authentication-with-nginx-5-19-36-34.png)
+</center>
 <p>Once you select the certificate, you will be allowed to visit nginx&rsquo;s index</p>
-<!-- raw HTML omitted -->
+<center>
+![](/images/13-client-side-certificate-authentication-with-nginx-5-19-37-38.png)
+</center>
 <h1 id="conclusion">Conclusion</h1>
 <p>There you have it - client side certificate authentication with Nginx.
 I hope the information you read was useful.

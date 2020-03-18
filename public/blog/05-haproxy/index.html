@@ -61,7 +61,7 @@
     "datePublished": "2018-10-14T14:04:13+01:00",
     "dateModified" : "2018-10-14T14:04:13+01:00",
     "url" : "https:\/\/viktorbarzin.me\/blog\/05-haproxy\/",
-    "wordCount" : "1093",
+    "wordCount" : "1095",
     "image": 	"\/images\/05-HA!Proxy-b5202366.png",
     "keywords" : [ "HAProxy","DNS","HAProxy config","HAProxy Access-control-list","Host header","linux networking","Blog" ]
 }
@@ -302,9 +302,9 @@ backend privatebin_http
 <p><strong>The configuration is pretty clear and intuitive</strong> and it doesn&rsquo;t take any debugging to make it work.
 It <em>just works</em>.</p>
 <p>So opening the domains, <strong>despite they resolve to the same ip address, a different service is loaded:</strong></p>
-<!-- raw HTML omitted -->
+<center> ![](/images/05-HA!Proxy-1d379d4b.png) </center>
 <p><img src="/images/05-HA!Proxy-64c65ce4.png" alt=""></p>
-<!-- raw HTML omitted -->
+<center> ![](/images/05-HA!Proxy-b6df7cfe.png) </center>
 <p><img src="/images/05-HA!Proxy-a54ef1d3.png" alt=""></p>
 <p>And of course accessing <a href="https://viktorbarzin.me">viktorbarzin.me</a> routes to the website you&rsquo;re on right now.</p>
 <h4 id="if-you-try-another-domain-that-resolves-to-this-ip-address-haproxy-will-not-be-able-to-find-a-matching-acl-therefore-will-return-an-error">If you try another domain that resolves to this IP address, HAProxy will not be able to find a matching ACL therefore will return an error:</h4>

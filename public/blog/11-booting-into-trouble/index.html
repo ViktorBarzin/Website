@@ -307,7 +307,7 @@ The files that it provides are:</p>
 </code></pre>
 <p>If you have these packages installed but you have reformatted the partition, simply <code>reinstall</code> them and the files will reappear.</p>
 <h3 id="so-what-exactly-do-we-have-inside-the-esp">So what exactly do we have inside the ESP?</h3>
-<p><!-- raw HTML omitted -->
+<p><img style="float:left;margin-right:10px" src="/images/11-booting-into-trouble-4-17-56-51.png" />
 In the root of our ESP, there is a single directory named <code>EFI</code> which contains information about bootable systems.</p>
 <p>Each bootable system has its own directory where the bootloader (and its config) is located.</p>
 <p>The <code>.efi</code> files are binaries that we won&rsquo;t worry too much about for now. The important ones are <code>grubx64.efi</code> and <code>shimx64-efi</code>.
@@ -322,11 +322,11 @@ The rest of the files are mostly binary so you probably won&rsquo;t go tweak the
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo grub2-mkconfig -o /boot/efi/EFI/&lt;operating system&gt;/grub.cfg
 </code></pre></div><p>Now if you have a working system and you run this command while in your system, it probably won&rsquo;t break anything.
 However, if you are in a <em>live system</em>, trying to fix your own, it might be tricky to get this right.</p>
-<!-- raw HTML omitted -->
+<p style="clear:left"></p>
 <h1 id="lessons-learned">Lessons learned</h1>
 <blockquote>
 <p>The more complex a setup, the harder it is to fix anything broken (or explain what&rsquo;s broken for that matter).</p>
-<p><!-- raw HTML omitted -->Me spending days debugging this.<!-- raw HTML omitted --></p>
+<p><cite>Me spending days debugging this.</cite></p>
 </blockquote>
 <p>In the beginning I mentioned that I wanted to change laptops without reinstalling.
 The issue was that my disk was MBR-formatted and using a BIOS (yes it was that old!) whereas my new machine does not support booting MBR-formatted disks.</p>
