@@ -218,7 +218,7 @@ docker <span style="color:#24909d">exec</span> -it -u <span style="color:#40ffff
 <p>Now, the above shell looks secure enough and does not let the user at any point to run any commands on the host.</p>
 <p>Secure, right?</p>
 <p>Well, not quite.</p>
-<p>As I mentioned earlier, SSH is quite a powerful protocols and can forward a lot of stuff including unix domain sockets.
+<p>As I mentioned earlier, SSH is quite a powerful protocol and can forward a lot of stuff including unix domain sockets.
 The docker CLI, by default, uses <a href="https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock#answer-35110344">a unix domain socket</a> to communicate with the docker API.
 This essentially means that all the <code>docker ps</code>, <code>docker run</code>, <code>docker network ls</code> etc. commands <strong>all</strong> go through that socket.</p>
 <p>I reckon you already see the arising issue there - you could SSH into the host and forward the docker socket <strong>from the host</strong> locally and then escape on the host.</p>

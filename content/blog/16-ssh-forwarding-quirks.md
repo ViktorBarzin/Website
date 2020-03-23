@@ -70,7 +70,7 @@ Secure, right?
 
 Well, not quite.
 
-As I mentioned earlier, SSH is quite a powerful protocols and can forward a lot of stuff including unix domain sockets.
+As I mentioned earlier, SSH is quite a powerful protocol and can forward a lot of stuff including unix domain sockets.
 The docker CLI, by default, uses [a unix domain socket](https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock#answer-35110344) to communicate with the docker API.
 This essentially means that all the `docker ps`, `docker run`, `docker network ls` etc. commands **all** go through that socket.
 
