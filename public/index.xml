@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>16 SSH Forwarding Quirks</title>
+      <link>https://viktorbarzin.me/blog/16-ssh-forwarding-quirks/</link>
+      <pubDate>Mon, 23 Mar 2020 10:19:06 +0000</pubDate>
+      
+      <guid>https://viktorbarzin.me/blog/16-ssh-forwarding-quirks/</guid>
+      <description>Introduction SSH is a ubiquitous protocol for managing remote machines securely.
+Most of the time one would need just shell access to a remote machine to run commands, however, SSH allows for so much more. One of the interesting features is SSH forwarding - you can forward ports, unix sockets, X11 sessions and other interesting stuff.
+All of this is fine until you start sharing the ssh server host with other people.</description>
+    </item>
+    
+    <item>
       <title>15 Arpspoofing Exploitation, Detection and Prevention</title>
       <link>https://viktorbarzin.me/blog/15-arpspoofing-exploitation-detection-prevention/</link>
       <pubDate>Wed, 11 Mar 2020 17:10:29 +0000</pubDate>
