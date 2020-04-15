@@ -1,8 +1,11 @@
 # Install the latest Debain operating system.
 FROM debian:latest as HUGO
 
+# Password to decrypt letsencrypt tar. Specify as CLI arg to docker build
+ARG LETSENCRYPT_PASS
+
 # Install Hugo.
-RUN apt-get update -y && apt-get install hugo -y
+RUN apt-get update -y && apt-get install hugo gpg -y
 
 # Copy the contents of the current working directory to the
 # static-site directory.
@@ -12,11 +15,16 @@ COPY . /static-site
 # setting the destination to the public directory.
 RUN hugo -v --source=/static-site --destination=/static-site/public
 
+# Decrypt the letsencrypt tar
+RUN sh -c "cd /static-site/configs/ && echo \"$LETSENCRYPT_PASS\" | gpg --pinentry-mode loopback --command-fd 0 --batch --yes --decrypt letsencrypt.tar.gz.asc | tar xzvf -"
+
 # Install NGINX, remove the default NGINX index.html file, and
 # copy the built static site files to the NGINX html directory.
-FROM nginx:stable-alpine
-RUN mv /usr/share/nginx/html/index.html /usr/share/nginx/html/old-index.html
-COPY --from=HUGO /static-site/public/ /usr/share/nginx/html/
+FROM byjg/nginx-extras:latest
+COPY --from=HUGO /static-site/public/ /var/www/html/
+COPY --from=HUGO /static-site/configs/nginx.conf /etc/nginx/
+COPY --from=HUGO /static-site/configs/letsencrypt /etc/letsencrypt
+RUN mkdir -p /etc/letsencrypt/live/viktorbarzin.me/
 
 # Instruct the container to listen for requests on port 80 (HTTP).
-EXPOSE 80
+EXPOSE 80 443
