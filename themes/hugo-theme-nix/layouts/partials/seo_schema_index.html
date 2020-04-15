@@ -1,0 +1,64 @@
+<meta property='og:title' content="Viktor Barzin (Viktor Barzin's site)"/>
+<meta property="og:image" content="{{ .Site.Params.profilePicture }}">
+<meta property="og:description" content="This is Viktor Barzin's personal website where you can find information about him as well as the projects he has done. You can also follow his blog where he shares his experience with various technologies." />
+<meta property='og:url' content="{{ .Permalink }}" />
+<meta property='og:type' content="website" />
+<meta property="og:site_name" content="{{ .Site.Params.title }}" />
+<meta name="description" content="This is Viktor Barzin's personal website where you can find information about him as well as the projects he has done. You can also follow his blog where he shares his experience with various technologies." />
+
+<meta name="twitter:title" content="{{ .Params.title }}" />
+<meta name="twitter:description" content="{{ .Params.description }}" />
+<meta name="twitter:image" content="{{ .Params.firstImgUrl }}" />
+<meta name="twitter:site" content="@{{ .Site.Params.TwitterID }}" />
+<meta name="twitter:creator" content="@{{ .Site.Params.TwitterID }}" />
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "{{ .Site.BaseURL }}"
+    },
+    "articleSection" : "{{ .Section }}",
+    "name" : {{ .Title }},
+    "headline" : "Viktor Barzin's Blog",
+    "description" : "This is my personal website where you can find information about myself as well as the projects I've done. You can also follow my blog where I share my experience with various technologies.",
+    "inLanguage" : "en-US",
+    "author" : {
+        "@type": "Person",
+        "name": "{{ htmlUnescape .Site.Params.Author }}",
+        "image": "",
+        "url": "https://viktorbarzin.me/",
+        "description": "I've been digging into Programming for quite some time now. My passion for technology has grown into cyber security and automation. I love ot go offline, watch Formula 1, play cheess and go skiing."
+    },
+    "creator" : "{{ .Site.Params.Author }}",
+    "publisher": {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "{{ .Site.Params.Author }}",
+        "sameAs": [
+            "https://www.facebook.com/viktor.barzin",
+            "https://github.com/ViktorBarzin",
+            "https://twitter.com/ViktorBarzin",
+            "https://www.linkedin.com/in/viktor-barzin/"
+        ],
+        "url": "https://viktorbarzin.me",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://viktorbarzin.me/images/profile-picture.jpeg"
+        }
+    },
+    "accountablePerson" : "{{ .Site.Params.Author }}",
+    "copyrightHolder" : "{{ .Site.Params.Author }}",
+    "copyrightYear" : "{{ .Date.Format "2018" }}",
+    "datePublished": {{ .Date }},
+    "dateModified" : {{ .Date }},
+    "url" : "{{ .Permalink }}",
+    "wordCount" : "50",
+    "image": 	"https://scontent.fsof3-1.fna.fbcdn.net/v/t1.0-9/18813162_1394825773937591_6301947579059643927_n.jpg?_nc_cat=0&oh=e6b47d5a24d800a7692eec52f2b9d8cf&oe=5C2C9005",
+    "keywords" : [ {{ if isset .Params "tags" }}{{ range .Params.tags }}"{{ . }}",{{ end }}{{ end }}"Viktor Barzin's Blog", "Vitkor Barzin's Projects", "About Viktor Barzin" ]
+}
+</script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
