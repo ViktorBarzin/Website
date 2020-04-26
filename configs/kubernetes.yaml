@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog
+  labels:
+    run: blog
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: blog
+  template:
+    metadata:
+      labels:
+        run: blog
+    spec:
+      containers:
+        - name: blog
+          image: viktorbarzin/blog:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 443
+            - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: blog
+  name: blog
+spec:
+  selector:
+    run: blog
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blog-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+    - host: "viktorbarzin.me"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blog
+              servicePort: 443
