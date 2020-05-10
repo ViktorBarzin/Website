@@ -1,7 +1,13 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: website
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: website
   name: blog
   labels:
     run: blog
@@ -30,6 +36,7 @@ kind: Service
 metadata:
   labels:
     run: blog
+  namespace: website
   name: blog
 spec:
   selector:
@@ -48,7 +55,7 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: blog-ingress
-  namespace: default
+  namespace: website
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
