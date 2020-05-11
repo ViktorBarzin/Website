@@ -21,9 +21,9 @@
          "@id": "{{ .Site.BaseURL }}"
     },
     "articleSection" : "{{ .Section }}",
-    "name" : {{ .Title }},
-    "headline" : {{ .Title }},
-    "description" : {{ if .Description }}{{ .Description }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ end }}{{ end }},
+    "name" : "{{ .Title }}",
+    "headline" : "{{ .Title }}",
+    "description" : {{ if .Description }}"{{ .Description }}"{{ else }}{{if .IsPage}}"{{ .Summary }}"{{ end }}{{ end }},
     "inLanguage" : "en-US",
     "author" : {
         "@type": "Person",
@@ -52,8 +52,8 @@
     "accountablePerson" : "{{ .Site.Params.Author }}",
     "copyrightHolder" : "{{ .Site.Params.Author }}",
     "copyrightYear" : "{{ .Date.Format "2018" }}",
-    "datePublished": {{ .Date }},
-    "dateModified" : {{ .Date }},
+    "datePublished": "{{ .Date }}",
+    "dateModified" : "{{ .Date }}",
     "url" : "{{ .Permalink }}",
     "wordCount" : "{{ .WordCount }}",
     "image": 	"{{ .Params.firstImgUrl }}",
