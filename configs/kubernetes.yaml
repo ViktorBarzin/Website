@@ -70,3 +70,10 @@ spec:
             backend:
               serviceName: blog
               servicePort: 443
+    - host: "www.viktorbarzin.me"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blog
+              servicePort: 443
