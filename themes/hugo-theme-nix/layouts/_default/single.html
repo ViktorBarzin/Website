@@ -1,41 +1,49 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>{{ .Title }} &middot; {{ .Site.Title }}</title>
 
-    <head>
-        <title> {{ .Title }} &middot; {{ .Site.Title }} </title>
+    {{ partial "seo_schema" . }} {{ partial "head.html" . }}
 
-		{{ partial "seo_schema" . 	}}
-        {{ partial "head.html" . }}
+    <!-- Google ads -->
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-
-        <!-- Google ads -->
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        {{ partial "header.html" . }}
-        <div class="container wrapper">
-            <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
-            <span class="post-date">{{ .Date.Format "Jan 2, 2006 " }}</span>
-            <div class="post-content">
-                {{ .Content }}
-            </div>
-            {{ if (isset .Params "nocomments")  }}
-            {{ else }}
-            <div class="post-comments">
-                {{ partial "disqus.html" }}
-                <!-- {{ template "_internal/disqus.html" . }} -->
-            </div>
-            {{ end }}
-            <div class="push"></div>
-        </div>
-        {{ partial "footer.html" . }}
-
-    </body>
+  <body>
+    {{ partial "header.html" . }}
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+      <span class="post-date">{{ .Date.Format "Jan 2, 2006 " }}</span>
+      <div id="post-content" class="post-content">
+        {{ .Content }}
+      </div>
+      {{ if (isset .Params "nocomments") }} {{ else }}
+      <div class="post-comments">
+        {{ partial "disqus.html" }}
+        <!-- {{ template "_internal/disqus.html" . }} -->
+      </div>
+      {{ end }}
+      <div class="push"></div>
+    </div>
+    {{ partial "page-scroll-indicator.html" . }} {{ partial "footer.html" . }}
+    <script>
+      // Add scroll bar indicator
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        // "#kek",
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>
