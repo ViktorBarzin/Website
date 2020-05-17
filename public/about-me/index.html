@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>About me &middot; Viktor Barzin (Viktor Barzin&#39;s Website)</title>
 
-    <head>
-        <title> About me &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
-
-		<meta property='og:title' content="About me"/>
+    <meta property='og:title' content="About me"/>
 <meta property="og:image" content="https://viktorbarzin.me/images/index-f170bc66.png" />
 <meta property="og:description" content="This page tells more about myself." />
 <meta property='og:url' content="https://viktorbarzin.me/about-me/" />
@@ -68,8 +67,7 @@
 </script>
 
 <script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
-
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 
@@ -109,20 +107,22 @@
 
 
 
+    
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-        
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        <header>
+  <body>
+    <header>
   <nav
     class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
   >
@@ -186,11 +186,12 @@
 
   </header>
 
-        <div class="container wrapper">
-            <h1><a href="https://viktorbarzin.me/about-me/">About me</a></h1>
-            <span class="post-date">Sep 2, 2018 </span>
-            <div class="post-content">
-                <p>Hi there! I&rsquo;m Viktor.</p>
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="https://viktorbarzin.me/about-me/">About me</a></h1>
+      <span class="post-date">Sep 2, 2018 </span>
+      <div id="post-content" class="post-content">
+        <p>Hi there! I&rsquo;m Viktor.</p>
 <p>I&rsquo;m {{ whatever year we are currently }} - 1998 years old and I&rsquo;m currently doing my BSc in Computer Science at the <a href="https://www.southampton.ac.uk/">University of Southampton</a>.</p>
 <p>You can find me on <a href="https://www.facebook.com/viktor.barzin">facebook</a>, <a href="https://github.com/ViktorBarzin">github</a>, <a href="https://linkedin.com/in/viktor-barzin">linkedin</a> and <a href="https://twitter.com/ViktorBarzin">twitter</a>.</p>
 <p>I&rsquo;m all into information security. I love solving interesting and challenging problems and I also enjoy helping others learn new stuff.</p>
@@ -220,10 +221,10 @@
 <script type="text/javascript">Calendly.initBadgeWidget({ url: 'https://calendly.com/viktorbarzin/30min', text: 'Schedule time with me', color: '#00a2ff', textColor: '#ffffff', branding: true });</script>
 <!-- Calendly badge widget end -->
 
-            </div>
-            
-            <div class="post-comments">
-                <div id="disqus_thread"></div>
+      </div>
+      
+      <div class="post-comments">
+        <div id="disqus_thread"></div>
 
 <script nonce="2726c7f26v" type="application/javascript">
     var disqus_config = function () {
@@ -241,12 +242,59 @@
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                
-            </div>
-            
-            <div class="push"></div>
-        </div>
-        <footer class="footer text-center">
+        
+      </div>
+      
+      <div class="push"></div>
+    </div>
+    <script>
+  var PageScrollIndicator = PageScrollIndicator || {};
+
+  PageScrollIndicator.createProgressBar = function (
+    progressBarLocation,
+    contentToTrack
+  ) {
+    
+    var $progressContElement = $("<div id='progress-cont'></div>");
+
+    
+    var $progressBarElement = $("<div id='progress-bar'></div>");
+    $progressBarElement.css("width", "0%");
+
+    $progressContElement.append($progressBarElement);
+
+    var $locationObject = $(progressBarLocation);
+    $locationObject.prepend($progressContElement);
+
+    
+    
+    $(window).scroll(function (e) {
+      var pageHeight = $(window).height();
+      var $container = $(contentToTrack);
+
+      
+      var adjustedHeight = $container.innerHeight() - pageHeight;
+      var progress = ($(window).scrollTop() / adjustedHeight) * 100;
+      $progressBarElement.css("width", progress + "%");
+    });
+  };
+</script>
+
+<style>
+  #progress-cont {
+    height: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background-color: #48a868;
+  }
+</style>
+ <footer class="footer text-center">
 <p>Copyright &copy; 2020 Viktor Barzin
 <span class="credit">
 	
@@ -258,5 +306,13 @@
 </p>
 </footer>
 
-
-    </body>
+    <script>
+      
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>

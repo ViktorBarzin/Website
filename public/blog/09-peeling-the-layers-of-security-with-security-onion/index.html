@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>09 Peeling the layers of security with Security Onion &middot; Viktor Barzin (Viktor Barzin&#39;s Website)</title>
 
-    <head>
-        <title> 09 Peeling the layers of security with Security Onion &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
-
-		<meta property='og:title' content="09 Peeling the layers of security with Security Onion"/>
+    <meta property='og:title' content="09 Peeling the layers of security with Security Onion"/>
 <meta property="og:image" content="https://viktorbarzin.me/images/09-security-onion-setup-37c20ba2.png" />
 <meta property="og:description" content="In this blogpost I share my experience of integrating Security Onion appliance in my home environment. I faced some quite interesting netowrking issues and learned quite a lot including how Security Onion sensors work, how exactly the promiscuous mode on VMware vSwitch works and lots more." />
 <meta property='og:url' content="https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/" />
@@ -68,8 +67,7 @@
 </script>
 
 <script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
-
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 
@@ -109,20 +107,22 @@
 
 
 
+    
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-        
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        <header>
+  <body>
+    <header>
   <nav
     class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
   >
@@ -186,11 +186,12 @@
 
   </header>
 
-        <div class="container wrapper">
-            <h1><a href="https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/">09 Peeling the layers of security with Security Onion</a></h1>
-            <span class="post-date">Jan 23, 2019 </span>
-            <div class="post-content">
-                <h1 id="introduction">Introduction</h1>
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="https://viktorbarzin.me/blog/09-peeling-the-layers-of-security-with-security-onion/">09 Peeling the layers of security with Security Onion</a></h1>
+      <span class="post-date">Jan 23, 2019 </span>
+      <div id="post-content" class="post-content">
+        <h1 id="introduction">Introduction</h1>
 <p>This time round, I&rsquo;ll share my experience with <a href="https://securityonion.net/">Security Onion</a> and the journey of setting it up in my environment.</p>
 <p>I will skip the dull installation process (everyone can click next at the prompts) and rather show you how it fits in my increasingly complex network topology.
 The focus of this blogpost will be on the interconnection between pfSense, VMWare ESXi and Security Onion.</p>
@@ -338,10 +339,10 @@ So being part of this portgroup, the SO appliance can see everyone&rsquo;s traff
 Setting it up in my environment was quite fun especially debugging the networking issues.</p>
 <p>If you&rsquo;d like to have a deeper insight on how networks work in general and what&rsquo;s more, what communicates with what in your own environment, I recommend setting up a Security Onion instance yourself and give it a go!</p>
 
-            </div>
-            
-            <div class="post-comments">
-                <div id="disqus_thread"></div>
+      </div>
+      
+      <div class="post-comments">
+        <div id="disqus_thread"></div>
 
 <script nonce="2726c7f26v" type="application/javascript">
     var disqus_config = function () {
@@ -359,12 +360,59 @@ Setting it up in my environment was quite fun especially debugging the networkin
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                
-            </div>
-            
-            <div class="push"></div>
-        </div>
-        <footer class="footer text-center">
+        
+      </div>
+      
+      <div class="push"></div>
+    </div>
+    <script>
+  var PageScrollIndicator = PageScrollIndicator || {};
+
+  PageScrollIndicator.createProgressBar = function (
+    progressBarLocation,
+    contentToTrack
+  ) {
+    
+    var $progressContElement = $("<div id='progress-cont'></div>");
+
+    
+    var $progressBarElement = $("<div id='progress-bar'></div>");
+    $progressBarElement.css("width", "0%");
+
+    $progressContElement.append($progressBarElement);
+
+    var $locationObject = $(progressBarLocation);
+    $locationObject.prepend($progressContElement);
+
+    
+    
+    $(window).scroll(function (e) {
+      var pageHeight = $(window).height();
+      var $container = $(contentToTrack);
+
+      
+      var adjustedHeight = $container.innerHeight() - pageHeight;
+      var progress = ($(window).scrollTop() / adjustedHeight) * 100;
+      $progressBarElement.css("width", progress + "%");
+    });
+  };
+</script>
+
+<style>
+  #progress-cont {
+    height: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background-color: #48a868;
+  }
+</style>
+ <footer class="footer text-center">
 <p>Copyright &copy; 2020 Viktor Barzin
 <span class="credit">
 	
@@ -376,5 +424,13 @@ Setting it up in my environment was quite fun especially debugging the networkin
 </p>
 </footer>
 
-
-    </body>
+    <script>
+      
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>

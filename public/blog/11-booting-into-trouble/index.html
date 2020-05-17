@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way &middot; Viktor Barzin (Viktor Barzin&#39;s Website)</title>
 
-    <head>
-        <title> 11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
-
-		<meta property='og:title' content="11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way"/>
+    <meta property='og:title' content="11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way"/>
 <meta property="og:image" content="https://viktorbarzin.me/images/11-booting-into-trouble-6-13-50-06.png" />
 <meta property="og:description" content="Explaining the early phases of the boot process. Difference between BIOS booting with MBR formatted disk and UEFI booting with GPG formatted disk." />
 <meta property='og:url' content="https://viktorbarzin.me/blog/11-booting-into-trouble/" />
@@ -68,8 +67,7 @@
 </script>
 
 <script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
-
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 
@@ -109,20 +107,22 @@
 
 
 
+    
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-        
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        <header>
+  <body>
+    <header>
   <nav
     class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
   >
@@ -186,11 +186,12 @@
 
   </header>
 
-        <div class="container wrapper">
-            <h1><a href="https://viktorbarzin.me/blog/11-booting-into-trouble/">11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way</a></h1>
-            <span class="post-date">Jul 27, 2019 </span>
-            <div class="post-content">
-                <h1 id="introduction">Introduction</h1>
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="https://viktorbarzin.me/blog/11-booting-into-trouble/">11 Booting Into Trouble - Learning the differences between MBR/GPT, BIOS/UEFI the hard way</a></h1>
+      <span class="post-date">Jul 27, 2019 </span>
+      <div id="post-content" class="post-content">
+        <h1 id="introduction">Introduction</h1>
 <p>Recently I replaced my <a href="https://www.cnet.com/products/dell-latitude-e6420-14-core-i5-2520m-4-gb-ram-320-gb-hdd-english-4692110/specs/">ancient laptop</a> with a new, <em>slightly better</em> <a href="https://www.dell.com/hr/business/p/precision-15-5530-laptop/pd">one</a>.
 People associate changing workstations with OS reinstall, setting up everything from scratch etc.</p>
 <p>I&rsquo;d rather put my <a href="https://www.samsung.com/us/computing/memory-storage/solid-state-drives/ssd-860-evo-2-5--sata-iii-1tb-mz-76e1t0b-am/">old disk</a> in my new machine and continue as is.
@@ -359,10 +360,10 @@ Here is a brief list of some of the resources I found useful while poking with m
 <p><a href="http://www.linux-magazine.com/Online/Features/Coping-with-the-UEFI-Boot-Process">http://www.linux-magazine.com/Online/Features/Coping-with-the-UEFI-Boot-Process</a></p>
 <p><a href="https://neosmart.net/wiki/mbr-boot-process/">https://neosmart.net/wiki/mbr-boot-process/</a></p>
 
-            </div>
-            
-            <div class="post-comments">
-                <div id="disqus_thread"></div>
+      </div>
+      
+      <div class="post-comments">
+        <div id="disqus_thread"></div>
 
 <script nonce="2726c7f26v" type="application/javascript">
     var disqus_config = function () {
@@ -380,12 +381,59 @@ Here is a brief list of some of the resources I found useful while poking with m
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                
-            </div>
-            
-            <div class="push"></div>
-        </div>
-        <footer class="footer text-center">
+        
+      </div>
+      
+      <div class="push"></div>
+    </div>
+    <script>
+  var PageScrollIndicator = PageScrollIndicator || {};
+
+  PageScrollIndicator.createProgressBar = function (
+    progressBarLocation,
+    contentToTrack
+  ) {
+    
+    var $progressContElement = $("<div id='progress-cont'></div>");
+
+    
+    var $progressBarElement = $("<div id='progress-bar'></div>");
+    $progressBarElement.css("width", "0%");
+
+    $progressContElement.append($progressBarElement);
+
+    var $locationObject = $(progressBarLocation);
+    $locationObject.prepend($progressContElement);
+
+    
+    
+    $(window).scroll(function (e) {
+      var pageHeight = $(window).height();
+      var $container = $(contentToTrack);
+
+      
+      var adjustedHeight = $container.innerHeight() - pageHeight;
+      var progress = ($(window).scrollTop() / adjustedHeight) * 100;
+      $progressBarElement.css("width", progress + "%");
+    });
+  };
+</script>
+
+<style>
+  #progress-cont {
+    height: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background-color: #48a868;
+  }
+</style>
+ <footer class="footer text-center">
 <p>Copyright &copy; 2020 Viktor Barzin
 <span class="credit">
 	
@@ -397,5 +445,13 @@ Here is a brief list of some of the resources I found useful while poking with m
 </p>
 </footer>
 
-
-    </body>
+    <script>
+      
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>

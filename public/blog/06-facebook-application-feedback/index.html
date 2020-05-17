@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>06 In the big 4! - Facebook Application Experience &middot; Viktor Barzin (Viktor Barzin&#39;s Website)</title>
 
-    <head>
-        <title> 06 In the big 4! - Facebook Application Experience &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
-
-		<meta property='og:title' content="06 In the big 4! - Facebook Application Experience"/>
+    <meta property='og:title' content="06 In the big 4! - Facebook Application Experience"/>
 <meta property="og:image" content="/images/06-Facebook-Application-Feedback-5fbb016d.png" />
 <meta property="og:description" content="In this blogpost I share my experience from my application process with Facebook which resulted with an offer and some tips and tricks on what I believe made me a successful candidate." />
 <meta property='og:url' content="https://viktorbarzin.me/blog/06-facebook-application-feedback/" />
@@ -68,8 +67,7 @@
 </script>
 
 <script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
-
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 
@@ -109,20 +107,22 @@
 
 
 
+    
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-        
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        <header>
+  <body>
+    <header>
   <nav
     class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
   >
@@ -186,11 +186,12 @@
 
   </header>
 
-        <div class="container wrapper">
-            <h1><a href="https://viktorbarzin.me/blog/06-facebook-application-feedback/">06 In the big 4! - Facebook Application Experience</a></h1>
-            <span class="post-date">Nov 18, 2018 </span>
-            <div class="post-content">
-                <h1 id="introduction">Introduction</h1>
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="https://viktorbarzin.me/blog/06-facebook-application-feedback/">06 In the big 4! - Facebook Application Experience</a></h1>
+      <span class="post-date">Nov 18, 2018 </span>
+      <div id="post-content" class="post-content">
+        <h1 id="introduction">Introduction</h1>
 <p>It&rsquo;s been a while since my last post.
 This was due to the fact I was preparing for my interview for <a href="https://www.facebook.com/careers/jobs/513843009077435/"><strong>Facebook&rsquo;s 2019 Production Engineering Internship Program</strong></a> as well as doing some uni related work which is not really worth blogging about.</p>
 <h3 id="anyway-the-good-news-is-that-i-got-that-offer-from-facebook">Anyway, the good news is that I got that offer from Facebook!</h3>
@@ -266,10 +267,10 @@ If you do follow my blog, I did a <a href="/blog/03-a-walk-down-infrastructure-l
 <p>In general, if you are <strong>curious about technology and stubborn enough - you&rsquo;ll succeed</strong>.</p>
 <p>If you do have any specific questions do feel free to reach out - I&rsquo;ve put enough ways you can contact me on this site already :-)</p>
 
-            </div>
-            
-            <div class="post-comments">
-                <div id="disqus_thread"></div>
+      </div>
+      
+      <div class="post-comments">
+        <div id="disqus_thread"></div>
 
 <script nonce="2726c7f26v" type="application/javascript">
     var disqus_config = function () {
@@ -287,12 +288,59 @@ If you do follow my blog, I did a <a href="/blog/03-a-walk-down-infrastructure-l
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                
-            </div>
-            
-            <div class="push"></div>
-        </div>
-        <footer class="footer text-center">
+        
+      </div>
+      
+      <div class="push"></div>
+    </div>
+    <script>
+  var PageScrollIndicator = PageScrollIndicator || {};
+
+  PageScrollIndicator.createProgressBar = function (
+    progressBarLocation,
+    contentToTrack
+  ) {
+    
+    var $progressContElement = $("<div id='progress-cont'></div>");
+
+    
+    var $progressBarElement = $("<div id='progress-bar'></div>");
+    $progressBarElement.css("width", "0%");
+
+    $progressContElement.append($progressBarElement);
+
+    var $locationObject = $(progressBarLocation);
+    $locationObject.prepend($progressContElement);
+
+    
+    
+    $(window).scroll(function (e) {
+      var pageHeight = $(window).height();
+      var $container = $(contentToTrack);
+
+      
+      var adjustedHeight = $container.innerHeight() - pageHeight;
+      var progress = ($(window).scrollTop() / adjustedHeight) * 100;
+      $progressBarElement.css("width", progress + "%");
+    });
+  };
+</script>
+
+<style>
+  #progress-cont {
+    height: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background-color: #48a868;
+  }
+</style>
+ <footer class="footer text-center">
 <p>Copyright &copy; 2020 Viktor Barzin
 <span class="credit">
 	
@@ -304,5 +352,13 @@ If you do follow my blog, I did a <a href="/blog/03-a-walk-down-infrastructure-l
 </p>
 </footer>
 
-
-    </body>
+    <script>
+      
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>

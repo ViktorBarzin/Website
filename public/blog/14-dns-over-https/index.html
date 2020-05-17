@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>14 DNS Over HTTPS &middot; Viktor Barzin (Viktor Barzin&#39;s Website)</title>
 
-    <head>
-        <title> 14 DNS Over HTTPS &middot; Viktor Barzin (Viktor Barzin&#39;s Website) </title>
-
-		<meta property='og:title' content="14 DNS Over HTTPS"/>
+    <meta property='og:title' content="14 DNS Over HTTPS"/>
 <meta property="og:image" content="https://viktorbarzin.me/images/14-dns-over-https-linkedin.png" />
 <meta property="og:description" content="This post is mainly about me sharing some very useful resources and bringing light onto the cool idea behind DNS-over-HTTPS (aka. DoH). I&#39;ll also share a simple setup on how to run your own DoH server to hide your DNS lookups from spying eyes." />
 <meta property='og:url' content="https://viktorbarzin.me/blog/14-dns-over-https/" />
@@ -68,8 +67,7 @@
 </script>
 
 <script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
-
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 
@@ -109,20 +107,22 @@
 
 
 
+    
+    <script
+      nonce="2726c7f26v"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script>
+    <script nonce="2726c7f26v">
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9755293925267478",
+        enable_page_level_ads: true,
+      });
+    </script>
+  </head>
 
-        
-        <script nonce="2726c7f26v" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script nonce="2726c7f26v">
-            (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-9755293925267478",
-                enable_page_level_ads: true
-            });
-        </script>
-
-    </head>
-
-    <body>
-        <header>
+  <body>
+    <header>
   <nav
     class="navbar navbar-default navbar-fixed-top navbar-inverse font-header"
   >
@@ -186,11 +186,12 @@
 
   </header>
 
-        <div class="container wrapper">
-            <h1><a href="https://viktorbarzin.me/blog/14-dns-over-https/">14 DNS Over HTTPS</a></h1>
-            <span class="post-date">Jan 29, 2020 </span>
-            <div class="post-content">
-                <h1 id="introduction">Introduction</h1>
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="https://viktorbarzin.me/blog/14-dns-over-https/">14 DNS Over HTTPS</a></h1>
+      <span class="post-date">Jan 29, 2020 </span>
+      <div id="post-content" class="post-content">
+        <h1 id="introduction">Introduction</h1>
 <p>This post is mainly about me sharing some very useful resources and bringing light onto the cool idea behind DNS-over-HTTPS (aka. DoH).</p>
 <p>I&rsquo;ll also share a simple setup on how to run your own DoH server to hide your DNS lookups from spying eyes.</p>
 <h1 id="what-is-dns-over-https-and-why-do-i-need-it">What is DNS-over-HTTPS and why do I need it?</h1>
@@ -365,10 +366,10 @@ If you set the mode to <code>0</code> or <code>5</code>, you will instantly see 
 <p>I hope that you enjoyed this post as much as I enjoyed writing it.
 You can share your thoughts in the comments section and share it with your friends to let them know about DNS-over-HTTPS!</p>
 
-            </div>
-            
-            <div class="post-comments">
-                <div id="disqus_thread"></div>
+      </div>
+      
+      <div class="post-comments">
+        <div id="disqus_thread"></div>
 
 <script nonce="2726c7f26v" type="application/javascript">
     var disqus_config = function () {
@@ -386,12 +387,59 @@ You can share your thoughts in the comments section and share it with your frien
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                
-            </div>
-            
-            <div class="push"></div>
-        </div>
-        <footer class="footer text-center">
+        
+      </div>
+      
+      <div class="push"></div>
+    </div>
+    <script>
+  var PageScrollIndicator = PageScrollIndicator || {};
+
+  PageScrollIndicator.createProgressBar = function (
+    progressBarLocation,
+    contentToTrack
+  ) {
+    
+    var $progressContElement = $("<div id='progress-cont'></div>");
+
+    
+    var $progressBarElement = $("<div id='progress-bar'></div>");
+    $progressBarElement.css("width", "0%");
+
+    $progressContElement.append($progressBarElement);
+
+    var $locationObject = $(progressBarLocation);
+    $locationObject.prepend($progressContElement);
+
+    
+    
+    $(window).scroll(function (e) {
+      var pageHeight = $(window).height();
+      var $container = $(contentToTrack);
+
+      
+      var adjustedHeight = $container.innerHeight() - pageHeight;
+      var progress = ($(window).scrollTop() / adjustedHeight) * 100;
+      $progressBarElement.css("width", progress + "%");
+    });
+  };
+</script>
+
+<style>
+  #progress-cont {
+    height: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background-color: #48a868;
+  }
+</style>
+ <footer class="footer text-center">
 <p>Copyright &copy; 2020 Viktor Barzin
 <span class="credit">
 	
@@ -403,5 +451,13 @@ You can share your thoughts in the comments section and share it with your frien
 </p>
 </footer>
 
-
-    </body>
+    <script>
+      
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>
