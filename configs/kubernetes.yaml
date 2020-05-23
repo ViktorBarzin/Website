@@ -28,6 +28,11 @@ spec:
           ports:
             - containerPort: 443
             - containerPort: 80
+        - name: nginx-exporter
+          image: nginx/nginx-prometheus-exporter
+          args: ["-nginx.scrape-uri", "http://127.0.0.1:8080/nginx_status"]
+          ports:
+            - containerPort: 9113
       imagePullSecrets:
         - name: regcred
 ---
@@ -38,6 +43,10 @@ metadata:
     run: blog
   namespace: website
   name: blog
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9113"
 spec:
   selector:
     run: blog
@@ -50,6 +59,10 @@ spec:
       protocol: TCP
       port: 443
       targetPort: 443
+    - name: metrics
+      protocol: TCP
+      port: 9113
+      targetPort: 9113
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
