@@ -16,7 +16,7 @@ COPY . /static-site
 RUN hugo -v --source=/static-site --destination=/static-site/public
 
 # Decrypt the letsencrypt tar
-RUN sh -c "cd /static-site/configs/ && echo \"$LETSENCRYPT_PASS\" | gpg --pinentry-mode loopback --command-fd 0 --batch --yes --decrypt letsencrypt.tar.gz.asc | tar xzvf -"
+# RUN sh -c "cd /static-site/configs/ && echo \"$LETSENCRYPT_PASS\" | gpg --no-tty --pinentry-mode loopback --command-fd 0 --batch --yes --decrypt letsencrypt.tar.gz.asc | tar xzvf -"
 
 # Install NGINX, remove the default NGINX index.html file, and
 # copy the built static site files to the NGINX html directory.
