@@ -23,7 +23,7 @@ RUN hugo -v --source=/static-site --destination=/static-site/public
 FROM byjg/nginx-extras:latest
 COPY --from=HUGO /static-site/public/ /var/www/html/
 COPY --from=HUGO /static-site/configs/nginx.conf /etc/nginx/
-COPY --from=HUGO /static-site/configs/letsencrypt /etc/letsencrypt
+#COPY --from=HUGO /static-site/configs/letsencrypt /etc/letsencrypt # Uncomment if setting LE cert in container again
 RUN mkdir -p /etc/letsencrypt/live/viktorbarzin.me/
 
 # Instruct the container to listen for requests on port 80 (HTTP).
