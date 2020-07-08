@@ -6,7 +6,7 @@
     <description>Recent content on Viktor Barzin (Viktor Barzin&#39;s Website)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 May 2019 14:24:22 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Mar 2020 10:19:06 +0000</lastBuildDate>
     
 	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     
@@ -188,7 +188,7 @@ Just google for a static site generator and you&amp;rsquo;ll find plenty.</descr
       <pubDate>Sat, 08 Sep 2018 13:44:49 +0100</pubDate>
       
       <guid>https://viktorbarzin.me/blog/01-secure-by-default/</guid>
-      <description>Brief intro Recently I&amp;rsquo;ve been messing around with various client-side web attacks. I&amp;rsquo;ve noticed that most web devs&amp;rsquo; knowledge goes as far as the framework their using requires and that&amp;rsquo;s it. When asked what is the purpose of a csrf token, they would say - &amp;ldquo;Oh, it&amp;rsquo;s something for security and if I don&amp;rsquo;t put it, my forms don&amp;rsquo;t work so it must be there.&amp;rdquo;
+      <description>Brief intro Recently I&amp;rsquo;ve been messing around with various client-side web attacks. I&amp;rsquo;ve noticed that most web devs&#39; knowledge goes as far as the framework their using requires and that&amp;rsquo;s it. When asked what is the purpose of a csrf token, they would say - &amp;ldquo;Oh, it&amp;rsquo;s something for security and if I don&amp;rsquo;t put it, my forms don&amp;rsquo;t work so it must be there.&amp;rdquo;
 If you find yourself having a similar answer, keep on reading.</description>
     </item>
     
