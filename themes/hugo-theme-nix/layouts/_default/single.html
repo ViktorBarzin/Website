@@ -18,8 +18,13 @@
       });
     </script> -->
 
-    <script
+    <!-- <script
       data-ad-client="ca-pub-2274821922281533"
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+    ></script> -->
+    <script
+      data-ad-client="ca-pub-6187423533259975"
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
     ></script>
@@ -31,9 +36,7 @@
     <div class="container wrapper">
       <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
       <span class="post-date">{{ .Date.Format "Jan 2, 2006 " }}</span>
-      <div id="post-content" class="post-content">
-        {{ .Content }}
-      </div>
+      <div id="post-content" class="post-content">{{ .Content }}</div>
       {{ if (isset .Params "nocomments") }} {{ else }}
       <div class="post-comments">
         {{ partial "disqus.html" }}
