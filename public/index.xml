@@ -6,11 +6,7 @@
     <description>Recent content on Viktor Barzin (Viktor Barzin&#39;s Website)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Mar 2020 10:19:06 +0000</lastBuildDate>
-    
-	<atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 23 Mar 2020 10:19:06 +0000</lastBuildDate><atom:link href="https://viktorbarzin.me/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>16 SSH Forwarding Quirks</title>
       <link>https://viktorbarzin.me/blog/16-ssh-forwarding-quirks/</link>
