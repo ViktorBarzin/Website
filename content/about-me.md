@@ -58,6 +58,6 @@ This is a list of public services I currently operate:
 - Webhook handler service to allow remote events triggering such as from events originating from GitHub, DockerHub etc.
 - Wireguard VPN instance to have secure access to all the rest.
 
-If [the blog section](/blog) I occasionally blog about interesting issues and how I overcame them.
+In [the blog section](/blog) I occasionally blog about interesting issues and how I overcame them.
 
 Happy reading! Hope you enjoy :-)
