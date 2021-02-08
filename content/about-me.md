@@ -36,11 +36,12 @@ The website will mostly be me sharing my experience with various technologies. I
 This is a list of public services I currently operate:
 
 #### Apps
-- This website - https://viktorbarzin.me
+- This website - https://viktorbarzin.me/
+- Status page to monitor the status of my services - https://status.viktorbarzin.me/
+- Ads-free f1 streaming service - http://f1.viktorbarzin.me/
+- Infrastructure dashboard visualizations - https://grafana.viktorbarzin.me/
 - Hackmd for online collaboration - https://hackmd.viktorbarzin.me/
 - Private bin for secure text sharing - https://pb.viktorbarzin.me/
-- Ads-free f1 streaming service - http://f1.viktorbarzin.me/
-- Status page to monitor the status of my services - https://status.viktorbarzin.me
 
 #### Dev
 - DNS server (no recursion for public) - ns1.viktorbarzin.me and ns2.viktorbarzin.me
