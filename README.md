@@ -1,3 +1,5 @@
+[![Build Status](https://drone.viktorbarzin.me/api/badges/ViktorBarzin/Website/status.svg)](https://drone.viktorbarzin.me/ViktorBarzin/Website)
+
 # My personal blog
 
 This repo contains the sources for my website:
