@@ -40,6 +40,7 @@ This is a list of public services I currently operate:
 - Status page to monitor the status of my services - https://status.viktorbarzin.me/
 - Ads-free f1 streaming service - http://f1.viktorbarzin.me/
 - Infrastructure dashboard visualizations - https://grafana.viktorbarzin.me/
+- Drone CI/CD - https://drone.viktorbarzin.me/
 - Hackmd for online collaboration - https://hackmd.viktorbarzin.me/
 - Private bin for secure text sharing - https://pb.viktorbarzin.me/
 
