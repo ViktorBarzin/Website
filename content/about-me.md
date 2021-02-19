@@ -21,14 +21,15 @@ curl https://viktorbarzin.me/gpg | gpg --import
 ```
 Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
 
-### About this site
-
-The website will mostly be me sharing my experience with various technologies. I'll post new articles every now and then on various technologies I've come across.
-
+### Reserve time with me
 <!-- Calendly badge widget begin -->
 <div class="calendly-inline-widget" data-url="https://calendly.com/viktorbarzin/30min" style="min-width:320px;height:630px;"></div>
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 <!-- Calendly badge widget end -->
+
+### About this site
+
+The website will mostly be me sharing my experience with various technologies. I'll post new articles every now and then on various technologies I've come across.
 
 ### Services
 
