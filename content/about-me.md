@@ -17,7 +17,7 @@ You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](
 ## Contact me
 If you want to chat, hmu on any of the above or email me using this PGP key:
 ```bash
-curl https://viktorbarzin.me/pgpkey.txt | gpg --import
+curl https://viktorbarzin.me/gpg | gpg --import
 ```
 Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
 
