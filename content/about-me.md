@@ -26,9 +26,8 @@ Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
 The website will mostly be me sharing my experience with various technologies. I'll post new articles every now and then on various technologies I've come across.
 
 <!-- Calendly badge widget begin -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
-<script type="text/javascript">Calendly.initBadgeWidget({ url: 'https://calendly.com/viktorbarzin/30min', text: 'Schedule time with me', color: '#00a2ff', textColor: '#ffffff', branding: true });</script>
+<div class="calendly-inline-widget" data-url="https://calendly.com/viktorbarzin/30min" style="min-width:320px;height:630px;"></div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 <!-- Calendly badge widget end -->
 
 ### Services
