@@ -1,11 +1,15 @@
 <meta property='og:title' content="{{ .Params.title }}"/>
 <meta property="og:image" content="{{ .Params.firstImgUrl }}" />
-<meta name="image" property="og:image" content="{{ .Params.firstImgUrl }}" />
 <meta property="og:description" content="{{ .Params.description }}" />
 <meta property='og:url' content="{{ .Permalink }}" />
 <meta property='og:type' content="website" />
 <meta property="og:site_name" content="{{ .Site.Params.title }}" />
 <meta name="description" content="{{ .Params.description }}" />
+
+<!-- linkedin is special... -->
+<meta name="image" property="og:image" content="{{ .Params.firstImgUrl }}" />
+<meta name="author" content="{{ .Site.Params.Author }}">
+
 
 <meta name="twitter:title" content="{{ .Params.title }}" />
 <meta name="twitter:description" content="{{ .Params.description }}" />
