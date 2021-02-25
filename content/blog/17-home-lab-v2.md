@@ -24,6 +24,7 @@ In this post I'll list all the applications I am currently running and what's th
 (sorted alphabetically)
 ## Bind9 DNS Server
 - Used as a primary DNS for [`viktorbarzin.me`](https://who.is/dns/viktorbarzin.me) zone.
+
    ```bash
    ╰─$ dig -t NS viktorbarzin.me
 
