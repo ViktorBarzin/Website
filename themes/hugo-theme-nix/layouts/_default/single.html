@@ -2,25 +2,9 @@
 <html>
   <head>
     <title>{{ .Title }} &middot; {{ .Site.Title }}</title>
-
-    {{ partial "seo_schema" . }} {{ partial "head.html" . }}
-
-    <!-- Google ads -->
-    <!-- <script
-      nonce="2726c7f26v"
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-    ></script>
-    <script nonce="2726c7f26v">
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-9755293925267478",
-        enable_page_level_ads: true,
-      });
-    </script> -->
-
-    <div>
-      {{ partial "google-ads" }}
-    </div>
+    {{ partial "head.html" . }}
+    {{ partial "seo_schema" . }} 
+    {{ partial "google-ads" }}
   </head>
 
   <body>
@@ -38,7 +22,8 @@
       {{ end }}
       <div class="push"></div>
     </div>
-    {{ partial "page-scroll-indicator.html" . }} {{ partial "footer.html" . }}
+    {{ partial "page-scroll-indicator.html" . }} 
+    {{ partial "footer.html" . }}
     <script>
       // Add scroll bar indicator
       PageScrollIndicator.createProgressBar(

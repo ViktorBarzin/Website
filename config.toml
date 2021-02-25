@@ -23,7 +23,7 @@ Name = "Viktor Barzin"
 HeaderUsername = "viktor"
 GoogleAnalytics = "UA-132992428-1" # DON'T REMOVE - used in head.html partial template
 HeaderHostname = "web"
-About = '''I'm Viktor. I'm a Computer Science alumnus of <a href="https://www.southampton.ac.uk/"/>University of Southampton</a> and I'm currently a Production Engineer @Facebook. I use this site as a portfolio to showcase my projects as well as to share my experiences with various technologies. Read more about me <a href="/about-me"> here</a> and feel free to checkout my <a href="/blog">blog posts</a>.'''
+About = '''I'm Viktor. I'm a Computer Science alumnus of <a href="https://www.southampton.ac.uk/">University of Southampton</a> and I'm currently a Production Engineer @Facebook. I use this site as a portfolio to showcase my projects as well as to share my experiences with various technologies. Read more about me <a href="/about-me"> here</a> and feel free to checkout my <a href="/blog">blog posts</a>.'''
 #ProfilePicture = "https://scontent.fsof3-1.fna.fbcdn.net/v/t1.0-9/18813162_1394825773937591_6301947579059643927_n.jpg?_nc_cat=111&_nc_ht=scontent.fsof3-1.fna&oh=f64acf8b70986be2a5701e408d149376&oe=5CCAC405"
 Title = "Viktor Barzin (Viktor Barzin's Website And Personal Blog)"
 ProfilePicture = "/images/profile-picture.jpeg"
