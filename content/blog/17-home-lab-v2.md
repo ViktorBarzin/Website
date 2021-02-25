@@ -22,7 +22,7 @@ In this post I'll list all the applications I am currently running and what's th
 
 # Service Showcase
 (sorted alphabetically)
-## Bind9 DNS Server
+## [Bind9](https://www.isc.org/bind/) DNS Server
 - Used as a primary DNS for [`viktorbarzin.me`](https://who.is/dns/viktorbarzin.me) zone.
 
    ```bash
@@ -56,13 +56,13 @@ In this post I'll list all the applications I am currently running and what's th
    ;; MSG SIZE  rcvd: 196
    ```
 - [Terraform module](https://github.com/ViktorBarzin/infra/tree/master/modules/kubernetes/bind)
-## Dnscrypt
+## [Dnscrypt](https://dnscrypt.info/)
 - Service to issue DNS queries over HTTPS thus improving privacy.
 - You can read more about it in my blog post about [DNS over HTTPS](/blog/14-dns-over-https/).
 - Everything that uses internet on my network does DNS resolving via this dnscrypt which anonymises outgoing queries .
 - [Terraform module](https://github.com/ViktorBarzin/infra/tree/master/modules/kubernetes/dnscrypt).
 
-## Drone CI/CD
+## [Drone CI/CD](https://www.drone.io/)
 - Continuous Integration/Continuous Delivery service for dynamic infra update.
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/drone/main.tf).
 
@@ -78,26 +78,26 @@ In this post I'll list all the applications I am currently running and what's th
 - Accessible at http://f1.viktorbarzin.me (Important to open as **http** because some streams use http as source and browser get annoyed by mixed content and I'm too lazy to reverse proxy them).
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/f1-stream/main.tf).
 
-## Hackmd
+## [Hackmd](https://github.com/hackmdio)
 - Service for _Real-time collaboration on documentation in markdown._
 - FOSS version of google docs and quip.
 - Accessible at https://hackmd.viktorbarzin.me
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/hackmd/main.tf).
 
-## KMS Licensing Server
+## [KMS](https://docs.microsoft.com/en-us/windows-server/get-started/kmsclientkeys) Licensing Server
 - KMS server that I use for licensing Microsoft Windows and Office packets.
 - Instructions on how to use at https://kms.viktorbarzin.me
 - Don't abuse :-)
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/kms/main.tf).
 
-## Kubernetes Dashboard
+## [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
 - Dashboard for visualizing Kubernetes resources.
 - Accessible at https://k8s.viktorbarzin.me (client certificate required).
 
 ![](/images/17-home-lab-v2-0-01-49-51.png)
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/k8s-dashboard/main.tf).
 
-## Mail Server
+## [Mail Server](https://github.com/docker-mailserver/docker-mailserver)
 - SMTP, IMAP mail server used for accounts in `@viktorbarzin.me` domain.
 - Try it out - send me an email at `contact@viktorbarzin.me`.
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/mailserver/main.tf).
@@ -109,18 +109,18 @@ In this post I'll list all the applications I am currently running and what's th
 
 
 ## Monitoring Services
-### Prometheus
+### [Prometheus](https://prometheus.io/)
 - Used for collecting metrics for the entire infra starting from Kubernetes resources to iDRAC SNMP readings and OpenWRT stats.
 - Accessible at https://prometheus.viktorbarzin.me (client certificate required).
 
 ![](/images/17-home-lab-v2-0-01-55-29.png)
 
-### Grafana
+### [Grafana](https://grafana.com/)
 - Used for prettier visualization based on the Prometheus metrics.
 - Dashboards - https://grafana.viktorbarzin.me/dashboards
 <iframe src="https://grafana.viktorbarzin.me/d/N9uZBy8Wz/kubernetes-cluster-overview?orgId=1&from=1613697460872&to=1613870260872&var-node=k8s-master&var-namespace=metallb-system&var-container=controller&var-duration=6h" scrolling="yes" width="100%" height=600> </iframe>
 
-### Alertmanager
+### [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/)
 - Used for alerting based on Prometheus metrics.
 - Accessible at https://alertmanager.viktorbarzin.me (client certificate required)
 
@@ -130,14 +130,14 @@ Example email alert:
 
 - [Terraform module for all monitoring services](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/monitoring/main.tf).
 
-## Pihole
+## [Pihole](https://pi-hole.net/)
 - Service to block Ads on DNS level which proves to be more effective than installing extensions.
 - Accessible at https://pihole.viktorbarzin.me (client certificate required).
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/pihole/main.tf).
 
 ![](/images/17-home-lab-v2-0-02-18-46.png)
 
-## Privatebin
+## [Privatebin](https://privatebin.info/)
 - Service to securely share snippets. Similar to [pastebin](https://pastebin.com) but content is encrypted.
 - Accessible at https://pb.viktorbarzin.me and https://privatebin.viktorbarzin.me
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/privatebin/main.tf).
@@ -163,7 +163,7 @@ Example email alert:
 - This website you are currently looking at.
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/blog/main.tf).
 
-## Wireguard VPN
+## [Wireguard](https://www.wireguard.com/) VPN
 - My VPN service of choice.
 - Migrated off from OpenVPN due to better performance but mostly operational simplicity and hype. 
 - There is also a web ui to make certificate creation easier.
