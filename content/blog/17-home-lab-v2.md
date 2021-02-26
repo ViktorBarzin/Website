@@ -94,7 +94,7 @@ In this post I'll list all the applications I am currently running and what's th
 - Dashboard for visualizing Kubernetes resources.
 - Accessible at https://k8s.viktorbarzin.me (client certificate required).
 
-![](/images/17-home-lab-v2-0-01-49-51.png)
+![](/images/17-home-lab-v2-0-01-49-52.png)
 - [Terraform module](https://github.com/ViktorBarzin/infra/blob/master/modules/kubernetes/k8s-dashboard/main.tf).
 
 ## [Mail Server](https://github.com/docker-mailserver/docker-mailserver)
