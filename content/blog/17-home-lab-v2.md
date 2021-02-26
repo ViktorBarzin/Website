@@ -56,6 +56,7 @@ In this post I'll list all the applications I am currently running and what's th
    ;; MSG SIZE  rcvd: 196
    ```
 - [Terraform module](https://github.com/ViktorBarzin/infra/tree/master/modules/kubernetes/bind)
+
 ## [Dnscrypt](https://dnscrypt.info/)
 - Service to issue DNS queries over HTTPS thus improving privacy.
 - You can read more about it in my blog post about [DNS over HTTPS](/blog/14-dns-over-https/).
