@@ -1,14 +1,19 @@
 ---
 title: "18 Building Clouds Part 2"
-date: 2021-02-21T13:12:49Z
+date: 2021-03-05T00:12:49Z
 author: "Viktor Barzin"
 description: ""
 sitemap:
    priority: 0.3
-tags: []
-firstImgUrl: "https://viktorbarzin.me/images/18-home-lab-v2-4-19-27-38.png"
-draft: true
+tags: ["home", "lab", "bind9", "dns", "dnscrypt", "drone", "ci", "cd", "f1", "stream", "hackmd", "kms", "kubernetes", "k8s", "dashboard", "mail", "server", "smtp", "imap", "metallb", "network", "load balancer", "prometheus", "grafana", "alertmanager", "pihole", "privatebin", "webhook", "website", "wireguard", "vpn", "esxi", "vmware", "vcenter", "pxe", "pfsense", "boot", "vlan", "kubernetes", "ipv6", "truenas", "metallb", "ingress", "loadbalancer", "ip sharing", "scalable", "highly available", "HA"]
+firstImgUrl: "https://viktorbarzin.me/images/18-building-clouds-part-2-0-18-54-55.png"
+draft: false
 ---
+# Introduction
+In my [previous post](/blog/17-home-lab-v2/) I shared most of the services I am running at home.
+In this post I will share the way they are setup, including code sources, some of the challenges I met and how I solved them.
+
+Enjoy :)
 
 # Problem statement
 
@@ -17,8 +22,8 @@ Design a system that is:
 - scalable (can handle increase in usage)
 - highly available (where the number of single point of failures is close to 0)
 - easily maintainable (a single person can support it without dedicating a lot of time)
-- moderately secure
-- reliable
+- moderately secure (having the ability to easily control who can talk to who)
+- reliable (being able to trust it to properly function and store data)
 
 The system must allow for easy disaster recovery with minimal downtime and recovery effort, ideally with no data loss. 
 
@@ -33,7 +38,7 @@ The physical constraints are:
    - 9 NICs, 1Gbps each
 - ~5 public IPv4 addresses, /60 IPv6 prefix
 
-Let's build ourselves a cloud!
+Let's build ourselves a self-hosted cloud!
 
 # Virtualization Solutions
 
@@ -52,7 +57,7 @@ Unfortunately I have not spend enough time exploring it and initially I had gone
 ### Microsoft HyperV
 Microsoft's HyperV is a great solution for Windows-based environments.
 Some of the things I don't like:
-- Licenses and Fees even for educational purposes
+- Licenses and fees even for educational purposes
 - Windows and .NET oriented which is not the direction I'm heading
 - Windows
 
@@ -80,7 +85,7 @@ There's lots of tutorials on how to install ESXi and it's not that exciting so s
 
 Installing web servers and application software on bare VMs is quite an old-fashioned and would definitely be not satisfy our high availability and low operational cost requirements.
 
-Containers prove to be a great solution and look like the natural evolution of VMs.
+Containers prove to be a great solution and are the natural evolution of VMs.
 With the cloud era it would be madness to choose anything else but Kubernetes for container orchestration.
 
 # Network Topology
@@ -136,7 +141,7 @@ Interesting responsibilities:
 - VMs connected to it have direct connectivity to upstream network
 - The only VM we want connected here from out "datacenter" is the PFsense appliance. Here is the topology of this switch:
 
-![](/images/18-building-clouds-part-2-0-18-54-54.png)
+![](/images/18-building-clouds-part-2-0-18-54-55.png)
 - Note there is 1 physical NIC connected to it which gets its address from the border router's dhcp server.
 ### Distributed vSwitch dLAN 
 - Switch with no uplinks, provides intra-cluster connectivity
@@ -424,6 +429,11 @@ spec:
     targetPort: 51820
 ```
 
+# Going Forwards
+The rest of my infra leverages this foundation which makes deployment of new services quite easy.
+
+Checkout my infra repo - https://github.com/ViktorBarzin/infra - where you can find the terraform modules for the entire thing.
+
 # Final words  
 
 Let's see how with this setup we meet our goals in the problem statement:
@@ -546,7 +556,7 @@ SUM:                            47            777            673           4398
 
 and it took me nearly a year to get it from scratch to its current state.
 
-Of course, there are a lot of services which did not make it this far, such as CephFS although I did spend significant amount of time setting them up.
+Of course, there are a lot of services which did not make it this far, such as CephFS and GlusterFS although I did spend significant amount of time setting them up.
 
 Do checkout my infra repo at https://github.com/ViktorBarzin/infra.
 I'd be happy if you find this blog post and the repo useful.

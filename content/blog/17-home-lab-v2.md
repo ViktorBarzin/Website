@@ -2,7 +2,7 @@
 title: "17 Home Lab v2"
 date: 2021-02-26T00:00:55Z
 author: "Viktor Barzin"
-description: ""
+description: "I share some of the services I am running at home. Nice read if you are looking for ideas for services to setup and play with in your home lab."
 sitemap:
    priority: 0.3
 tags: ["home", "lab", "bind9", "dns", "dnscrypt", "drone", "ci", "cd", "f1", "stream", "hackmd", "kms", "kubernetes", "k8s", "dashboard", "mail", "server", "smtp", "imap", "metallb", "network", "load balancer", "prometheus", "grafana", "alertmanager", "pihole", "privatebin", "webhook", "website", "wireguard", "vpn"]
