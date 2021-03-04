@@ -28,7 +28,7 @@ And the T610 one:
 
 You can see that the T610 machine has 2 CPUs - adding the 2nd one required adding thermal paste and hoping it will work since the entire setup isn't quite new and stuff could have broken down in various ways.
 
-I have setup a virtual environment on both using [VMWare vSphere](https://www.vmware.com/products/vsphere.html) products which I use for educational purposes. For more info about the stuff I run on them check out my blogpost on that [here](/blog/03-a-walk-down-infrastructure-lane/).
+I have setup a virtual environment on both using [VMWare vSphere](https://www.vmware.com/products/vsphere.html) products which I use for educational purposes. For more info about the stuff I run on them check out my blogpost on that [here](blog/17-home-lab-v2/).
 
 # This website
 
