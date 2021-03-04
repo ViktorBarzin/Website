@@ -8,6 +8,34 @@ tags: []
 firstImgUrl: "https://viktorbarzin.me/images/index-f170bc66.png"
 ---
 
+{{< rawhtml >}}
+<div id="fb-root"></div>
+    <script async>
+    window.fbAsyncInit = function() {
+        FB.init({
+        xfbml            : true,
+        version          : 'v10.0'
+        });
+    };
+
+    (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <!-- Your Chat Plugin code -->
+    <div class="fb-customerchat"
+    attribution="setup_tool"
+    page_id="112276754007935"
+theme_color="#0A7CFF">
+      </div>
+
+{{< /rawhtml >}}
+
 Hi there! I'm Viktor.
 
 I'm {{ whatever year we are currently }} - 1998 years old and I'm currently working as a [Production Engineer](https://engineering.fb.com/category/production-engineering/) at Facebook.
@@ -22,10 +50,13 @@ curl https://viktorbarzin.me/gpg | gpg --import
 Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
 
 ### Reserve time with me
+
+{{< rawhtml >}}
 <!-- Calendly badge widget begin -->
 <div class="calendly-inline-widget" data-url="https://calendly.com/viktorbarzin/30min" style="min-width:320px;height:630px;"></div>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+<script async type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
 <!-- Calendly badge widget end -->
+{{< /rawhtml >}}
 
 ### About this site
 
@@ -63,31 +94,3 @@ This is a list of public services I currently operate:
 In [the blog section](/blog) I occasionally blog about interesting issues and how I overcame them.
 
 Happy reading! Hope you enjoy :-)
-
-{{< rawhtml >}}
-<div id="fb-root"></div>
-    <script>
-    window.fbAsyncInit = function() {
-        FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
-        });
-    };
-
-    (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    </script>
-
-    <!-- Your Chat Plugin code -->
-    <div class="fb-customerchat"
-    attribution="setup_tool"
-    page_id="112276754007935"
-theme_color="#0A7CFF">
-      </div>
-
-{{< /rawhtml >}}
