@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "/home/viktor/.virtualenvs/blog/bin/python",
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "yapf"
+}
