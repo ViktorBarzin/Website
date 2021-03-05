@@ -1,6 +1,6 @@
 ---
 title: "About me"
-date: 2018-09-02T00:22:22+01:00
+date: 2018-09-02T00:22:23+01:00
 author: "Viktor Barzin"
 draft: false
 description: "This page tells more about myself."
