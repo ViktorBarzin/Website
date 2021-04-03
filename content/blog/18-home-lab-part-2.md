@@ -141,7 +141,7 @@ Interesting responsibilities:
 - VMs connected to it have direct connectivity to upstream network
 - The only VM we want connected here from out "datacenter" is the PFsense appliance. Here is the topology of this switch:
 
-![](/images/18-building-clouds-part-2-0-18-54-55.png)
+![](/images/18-building-clouds-part-2-0-18-54-56.png)
 - Note there is 1 physical NIC connected to it which gets its address from the border router's dhcp server.
 ### Distributed vSwitch dLAN 
 - Switch with no uplinks, provides intra-cluster connectivity
