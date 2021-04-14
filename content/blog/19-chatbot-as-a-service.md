@@ -1,6 +1,6 @@
 ---
 title: "19 Chatbot as a Service"
-date: 2021-04-05T23:40:31+01:00
+date: 2021-04-14T00:00:00+00:00
 author: "Viktor Barzin"
 description: "I share my experience of creating a chatbot, powered by FB Messenger which shares information about my services and more."
 sitemap:
