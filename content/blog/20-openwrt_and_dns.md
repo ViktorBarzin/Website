@@ -1,6 +1,6 @@
 ---
 title: "20 OpenWRT and DNS"
-date: 2021-09-13T00:11:24+01:00
+date: 2021-09-14T00:11:24+01:00
 author: "Viktor Barzin"
 description: "I share my experience with logging DNS traffic on OpenWRT and exporting it to Prometheus and building a Grafana dashboard."
 sitemap:
@@ -48,8 +48,8 @@ tags:
     "privacy",
     "github",
   ]
-firstImgUrl: "https://viktorbarzin.me/"
-draft: true
+firstImgUrl: "https://viktorbarzin.me/images/20-openwrt-and-dns-linkdin.png"
+draft: false
 ---
 
 # Introduction
