@@ -29,6 +29,7 @@ Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
 {{< rawhtml >}}
 
 <!-- Calendly badge widget begin -->
+<!-- If you find this, well done, I'll be interested to chat :) -->
 <!-- <div class="calendly-inline-widget" data-url="https://calendly.com/viktorbarzin/30min" style="min-width:320px;height:630px;"></div> -->
 <!-- <script async type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script> -->
 <!-- Calendly badge widget end -->
