@@ -3,22 +3,21 @@ type: kubernetes
 name: default
 
 steps:
-- name: Build image  
-  image: plugins/docker
-  settings:
-    username: "viktorbarzin"
-    password: 
-      from_secret: dockerhub_password
-    repo: viktorbarzin/blog
-    dockerfile: Dockerfile
-    auto_tag: true
-- name: Update deployment
-  image: alpine
-  commands:
-    - "apk add curl"
-    - "curl -X PATCH https://kubernetes:6443/apis/apps/v1/namespaces/website/deployments/blog -H \"Authorization:Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" -H \"Content-Type:application/strategic-merge-patch+json\" -k -d '{\"spec\": {\"template\": {\"metadata\": { \"annotations\": {\"kubectl.kubernetes.io/restartedAt\": \"'$(date +%Y-%m-%dT%TZ)'\" }}}}}' | head"
-
----
-kind: secret
-name: dockerhub_password
-data: ZB3OHrGwCBy4pVQZv+fiPWN1mUeegBnB2kh+2O5nbLQmoU2ls6bdXB70NiRcbVrE
+  - name: Build image
+    image: plugins/docker
+    settings:
+      # username: "viktorbarzin"
+      # password:
+      #   from_secret: dockerhub_password
+      repo: viktorbarzin/blog
+      dockerfile: Dockerfile
+      auto_tag: true
+  - name: Update deployment
+    image: alpine
+    commands:
+      - "apk add curl"
+      - 'curl -X PATCH https://kubernetes:6443/apis/apps/v1/namespaces/website/deployments/blog -H "Authorization:Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -H "Content-Type:application/strategic-merge-patch+json" -k -d ''{"spec": {"template": {"metadata": { "annotations": {"kubectl.kubernetes.io/restartedAt": "''$(date +%Y-%m-%dT%TZ)''" }}}}}'' | head'
+# ---
+# kind: secret
+# name: dockerhub_password
+# data: ZB3OHrGwCBy4pVQZv+fiPWN1mUeegBnB2kh+2O5nbLQmoU2ls6bdXB70NiRcbVrE
