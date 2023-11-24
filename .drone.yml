@@ -6,9 +6,9 @@ steps:
   - name: Build image
     image: plugins/docker
     settings:
-      # username: "viktorbarzin"
-      # password:
-      #   from_secret: dockerhub_password
+      username: "viktorbarzin"
+      password:
+        from_secret: dockerhub-pat
       repo: viktorbarzin/blog
       dockerfile: Dockerfile
       auto_tag: true
