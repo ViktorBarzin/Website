@@ -23,8 +23,8 @@ Name = "Viktor Barzin"
 HeaderUsername = "viktor"
 GoogleAnalytics = "UA-132992428-1" # DON'T REMOVE - used in head.html partial template
 HeaderHostname = "web"
-About = '''Hi, I'm Viktor🙂 I'm currently a <a href="https://engineering.fb.com/category/production-engineering/"> Production Engineer at Facebook</a>. This is my blog which I use as a portfolio to showcase my projects as well as to share my experiences with various technologies. Read more about me <a href="/about-me"> here</a> and feel free to checkout my <a href="/blog">blog posts</a>.'''
-#ProfilePicture = "https://scontent.fsof3-1.fna.fbcdn.net/v/t1.0-9/18813162_1394825773937591_6301947579059643927_n.jpg?_nc_cat=111&_nc_ht=scontent.fsof3-1.fna&oh=f64acf8b70986be2a5701e408d149376&oe=5CCAC405"
+About = '''Hi, I'm Viktor🙂 I'm currently a <a href="https://engineering.fb.com/category/production-engineering/"> Production Engineer at Meta</a> and a self-hosting enthusiast. This is my blog which I use as a portfolio to showcase my projects as well as to share my experiences with various technologies. Read more about me <a href="/about-me"> here</a>, checkout what I'm currently self-hosting <a href="https://dashy.viktorbarzin.me/">here</a> and feel free to checkout my <a href="/blog">blog posts</a>.'''
+#ProfilePicture = "https://scontent-lhr8-1.xx.fbcdn.net/v/t39.30808-6/411035119_7058279747592137_5840445031833582462_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pxmXkovw7f8Q7kNvgFAbpqb&_nc_ht=scontent-lhr8-1.xx&oh=00_AYAqn0TKGHx02vG3pYTqXaWEXhMjx-s505HrIStQQs1Pog&oe=66B07FCD"
 Title = "Viktor Barzin (Viktor Barzin's Website And Personal Blog)"
 ProfilePicture = "/images/profile-picture.jpeg"
 GithubID = "viktorbarzin"

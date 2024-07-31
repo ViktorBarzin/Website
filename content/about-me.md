@@ -12,16 +12,16 @@ firstImgUrl: "https://viktorbarzin.me/images/index-f170bc66.png"
 
 Hi there! I'm Viktor.
 
-I'm {{ whatever year we are currently }} - 1998 years old and I'm currently working as a [Production Engineer](https://engineering.fb.com/category/production-engineering/) at Facebook.
+I'm {{ whatever year we are currently }} - 1998 years old and I'm currently working as a [Production Engineer](https://engineering.fb.com/category/production-engineering/) at Meta.
 
-You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin), [linkedin](https://linkedin.com/in/viktor-barzin) and [twitter](https://twitter.com/ViktorBarzin).
+You can find me on [facebook](https://www.facebook.com/viktor.barzin), [github](https://github.com/ViktorBarzin), [instagram](https://www.instagram.com/vikkbarzin), [linkedin](https://linkedin.com/in/viktor-barzin).
 
 ## Contact me
 
 If you want to chat, hmu on any of the above or email me using this PGP key:
 
 ```bash
-curl https://viktorbarzin.me/gpg | gpg --import
+curl https://viktorbarzin.me/gpg.asc | gpg --import
 ```
 
 Email: [contact@viktorbarzin.me](mailto:contact@viktorbarzin.me)
@@ -42,13 +42,20 @@ The website will mostly be me sharing my experience with various technologies. I
 
 ### Services
 
-This is a list of public services I currently operate:
+I found that the list below keeps getting out of date as I keep adding new services to my cluster so to solve this problem I (you guessed it) setup another service to display everything that I currently self-host.
+You can find all my latest projects with links (some require authentication) at [dashy.viktorbarzin.me](https://dashy.viktorbarzin.me).
 
 #### Apps
 
+Here are some of the apps I self host.
+The full list (besides the terraform modules in my github repo) can be found at [dashy.viktorbarzin.me](https://dashy.viktorbarzin.me).
+
 - This website - https://viktorbarzin.me/
 - Status page to monitor the status of my services - https://status.viktorbarzin.me/
-- Ads-free f1 streaming service - http://f1.viktorbarzin.me/
+- Vaultwarden password manager - https://vaultwarden.viktorbarzin.me/
+- Immich (Open source Google Photos alternative) - https://immich.viktorbarzin.me/
+- Technitium DNS server (forwarder with DNS over HTTPS and Adblock for maximum privacy)
+- Ads and popup-free f1 streaming service - http://f1.viktorbarzin.me/ (I update the sides every now and then whenever they don't work so you can bookmark this)
 - Infrastructure dashboard visualizations - https://grafana.viktorbarzin.me/
 - Drone CI/CD - https://drone.viktorbarzin.me/
 - Hackmd for online collaboration - https://hackmd.viktorbarzin.me/
@@ -59,18 +66,14 @@ This is a list of public services I currently operate:
 - DNS server (no recursion for public) - ns1.viktorbarzin.me and ns2.viktorbarzin.me
 - KMS Windows activator - https://kms.viktorbarzin.me/
 - Helper page to get access to my wireguard vpn - https://wg.viktorbarzin.me/
-- Service to setup your `kubectl` to get access to my Kubernetes cluster - https://kubectl.viktorbarzin.me/
 - Mailserver (imaps and pop3s)
 
 #### Internal
 
-- Pihole for ads-free browsing
 - Kubernetes dashboard for a GUI overview of my cluster
 - Ceph web UI to monitor the overall status of the CephFS
-- DNSCrypt for DNS-over-HTTPS to anonymise my infra's DNS lookups
-- Internal bind dns instance to map services to IPs
 - Webhook handler service to allow remote events triggering such as from events originating from GitHub, DockerHub etc.
-- Wireguard VPN instance to have secure access to all the rest.
+- Tailscale VPN instance to have secure access to all the rest and use exit nodes from various geographical locations.
 
 In [the blog section](/blog) I occasionally blog about interesting issues and how I overcame them.
 
