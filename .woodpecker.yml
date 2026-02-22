@@ -1,7 +1,12 @@
 when:
   event: push
 
-skip_clone: true
+
+clone:
+  git:
+    image: alpine
+    commands:
+      - "echo clone-placeholder"
 
 steps:
   - name: clone
