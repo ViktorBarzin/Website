@@ -1,0 +1,19 @@
+when:
+  event: push
+
+steps:
+  - name: build-image
+    image: woodpeckerci/plugin-docker-buildx
+    settings:
+      username: "viktorbarzin"
+      password:
+        from_secret: dockerhub-pat
+      repo: viktorbarzin/blog
+      dockerfile: Dockerfile
+      auto_tag: true
+
+  - name: update-deployment
+    image: alpine
+    commands:
+      - "apk add curl"
+      - 'curl -X PATCH https://10.0.20.100:6443/apis/apps/v1/namespaces/website/deployments/blog -H "Authorization:Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -H "Content-Type:application/strategic-merge-patch+json" -k -d ''{"spec": {"template": {"metadata": { "annotations": {"kubectl.kubernetes.io/restartedAt": "''$(date +%Y-%m-%dT%TZ)''" }}}}}'' | head'
