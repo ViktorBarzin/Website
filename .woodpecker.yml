@@ -18,7 +18,6 @@ steps:
       repo: viktorbarzin/blog
       dockerfile: Dockerfile
       auto_tag: true
-      buildx_no_cache: true
 
   - name: update-deployment
     image: alpine
