@@ -1,0 +1,69 @@
+<meta property='og:title' content="{{ .Params.title }}"/>
+<meta property="og:image" content="{{ .Params.firstImgUrl }}" />
+<meta property="og:description" content="{{ .Params.description }}" />
+<meta property='og:url' content="{{ .Permalink }}" />
+<meta property='og:type' content="website" />
+<meta property="og:site_name" content="{{ .Site.Params.title }}" />
+<meta name="description" content="{{ .Params.description }}" />
+
+<!-- linkedin is special... -->
+<meta name="image" property="og:image" content="{{ .Params.firstImgUrl }}" />
+<meta name="author" content="{{ .Site.Params.Author }}" />
+
+
+<meta name="twitter:title" content="{{ .Params.title }}" />
+<meta name="twitter:description" content="{{ .Params.description }}" />
+<meta name="twitter:image" content="{{ .Params.firstImgUrl }}" />
+<meta name="twitter:site" content="@{{ .Site.Params.TwitterID }}" />
+<meta name="twitter:creator" content="@{{ .Site.Params.TwitterID }}" />
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "{{ .Site.BaseURL }}"
+    },
+    "articleSection" : "{{ .Section }}",
+    "name" : "{{ .Title }}",
+    "headline" : "{{ .Title }}",
+    "description" : {{ if .Description }}"{{ .Description }}"{{ else if .IsPage }}"{{ .Summary }}"{{ else }}""{{ end }},
+    "inLanguage" : "en-US",
+    "author" : {
+        "@type": "Person",
+        "name": "{{ .Site.Params.Author }}",
+        "image": "",
+        "url": "https://viktorbarzin.me/",
+        "description": "I've been digging into Programming for quite some time now. My passion for technology has grown into cyber security and automation. I love ot go offline, watch Formula 1, play cheess and go skiing."
+    },
+    "creator" : "{{ .Site.Params.Author }}",
+    "publisher": {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "{{ .Site.Params.Author }}",
+        "sameAs": [
+            "https://www.facebook.com/viktor.barzin",
+            "https://github.com/ViktorBarzin",
+            "https://twitter.com/ViktorBarzin",
+            "https://www.linkedin.com/in/viktor-barzin/"
+        ],
+        "url": "https://viktorbarzin.me",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://viktorbarzin.me/images/profile-picture.jpeg"
+        }
+    },
+    "accountablePerson" : "{{ .Site.Params.Author }}",
+    "copyrightHolder" : "{{ .Site.Params.Author }}",
+    "copyrightYear" : "{{ .Date.Format "2018" }}",
+    "datePublished": "{{ .Date }}",
+    "dateModified" : "{{ .Date }}",
+    "url" : "{{ .Permalink }}",
+    "wordCount" : "{{ .WordCount }}",
+    "image": 	"{{ .Params.firstImgUrl }}",
+    "keywords" : [ {{ if isset .Params "tags" }}{{ range .Params.tags }}"{{ . }}",{{ end }}{{ end }}"Blog" ]
+}
+</script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
