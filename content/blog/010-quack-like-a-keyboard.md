@@ -6,7 +6,6 @@ author: "Viktor Barzin"
 description: ""
 tags: []
 firstImgUrl: "https://viktorbarzin.me/"
-draft: true
 ---
 
 # Pre-Intro
