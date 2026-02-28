@@ -18,6 +18,7 @@ steps:
       repo: viktorbarzin/blog
       dockerfile: Dockerfile
       auto_tag: true
+      no_cache: true
 
   - name: update-deployment
     image: alpine
