@@ -13,7 +13,7 @@ googleAnalytics = "UA-132992428-1"
     [markup.goldmark.renderer]
       unsafe = true
       
-disableKinds = ["sitemap", "categories", "taxonomy", "taxonomyTerm"]
+disableKinds = ["sitemap", "categories", "taxonomy", "term"]
 
 [taxonomies]
 

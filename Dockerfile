@@ -1,25 +1,13 @@
-# Install the latest Debain operating system.
-FROM debian:latest as HUGO
+# Stage 1: Build the static site with Hugo
+FROM ghcr.io/gohugoio/hugo:v0.157.0 AS builder
 
-# Password to decrypt letsencrypt tar. Specify as CLI arg to docker build
-ARG LETSENCRYPT_PASS
+COPY . /src
+RUN hugo --minify --noBuildLock --source=/src --destination=/src/public
 
-# Install Hugo.
-RUN apt-get update -y && apt-get install hugo -y
+# Stage 2: Serve with NGINX
+FROM nginx:1.28-alpine
 
-# Copy the contents of the current working directory to the
-# static-site directory.
-COPY . /static-site
-
-# Command Hugo to build the static site from the source files,
-# setting the destination to the public directory.
-RUN hugo -v --source=/static-site --destination=/static-site/public
-
-# Install NGINX, remove the default NGINX index.html file, and
-# copy the built static site files to the NGINX html directory.
-FROM byjg/nginx-extras:latest
-COPY --from=HUGO /static-site/public/ /var/www/html/
-COPY --from=HUGO /static-site/configs/nginx.conf /etc/nginx/
-#COPY --from=HUGO /static-site/configs/letsencrypt /etc/letsencrypt # Uncomment if setting LE cert in container again
+COPY --from=builder /src/public/ /var/www/html/
+COPY --from=builder /src/configs/nginx.conf /etc/nginx/
 
 EXPOSE 80
