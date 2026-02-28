@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .Title }} &middot; {{ .Site.Title }}</title>
+    {{ partial "head.html" . }}
+    {{ partial "seo_schema" . }}
+    {{ partial "google-ads" }}
+  </head>
+
+  <body>
+    {{ partial "header.html" . }}
+    <div id="kek"></div>
+    <div class="container wrapper">
+      <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+      <span class="post-date">{{ .Date.Format "Jan 2, 2006 " }}</span>
+      <div id="post-content" class="post-content">{{ .Content }}</div>
+      {{ if (isset .Params "nocomments") }} {{ else }}
+      <div class="post-comments">
+        {{ partial "disqus.html" }}
+      </div>
+      {{ end }}
+      <div class="push"></div>
+    </div>
+    {{ partial "page-scroll-indicator.html" . }}
+    {{ partial "footer.html" . }}
+    <script>
+      // Add scroll bar indicator
+      PageScrollIndicator.createProgressBar(
+        "#navbar-collapse-1",
+        // "#kek",
+        "#post-content"
+      );
+    </script>
+  </body>
+</html>
