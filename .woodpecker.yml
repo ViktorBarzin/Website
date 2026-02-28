@@ -20,7 +20,6 @@ steps:
       tags:
         - latest
         - "${CI_PIPELINE_NUMBER}"
-      no_cache: true
 
   - name: update-deployment
     image: alpine
