@@ -1,0 +1,7 @@
+{{ $file := .Get "src" }}
+{{ $alt := .Get "alt" | default "" }}
+{{ $path := printf "images/%s" $file }}
+{{ $svg := readFile (printf "static/%s" $path) }}
+<div class="svg-diagram" title="{{ $alt }}">
+  {{ $svg | safeHTML }}
+</div>

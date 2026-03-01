@@ -1,106 +1,133 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" font-family="sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="sans-serif">
   <defs>
     <marker id="d1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#6c7086"/>
+      <path d="M0,0 L8,3 L0,6" fill="#666666"/>
     </marker>
     <marker id="d-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#89b4fa"/>
+      <path d="M0,0 L8,3 L0,6" fill="#4a90d9"/>
     </marker>
     <marker id="d-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#a6e3a1"/>
+      <path d="M0,0 L8,3 L0,6" fill="#5cb85c"/>
     </marker>
     <marker id="d-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#fab387"/>
+      <path d="M0,0 L8,3 L0,6" fill="#f0ad4e"/>
     </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="960" height="420" rx="8" fill="#1e1e2e"/>
-
   <!-- Title -->
-  <text x="480" y="30" fill="#cdd6f4" font-size="16" font-weight="bold" text-anchor="middle">DNS Split-Horizon Resolution</text>
+  <text x="450" y="30" fill="#1a1a1a" font-size="16" font-weight="bold" text-anchor="middle">DNS Split-Horizon Resolution</text>
 
   <!-- Divider line -->
-  <line x1="480" y1="50" x2="480" y2="380" stroke="#6c7086" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="480" y="398" fill="#6c7086" font-size="10" text-anchor="middle">Split Horizon</text>
+  <line x1="450" y1="50" x2="450" y2="380" stroke="#999999" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="450" y="398" fill="#555555" font-size="10" text-anchor="middle">Split Horizon</text>
 
   <!-- ========== LEFT: External Path ========== -->
-  <text x="240" y="60" fill="#fab387" font-size="14" font-weight="bold" text-anchor="middle">External Path</text>
-  <text x="240" y="78" fill="#6c7086" font-size="10" text-anchor="middle">viktorbarzin.me</text>
+  <text x="225" y="60" fill="#8a6d3b" font-size="14" font-weight="bold" text-anchor="middle">External Path</text>
+  <text x="225" y="78" fill="#555555" font-size="10" text-anchor="middle">viktorbarzin.me</text>
 
   <!-- External Client -->
-  <rect x="155" y="95" width="170" height="36" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
-  <text x="240" y="118" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">External Client</text>
+  <g data-label="External Client">
+    <title>External Client - Users accessing services from the internet</title>
+    <rect x="140" y="95" width="170" height="36" rx="6" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="225" y="118" fill="#8a6d3b" font-size="11" font-weight="bold" text-anchor="middle">External Client</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="240" y1="131" x2="240" y2="155" stroke="#fab387" stroke-width="1.5" marker-end="url(#d-orange)"/>
-  <text x="270" y="147" fill="#6c7086" font-size="9">DNS query</text>
+  <line x1="225" y1="131" x2="225" y2="155" stroke="#f0ad4e" stroke-width="1.5" marker-end="url(#d-orange)"/>
+  <text x="255" y="147" fill="#555555" font-size="9">DNS query</text>
 
   <!-- Cloudflare DNS -->
-  <rect x="140" y="155" width="200" height="44" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
-  <text x="240" y="175" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">Cloudflare DNS</text>
-  <text x="240" y="191" fill="#6c7086" font-size="9" text-anchor="middle">Proxied A/CNAME records</text>
+  <g data-label="Cloudflare DNS">
+    <title>Cloudflare DNS - Proxied A/CNAME records with WAF protection</title>
+    <rect x="125" y="155" width="200" height="44" rx="6" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="225" y="175" fill="#8a6d3b" font-size="11" font-weight="bold" text-anchor="middle">Cloudflare DNS</text>
+    <text x="225" y="191" fill="#555555" font-size="9" text-anchor="middle">Proxied A/CNAME records</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="240" y1="199" x2="240" y2="223" stroke="#fab387" stroke-width="1.5" marker-end="url(#d-orange)"/>
-  <text x="278" y="215" fill="#6c7086" font-size="9">tunnel</text>
+  <line x1="225" y1="199" x2="225" y2="223" stroke="#f0ad4e" stroke-width="1.5" marker-end="url(#d-orange)"/>
+  <text x="263" y="215" fill="#555555" font-size="9">tunnel</text>
 
   <!-- Cloudflare Tunnel -->
-  <rect x="140" y="223" width="200" height="44" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
-  <text x="240" y="243" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">Cloudflare Tunnel</text>
-  <text x="240" y="259" fill="#6c7086" font-size="9" text-anchor="middle">cloudflared (k8s pod)</text>
+  <g data-label="Cloudflare Tunnel">
+    <title>Cloudflare Tunnel - cloudflared running as a Kubernetes pod</title>
+    <rect x="125" y="223" width="200" height="44" rx="6" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="225" y="243" fill="#8a6d3b" font-size="11" font-weight="bold" text-anchor="middle">Cloudflare Tunnel</text>
+    <text x="225" y="259" fill="#555555" font-size="9" text-anchor="middle">cloudflared (k8s pod)</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="240" y1="267" x2="240" y2="291" stroke="#fab387" stroke-width="1.5" marker-end="url(#d-orange)"/>
+  <line x1="225" y1="267" x2="225" y2="291" stroke="#f0ad4e" stroke-width="1.5" marker-end="url(#d-orange)"/>
 
   <!-- Traefik -->
-  <rect x="140" y="291" width="200" height="44" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
-  <text x="240" y="311" fill="#89b4fa" font-size="11" font-weight="bold" text-anchor="middle">Traefik Ingress</text>
-  <text x="240" y="327" fill="#6c7086" font-size="9" text-anchor="middle">10.0.20.200 (MetalLB)</text>
+  <g data-label="Traefik Ingress External">
+    <title>Traefik Ingress - Reverse proxy at 10.0.20.200 via MetalLB</title>
+    <rect x="125" y="291" width="200" height="44" rx="6" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
+    <text x="225" y="311" fill="#2c5ea0" font-size="11" font-weight="bold" text-anchor="middle">Traefik Ingress</text>
+    <text x="225" y="327" fill="#555555" font-size="9" text-anchor="middle">10.0.20.200 (MetalLB)</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="240" y1="335" x2="240" y2="359" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#d-blue)"/>
+  <line x1="225" y1="335" x2="225" y2="359" stroke="#4a90d9" stroke-width="1.5" marker-end="url(#d-blue)"/>
 
   <!-- Services -->
-  <rect x="140" y="359" width="200" height="36" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="240" y="382" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">K8s Services (70+)</text>
+  <g data-label="K8s Services External">
+    <title>Kubernetes Services - 70+ services accessible from external path</title>
+    <rect x="125" y="359" width="200" height="36" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="225" y="382" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">K8s Services (70+)</text>
+  </g>
 
   <!-- ========== RIGHT: Internal Path ========== -->
-  <text x="720" y="60" fill="#a6e3a1" font-size="14" font-weight="bold" text-anchor="middle">Internal Path</text>
-  <text x="720" y="78" fill="#6c7086" font-size="10" text-anchor="middle">viktorbarzin.lan</text>
+  <text x="675" y="60" fill="#2d6a2d" font-size="14" font-weight="bold" text-anchor="middle">Internal Path</text>
+  <text x="675" y="78" fill="#555555" font-size="10" text-anchor="middle">viktorbarzin.lan</text>
 
   <!-- Internal Client -->
-  <rect x="635" y="95" width="170" height="36" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="720" y="118" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">Internal Client</text>
+  <g data-label="Internal Client">
+    <title>Internal Client - Devices on the local network</title>
+    <rect x="590" y="95" width="170" height="36" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="675" y="118" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">Internal Client</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="720" y1="131" x2="720" y2="155" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#d-green)"/>
-  <text x="750" y="147" fill="#6c7086" font-size="9">DNS query</text>
+  <line x1="675" y1="131" x2="675" y2="155" stroke="#5cb85c" stroke-width="1.5" marker-end="url(#d-green)"/>
+  <text x="705" y="147" fill="#555555" font-size="9">DNS query</text>
 
   <!-- Technitium DNS -->
-  <rect x="615" y="155" width="210" height="44" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="720" y="175" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">Technitium DNS</text>
-  <text x="720" y="191" fill="#6c7086" font-size="9" text-anchor="middle">10.0.20.101 (authoritative)</text>
+  <g data-label="Technitium DNS">
+    <title>Technitium DNS - Authoritative DNS server at 10.0.20.101</title>
+    <rect x="570" y="155" width="210" height="44" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="675" y="175" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">Technitium DNS</text>
+    <text x="675" y="191" fill="#555555" font-size="9" text-anchor="middle">10.0.20.101 (authoritative)</text>
+  </g>
 
   <!-- Arrow down (skips tunnel + traefik, goes direct) -->
-  <line x1="720" y1="199" x2="720" y2="291" stroke="#a6e3a1" stroke-width="2" marker-end="url(#d-green)"/>
-  <text x="740" y="250" fill="#a6e3a1" font-size="9" font-weight="bold">direct</text>
+  <line x1="675" y1="199" x2="675" y2="291" stroke="#5cb85c" stroke-width="2" marker-end="url(#d-green)"/>
+  <text x="695" y="250" fill="#2d6a2d" font-size="9" font-weight="bold">direct</text>
 
   <!-- Traefik (right side) -->
-  <rect x="620" y="291" width="200" height="44" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
-  <text x="720" y="311" fill="#89b4fa" font-size="11" font-weight="bold" text-anchor="middle">Traefik Ingress</text>
-  <text x="720" y="327" fill="#6c7086" font-size="9" text-anchor="middle">10.0.20.200 (direct LAN)</text>
+  <g data-label="Traefik Ingress Internal">
+    <title>Traefik Ingress - Direct LAN access at 10.0.20.200</title>
+    <rect x="575" y="291" width="200" height="44" rx="6" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
+    <text x="675" y="311" fill="#2c5ea0" font-size="11" font-weight="bold" text-anchor="middle">Traefik Ingress</text>
+    <text x="675" y="327" fill="#555555" font-size="9" text-anchor="middle">10.0.20.200 (direct LAN)</text>
+  </g>
 
   <!-- Arrow down -->
-  <line x1="720" y1="335" x2="720" y2="359" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#d-blue)"/>
+  <line x1="675" y1="335" x2="675" y2="359" stroke="#4a90d9" stroke-width="1.5" marker-end="url(#d-blue)"/>
 
   <!-- Services (right) -->
-  <rect x="620" y="359" width="200" height="36" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="720" y="382" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">K8s Services (70+)</text>
+  <g data-label="K8s Services Internal">
+    <title>Kubernetes Services - 70+ services accessible from internal path</title>
+    <rect x="575" y="359" width="200" height="36" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="675" y="382" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">K8s Services (70+)</text>
+  </g>
 
   <!-- Key insight box -->
-  <rect x="340" y="130" width="280" height="65" rx="6" fill="#313244" stroke="#6c7086" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="480" y="150" fill="#cdd6f4" font-size="10" font-weight="bold" text-anchor="middle">Same services, different paths</text>
-  <text x="480" y="165" fill="#6c7086" font-size="9" text-anchor="middle">External: CF Proxy + WAF + Tunnel</text>
-  <text x="480" y="180" fill="#6c7086" font-size="9" text-anchor="middle">Internal: Direct LAN (low latency)</text>
+  <g data-label="Split Horizon Info">
+    <title>Same services are accessible through different paths depending on network location</title>
+    <rect x="310" y="130" width="280" height="65" rx="6" fill="#f5f5f5" stroke="#999999" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="450" y="150" fill="#333333" font-size="10" font-weight="bold" text-anchor="middle">Same services, different paths</text>
+    <text x="450" y="165" fill="#555555" font-size="9" text-anchor="middle">External: CF Proxy + WAF + Tunnel</text>
+    <text x="450" y="180" fill="#555555" font-size="9" text-anchor="middle">Internal: Direct LAN (low latency)</text>
+  </g>
 </svg>

@@ -1,0 +1,46 @@
+/* Interactive SVG diagrams */
+.svg-diagram {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  cursor: grab;
+}
+
+.svg-diagram svg {
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.svg-diagram svg:hover {
+  transform: scale(1.02);
+}
+
+/* Highlight groups on hover */
+.svg-diagram svg g[data-label]:hover {
+  filter: brightness(0.92);
+  cursor: pointer;
+}
+
+.svg-diagram svg rect:hover,
+.svg-diagram svg .node:hover rect {
+  stroke-width: 3;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+  transition: all 0.15s ease;
+}
+
+/* Tooltip via title */
+.svg-diagram svg [data-tooltip]:hover {
+  cursor: help;
+}
+
+/* Click to zoom */
+.svg-diagram.zoomed svg {
+  max-width: none;
+  width: 140%;
+  margin-left: -20%;
+}

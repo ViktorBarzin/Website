@@ -20,7 +20,7 @@ This is Part 1 of a 4-part series:
 
 # High-Level Architecture
 
-![High-level architecture](/images/21-home-lab-v3-overview.svg)
+{{< svg src="21-home-lab-v3-overview.svg" alt="High-level architecture" >}}
 
 Everything runs on a single Dell R730 in my flat. Internet comes in through Cloudflare (DNS + Tunnel), hits pfSense for firewall/routing, and fans out across 3 VLANs into a 5-node Kubernetes cluster. A remote Home Assistant instance in Sofia handles the solar setup and smart home there.
 
@@ -49,7 +49,7 @@ The R730 sits in a closet. When a kernel update goes wrong or a VM freezes, iDRA
 
 The Huawei UPS2000 keeps the server alive through power cuts. Without monitoring, a UPS is a black box — you don't know it's dying until it's dead.
 
-![UPS monitoring pipeline](/images/21-home-lab-v3-ups.svg)
+{{< svg src="21-home-lab-v3-ups.svg" alt="UPS monitoring pipeline" >}}
 
 The UPS exposes metrics via SNMP v1. I wrote a custom SNMP exporter config that pulls Huawei-proprietary MIB OIDs (`1.3.6.1.4.1.2011.6.174`) for apparent and active power — data the standard UPS-MIB doesn't expose. Grafana shows battery charge, estimated runtime, load percentage, and input/output voltage in real-time. I get alerted if battery drops below 50% or load exceeds 80%.
 
@@ -57,7 +57,7 @@ The UPS exposes metrics via SNMP v1. I wrote a custom SNMP exporter config that 
 
 Moved from VMware ESXi to Proxmox in 2023. ESXi's free tier was getting more restrictive, and Broadcom's acquisition made the future uncertain. Proxmox gave me three things ESXi couldn't: no licensing cost, a proper REST API for Terraform automation, and first-class cloud-init support for VM templating.
 
-![Proxmox VM layout](/images/21-home-lab-v3-proxmox.svg)
+{{< svg src="21-home-lab-v3-proxmox.svg" alt="Proxmox VM layout" >}}
 
 12 VMs on a single host. The k8s nodes are identical (except node1 which gets the GPU) — this makes them interchangeable and easy to rebuild.
 
@@ -78,7 +78,7 @@ The entire process is in `stacks/infra/main.tf`. Cloud-init handles OS setup, pa
 
 Flat networks are simple but dangerous — a compromised IoT device shouldn't be able to reach your NFS server. VLANs provide isolation without additional hardware.
 
-![Network topology](/images/21-home-lab-v3-network.svg)
+{{< svg src="21-home-lab-v3-network.svg" alt="Network topology" >}}
 
 | Network | Subnet | Purpose |
 |---------|--------|---------|
@@ -104,7 +104,7 @@ pfSense CE 2.7.2 runs as a VM (VMID 101). 167 firewall rules, 154 NAT rules. Why
 
 Why split-horizon? External users need Cloudflare's DDoS protection and CDN. Internal users need to resolve services to private IPs without hairpinning through the internet.
 
-![DNS split-horizon](/images/21-home-lab-v3-dns.svg)
+{{< svg src="21-home-lab-v3-dns.svg" alt="DNS split-horizon" >}}
 
 - **External**: Cloudflare manages `viktorbarzin.me`. Services are proxied through Cloudflare Tunnel or direct WAN NAT.
 - **Internal**: Technitium DNS at `10.0.20.101` handles `viktorbarzin.lan` and overrides `viktorbarzin.me` records to point to internal IPs.
@@ -159,7 +159,7 @@ I use inline NFS volumes instead of PV/PVC resources. Why? Fewer Kubernetes obje
 
 The entire cluster is managed through Terragrunt with **per-service state isolation**. Each of the 70+ services has its own `terraform.tfstate`. This is the single most important architectural decision in the whole setup.
 
-![Terragrunt structure](/images/21-home-lab-v3-terragrunt.svg)
+{{< svg src="21-home-lab-v3-terragrunt.svg" alt="Terragrunt structure" >}}
 
 ```
 stacks/
@@ -189,7 +189,7 @@ Shared configuration flows through `terraform.tfvars` (encrypted via `git-crypt`
 
 Every service uses a shared `ingress_factory` module that generates the full Traefik middleware chain. This is how I maintain consistent security posture across 70+ services without copy-pasting middleware config.
 
-![Ingress factory middleware chain](/images/21-home-lab-v3-ingress-factory.svg)
+{{< svg src="21-home-lab-v3-ingress-factory.svg" alt="Ingress factory middleware chain" >}}
 
 ```hcl
 module "ingress" {

@@ -1,75 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" font-family="sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="sans-serif">
   <defs>
     <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#6c7086"/>
+      <path d="M0,0 L8,3 L0,6" fill="#666666"/>
     </marker>
     <marker id="arr-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#a6e3a1"/>
+      <path d="M0,0 L8,3 L0,6" fill="#5cb85c"/>
     </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="960" height="340" rx="8" fill="#1e1e2e"/>
-
   <!-- Title -->
-  <text x="480" y="30" fill="#cdd6f4" font-size="16" font-weight="bold" text-anchor="middle">UPS Monitoring Pipeline</text>
+  <text x="450" y="30" fill="#1a1a1a" font-size="16" font-weight="bold" text-anchor="middle">UPS Monitoring Pipeline</text>
 
   <!-- Huawei UPS -->
-  <rect x="30" y="80" width="150" height="70" rx="8" fill="#313244" stroke="#f38ba8" stroke-width="2"/>
-  <text x="105" y="108" fill="#f38ba8" font-size="12" font-weight="bold" text-anchor="middle">Huawei</text>
-  <text x="105" y="124" fill="#f38ba8" font-size="12" font-weight="bold" text-anchor="middle">UPS2000</text>
-  <text x="105" y="140" fill="#6c7086" font-size="9" text-anchor="middle">1kVA / Online</text>
+  <g data-label="Huawei UPS2000">
+    <title>Huawei UPS2000 - 1kVA Online UPS providing power protection</title>
+    <rect x="20" y="80" width="150" height="70" rx="8" fill="#fce4ec" stroke="#d9534f" stroke-width="2"/>
+    <text x="95" y="108" fill="#a94442" font-size="12" font-weight="bold" text-anchor="middle">Huawei</text>
+    <text x="95" y="124" fill="#a94442" font-size="12" font-weight="bold" text-anchor="middle">UPS2000</text>
+    <text x="95" y="140" fill="#555555" font-size="9" text-anchor="middle">1kVA / Online</text>
+  </g>
 
   <!-- SNMP v1 label -->
-  <text x="255" y="108" fill="#fab387" font-size="10" font-weight="bold" text-anchor="middle">SNMP v1</text>
-  <line x1="180" y1="115" x2="310" y2="115" stroke="#fab387" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="245" y="108" fill="#8a6d3b" font-size="10" font-weight="bold" text-anchor="middle">SNMP v1</text>
+  <line x1="170" y1="115" x2="290" y2="115" stroke="#f0ad4e" stroke-width="1.5" marker-end="url(#arr)"/>
 
   <!-- SNMP Exporter -->
-  <rect x="310" y="80" width="150" height="70" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
-  <text x="385" y="108" fill="#89b4fa" font-size="11" font-weight="bold" text-anchor="middle">SNMP Exporter</text>
-  <text x="385" y="126" fill="#6c7086" font-size="9" text-anchor="middle">Kubernetes Pod</text>
-  <text x="385" y="140" fill="#6c7086" font-size="9" text-anchor="middle">:9116/snmp</text>
+  <g data-label="SNMP Exporter">
+    <title>SNMP Exporter - Translates SNMP data to Prometheus metrics on :9116/snmp</title>
+    <rect x="290" y="80" width="150" height="70" rx="8" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
+    <text x="365" y="108" fill="#2c5ea0" font-size="11" font-weight="bold" text-anchor="middle">SNMP Exporter</text>
+    <text x="365" y="126" fill="#555555" font-size="9" text-anchor="middle">Kubernetes Pod</text>
+    <text x="365" y="140" fill="#555555" font-size="9" text-anchor="middle">:9116/snmp</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="460" y1="115" x2="510" y2="115" stroke="#6c7086" stroke-width="1.5" marker-end="url(#arr)"/>
-  <text x="485" y="108" fill="#6c7086" font-size="9" text-anchor="middle">scrape</text>
+  <line x1="440" y1="115" x2="490" y2="115" stroke="#666666" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="465" y="108" fill="#555555" font-size="9" text-anchor="middle">scrape</text>
 
   <!-- Prometheus -->
-  <rect x="510" y="80" width="150" height="70" rx="8" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
-  <text x="585" y="108" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">Prometheus</text>
-  <text x="585" y="126" fill="#6c7086" font-size="9" text-anchor="middle">Time-series DB</text>
-  <text x="585" y="140" fill="#6c7086" font-size="9" text-anchor="middle">15s interval</text>
+  <g data-label="Prometheus">
+    <title>Prometheus - Time-series database scraping metrics every 15 seconds</title>
+    <rect x="490" y="80" width="150" height="70" rx="8" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="565" y="108" fill="#8a6d3b" font-size="11" font-weight="bold" text-anchor="middle">Prometheus</text>
+    <text x="565" y="126" fill="#555555" font-size="9" text-anchor="middle">Time-series DB</text>
+    <text x="565" y="140" fill="#555555" font-size="9" text-anchor="middle">15s interval</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="660" y1="115" x2="710" y2="115" stroke="#6c7086" stroke-width="1.5" marker-end="url(#arr)"/>
-  <text x="685" y="108" fill="#6c7086" font-size="9" text-anchor="middle">query</text>
+  <line x1="640" y1="115" x2="690" y2="115" stroke="#666666" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="665" y="108" fill="#555555" font-size="9" text-anchor="middle">query</text>
 
   <!-- Grafana -->
-  <rect x="710" y="80" width="150" height="70" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="785" y="108" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">Grafana</text>
-  <text x="785" y="126" fill="#6c7086" font-size="9" text-anchor="middle">Dashboard</text>
-  <text x="785" y="140" fill="#6c7086" font-size="9" text-anchor="middle">+ Alerting</text>
+  <g data-label="Grafana">
+    <title>Grafana - Dashboard visualization and alerting</title>
+    <rect x="690" y="80" width="150" height="70" rx="8" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="765" y="108" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">Grafana</text>
+    <text x="765" y="126" fill="#555555" font-size="9" text-anchor="middle">Dashboard</text>
+    <text x="765" y="140" fill="#555555" font-size="9" text-anchor="middle">+ Alerting</text>
+  </g>
 
   <!-- Metrics boxes -->
-  <text x="480" y="195" fill="#cdd6f4" font-size="13" font-weight="bold" text-anchor="middle">Key Metrics</text>
+  <text x="450" y="195" fill="#1a1a1a" font-size="13" font-weight="bold" text-anchor="middle">Key Metrics</text>
 
-  <rect x="100" y="210" width="160" height="50" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1"/>
-  <text x="180" y="232" fill="#89b4fa" font-size="11" font-weight="bold" text-anchor="middle">Battery %</text>
-  <text x="180" y="248" fill="#6c7086" font-size="9" text-anchor="middle">Charge level & health</text>
+  <g data-label="Battery Metric">
+    <title>Battery % - Charge level and health status</title>
+    <rect x="80" y="210" width="160" height="50" rx="6" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
+    <text x="160" y="232" fill="#2c5ea0" font-size="11" font-weight="bold" text-anchor="middle">Battery %</text>
+    <text x="160" y="248" fill="#555555" font-size="9" text-anchor="middle">Charge level &amp; health</text>
+  </g>
 
-  <rect x="290" y="210" width="160" height="50" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1"/>
-  <text x="370" y="232" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">Runtime (min)</text>
-  <text x="370" y="248" fill="#6c7086" font-size="9" text-anchor="middle">Remaining battery time</text>
+  <g data-label="Runtime Metric">
+    <title>Runtime (min) - Remaining battery time</title>
+    <rect x="270" y="210" width="160" height="50" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="350" y="232" fill="#2d6a2d" font-size="11" font-weight="bold" text-anchor="middle">Runtime (min)</text>
+    <text x="350" y="248" fill="#555555" font-size="9" text-anchor="middle">Remaining battery time</text>
+  </g>
 
-  <rect x="480" y="210" width="160" height="50" rx="6" fill="#313244" stroke="#fab387" stroke-width="1"/>
-  <text x="560" y="232" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">Load %</text>
-  <text x="560" y="248" fill="#6c7086" font-size="9" text-anchor="middle">Output power usage</text>
+  <g data-label="Load Metric">
+    <title>Load % - Output power usage</title>
+    <rect x="460" y="210" width="160" height="50" rx="6" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="540" y="232" fill="#8a6d3b" font-size="11" font-weight="bold" text-anchor="middle">Load %</text>
+    <text x="540" y="248" fill="#555555" font-size="9" text-anchor="middle">Output power usage</text>
+  </g>
 
-  <rect x="670" y="210" width="160" height="50" rx="6" fill="#313244" stroke="#f38ba8" stroke-width="1"/>
-  <text x="750" y="232" fill="#f38ba8" font-size="11" font-weight="bold" text-anchor="middle">Voltage (V)</text>
-  <text x="750" y="248" fill="#6c7086" font-size="9" text-anchor="middle">Input & output voltage</text>
+  <g data-label="Voltage Metric">
+    <title>Voltage (V) - Input and output voltage</title>
+    <rect x="650" y="210" width="160" height="50" rx="6" fill="#fce4ec" stroke="#d9534f" stroke-width="1.5"/>
+    <text x="730" y="232" fill="#a94442" font-size="11" font-weight="bold" text-anchor="middle">Voltage (V)</text>
+    <text x="730" y="248" fill="#555555" font-size="9" text-anchor="middle">Input &amp; output voltage</text>
+  </g>
 
   <!-- Alert note -->
-  <rect x="250" y="285" width="460" height="35" rx="6" fill="#313244" stroke="#f38ba8" stroke-width="1" stroke-dasharray="4,2"/>
-  <text x="480" y="307" fill="#f38ba8" font-size="10" text-anchor="middle">Alert: Battery &lt; 50% or Load &gt; 80% triggers PagerDuty notification</text>
+  <g data-label="Alert Rule">
+    <title>Alert triggers PagerDuty when battery is low or load is high</title>
+    <rect x="220" y="285" width="460" height="35" rx="6" fill="#fce4ec" stroke="#d9534f" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="450" y="307" fill="#a94442" font-size="10" text-anchor="middle">Alert: Battery &lt; 50% or Load &gt; 80% triggers PagerDuty notification</text>
+  </g>
 </svg>

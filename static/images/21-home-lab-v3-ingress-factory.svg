@@ -1,101 +1,140 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" font-family="sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="sans-serif">
   <defs>
     <marker id="i1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#6c7086"/>
+      <path d="M0,0 L8,3 L0,6" fill="#666666"/>
     </marker>
     <marker id="i-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6" fill="#89b4fa"/>
+      <path d="M0,0 L8,3 L0,6" fill="#4a90d9"/>
+    </marker>
+    <marker id="i-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#d9534f"/>
+    </marker>
+    <marker id="i-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#f0ad4e"/>
+    </marker>
+    <marker id="i-purple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#9c27b0"/>
+    </marker>
+    <marker id="i-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#5cb85c"/>
+    </marker>
+    <marker id="i-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#c9a227"/>
     </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="960" height="340" rx="8" fill="#1e1e2e"/>
-
   <!-- Title -->
-  <text x="480" y="28" fill="#cdd6f4" font-size="16" font-weight="bold" text-anchor="middle">Ingress Factory -- Middleware Pipeline</text>
-  <text x="480" y="48" fill="#6c7086" font-size="11" text-anchor="middle">Applied to all 70+ services via one Terraform module</text>
+  <text x="450" y="28" fill="#1a1a1a" font-size="16" font-weight="bold" text-anchor="middle">Ingress Factory -- Middleware Pipeline</text>
+  <text x="450" y="48" fill="#555555" font-size="11" text-anchor="middle">Applied to all 70+ services via one Terraform module</text>
 
   <!-- Request -->
-  <rect x="20" y="100" width="90" height="60" rx="6" fill="#313244" stroke="#cdd6f4" stroke-width="1.5"/>
-  <text x="65" y="128" fill="#cdd6f4" font-size="11" font-weight="bold" text-anchor="middle">Request</text>
-  <text x="65" y="145" fill="#6c7086" font-size="8" text-anchor="middle">HTTPS</text>
+  <g data-label="Request">
+    <title>Incoming HTTPS request from the internet</title>
+    <rect x="10" y="100" width="85" height="60" rx="6" fill="#f5f5f5" stroke="#333333" stroke-width="1.5"/>
+    <text x="52" y="128" fill="#333333" font-size="11" font-weight="bold" text-anchor="middle">Request</text>
+    <text x="52" y="145" fill="#555555" font-size="8" text-anchor="middle">HTTPS</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="110" y1="130" x2="130" y2="130" stroke="#6c7086" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="95" y1="130" x2="115" y2="130" stroke="#666666" stroke-width="1.5" marker-end="url(#i1)"/>
 
   <!-- Rate Limit -->
-  <rect x="130" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
-  <text x="182" y="117" fill="#89b4fa" font-size="10" font-weight="bold" text-anchor="middle">Rate Limit</text>
-  <text x="182" y="135" fill="#cdd6f4" font-size="9" text-anchor="middle">10 avg</text>
-  <text x="182" y="150" fill="#cdd6f4" font-size="9" text-anchor="middle">50 burst</text>
-  <text x="182" y="163" fill="#6c7086" font-size="8" text-anchor="middle">/second</text>
+  <g data-label="Rate Limit">
+    <title>Rate Limit - 10 requests average, 50 burst per second</title>
+    <rect x="115" y="90" width="100" height="80" rx="6" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
+    <text x="165" y="117" fill="#2c5ea0" font-size="10" font-weight="bold" text-anchor="middle">Rate Limit</text>
+    <text x="165" y="135" fill="#333333" font-size="9" text-anchor="middle">10 avg</text>
+    <text x="165" y="150" fill="#333333" font-size="9" text-anchor="middle">50 burst</text>
+    <text x="165" y="163" fill="#555555" font-size="8" text-anchor="middle">/second</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="235" y1="130" x2="255" y2="130" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#i-blue)"/>
+  <line x1="215" y1="130" x2="235" y2="130" stroke="#4a90d9" stroke-width="1.5" marker-end="url(#i-blue)"/>
 
   <!-- CrowdSec WAF -->
-  <rect x="255" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#f38ba8" stroke-width="1.5"/>
-  <text x="307" y="117" fill="#f38ba8" font-size="10" font-weight="bold" text-anchor="middle">CrowdSec</text>
-  <text x="307" y="135" fill="#f38ba8" font-size="10" font-weight="bold" text-anchor="middle">WAF</text>
-  <text x="307" y="152" fill="#cdd6f4" font-size="9" text-anchor="middle">Bouncer</text>
-  <text x="307" y="163" fill="#6c7086" font-size="8" text-anchor="middle">IP reputation</text>
+  <g data-label="CrowdSec WAF">
+    <title>CrowdSec WAF - IP reputation-based bouncer for blocking malicious traffic</title>
+    <rect x="235" y="90" width="100" height="80" rx="6" fill="#fce4ec" stroke="#d9534f" stroke-width="1.5"/>
+    <text x="285" y="117" fill="#a94442" font-size="10" font-weight="bold" text-anchor="middle">CrowdSec</text>
+    <text x="285" y="135" fill="#a94442" font-size="10" font-weight="bold" text-anchor="middle">WAF</text>
+    <text x="285" y="152" fill="#333333" font-size="9" text-anchor="middle">Bouncer</text>
+    <text x="285" y="163" fill="#555555" font-size="8" text-anchor="middle">IP reputation</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="360" y1="130" x2="380" y2="130" stroke="#f38ba8" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="335" y1="130" x2="355" y2="130" stroke="#d9534f" stroke-width="1.5" marker-end="url(#i-red)"/>
 
   <!-- Anti-AI Bot -->
-  <rect x="380" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
-  <text x="432" y="117" fill="#fab387" font-size="10" font-weight="bold" text-anchor="middle">Anti-AI Bot</text>
-  <text x="432" y="135" fill="#fab387" font-size="10" font-weight="bold" text-anchor="middle">Block</text>
-  <text x="432" y="152" fill="#cdd6f4" font-size="9" text-anchor="middle">GPTBot, etc.</text>
-  <text x="432" y="163" fill="#6c7086" font-size="8" text-anchor="middle">User-Agent filter</text>
+  <g data-label="Anti-AI Bot Block">
+    <title>Anti-AI Bot Block - User-Agent filter blocking GPTBot and similar crawlers</title>
+    <rect x="355" y="90" width="100" height="80" rx="6" fill="#fff3e0" stroke="#f0ad4e" stroke-width="1.5"/>
+    <text x="405" y="117" fill="#8a6d3b" font-size="10" font-weight="bold" text-anchor="middle">Anti-AI Bot</text>
+    <text x="405" y="135" fill="#8a6d3b" font-size="10" font-weight="bold" text-anchor="middle">Block</text>
+    <text x="405" y="152" fill="#333333" font-size="9" text-anchor="middle">GPTBot, etc.</text>
+    <text x="405" y="163" fill="#555555" font-size="8" text-anchor="middle">User-Agent filter</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="485" y1="130" x2="505" y2="130" stroke="#fab387" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="455" y1="130" x2="475" y2="130" stroke="#f0ad4e" stroke-width="1.5" marker-end="url(#i-orange)"/>
 
   <!-- Authentik Auth -->
-  <rect x="505" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#cba6f7" stroke-width="1.5"/>
-  <text x="557" y="117" fill="#cba6f7" font-size="10" font-weight="bold" text-anchor="middle">Authentik</text>
-  <text x="557" y="135" fill="#cba6f7" font-size="10" font-weight="bold" text-anchor="middle">SSO</text>
-  <text x="557" y="152" fill="#cdd6f4" font-size="9" text-anchor="middle">ForwardAuth</text>
-  <text x="557" y="163" fill="#6c7086" font-size="8" text-anchor="middle">OIDC / SAML</text>
+  <g data-label="Authentik SSO">
+    <title>Authentik SSO - ForwardAuth middleware with OIDC/SAML authentication</title>
+    <rect x="475" y="90" width="100" height="80" rx="6" fill="#f3e5f5" stroke="#9c27b0" stroke-width="1.5"/>
+    <text x="525" y="117" fill="#6a1b9a" font-size="10" font-weight="bold" text-anchor="middle">Authentik</text>
+    <text x="525" y="135" fill="#6a1b9a" font-size="10" font-weight="bold" text-anchor="middle">SSO</text>
+    <text x="525" y="152" fill="#333333" font-size="9" text-anchor="middle">ForwardAuth</text>
+    <text x="525" y="163" fill="#555555" font-size="8" text-anchor="middle">OIDC / SAML</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="610" y1="130" x2="630" y2="130" stroke="#cba6f7" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="575" y1="130" x2="595" y2="130" stroke="#9c27b0" stroke-width="1.5" marker-end="url(#i-purple)"/>
 
   <!-- Security Headers -->
-  <rect x="630" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
-  <text x="682" y="117" fill="#a6e3a1" font-size="10" font-weight="bold" text-anchor="middle">Security</text>
-  <text x="682" y="135" fill="#a6e3a1" font-size="10" font-weight="bold" text-anchor="middle">Headers</text>
-  <text x="682" y="152" fill="#cdd6f4" font-size="9" text-anchor="middle">HSTS, CSP</text>
-  <text x="682" y="163" fill="#6c7086" font-size="8" text-anchor="middle">X-Frame, etc.</text>
+  <g data-label="Security Headers">
+    <title>Security Headers - HSTS, CSP, X-Frame-Options and other security headers</title>
+    <rect x="595" y="90" width="100" height="80" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="1.5"/>
+    <text x="645" y="117" fill="#2d6a2d" font-size="10" font-weight="bold" text-anchor="middle">Security</text>
+    <text x="645" y="135" fill="#2d6a2d" font-size="10" font-weight="bold" text-anchor="middle">Headers</text>
+    <text x="645" y="152" fill="#333333" font-size="9" text-anchor="middle">HSTS, CSP</text>
+    <text x="645" y="163" fill="#555555" font-size="8" text-anchor="middle">X-Frame, etc.</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="735" y1="130" x2="755" y2="130" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="695" y1="130" x2="715" y2="130" stroke="#5cb85c" stroke-width="1.5" marker-end="url(#i-green)"/>
 
   <!-- Rybbit Analytics -->
-  <rect x="755" y="90" width="105" height="80" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
-  <text x="807" y="117" fill="#f9e2af" font-size="10" font-weight="bold" text-anchor="middle">Rybbit</text>
-  <text x="807" y="135" fill="#f9e2af" font-size="10" font-weight="bold" text-anchor="middle">Analytics</text>
-  <text x="807" y="152" fill="#cdd6f4" font-size="9" text-anchor="middle">Script inject</text>
-  <text x="807" y="163" fill="#6c7086" font-size="8" text-anchor="middle">Privacy-first</text>
+  <g data-label="Rybbit Analytics">
+    <title>Rybbit Analytics - Privacy-first analytics script injection</title>
+    <rect x="715" y="90" width="100" height="80" rx="6" fill="#fff3e0" stroke="#c9a227" stroke-width="1.5"/>
+    <text x="765" y="117" fill="#8a6d3b" font-size="10" font-weight="bold" text-anchor="middle">Rybbit</text>
+    <text x="765" y="135" fill="#8a6d3b" font-size="10" font-weight="bold" text-anchor="middle">Analytics</text>
+    <text x="765" y="152" fill="#333333" font-size="9" text-anchor="middle">Script inject</text>
+    <text x="765" y="163" fill="#555555" font-size="8" text-anchor="middle">Privacy-first</text>
+  </g>
 
   <!-- Arrow -->
-  <line x1="860" y1="130" x2="880" y2="130" stroke="#f9e2af" stroke-width="1.5" marker-end="url(#i1)"/>
+  <line x1="815" y1="130" x2="835" y2="130" stroke="#c9a227" stroke-width="1.5" marker-end="url(#i-amber)"/>
 
   <!-- Service -->
-  <rect x="880" y="100" width="60" height="60" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="2"/>
-  <text x="910" y="128" fill="#a6e3a1" font-size="10" font-weight="bold" text-anchor="middle">Your</text>
-  <text x="910" y="145" fill="#a6e3a1" font-size="10" font-weight="bold" text-anchor="middle">Service</text>
+  <g data-label="Your Service">
+    <title>Your Service - The backend Kubernetes service receiving the request</title>
+    <rect x="835" y="100" width="55" height="60" rx="6" fill="#e6f4ea" stroke="#5cb85c" stroke-width="2"/>
+    <text x="862" y="128" fill="#2d6a2d" font-size="10" font-weight="bold" text-anchor="middle">Your</text>
+    <text x="862" y="145" fill="#2d6a2d" font-size="10" font-weight="bold" text-anchor="middle">Service</text>
+  </g>
 
   <!-- Bottom: Terraform module info -->
-  <rect x="130" y="210" width="700" height="100" rx="8" fill="#313244" stroke="#6c7086" stroke-width="1"/>
+  <g data-label="Terraform Module Usage">
+    <title>Terraform module usage example - ingress-factory with default-on security</title>
+    <rect x="100" y="210" width="700" height="100" rx="8" fill="#f5f5f5" stroke="#999999" stroke-width="1"/>
 
-  <text x="480" y="235" fill="#cdd6f4" font-size="12" font-weight="bold" text-anchor="middle">Terraform Module Usage</text>
+    <text x="450" y="235" fill="#333333" font-size="12" font-weight="bold" text-anchor="middle">Terraform Module Usage</text>
 
-  <text x="160" y="260" fill="#89b4fa" font-size="10" font-family="monospace">module "ingress" {</text>
-  <text x="180" y="275" fill="#cdd6f4" font-size="10" font-family="monospace">source    = "../../modules/ingress-factory"</text>
-  <text x="180" y="290" fill="#cdd6f4" font-size="10" font-family="monospace">hostname  = "app.viktorbarzin.me"</text>
-  <text x="180" y="305" fill="#6c7086" font-size="10" font-family="monospace">// rate_limit, auth, headers all default ON</text>
-  <text x="160" y="318" fill="#89b4fa" font-size="10" font-family="monospace">}</text>
+    <text x="130" y="260" fill="#2c5ea0" font-size="10" font-family="monospace">module "ingress" {</text>
+    <text x="150" y="275" fill="#333333" font-size="10" font-family="monospace">source    = "../../modules/ingress-factory"</text>
+    <text x="150" y="290" fill="#333333" font-size="10" font-family="monospace">hostname  = "app.viktorbarzin.me"</text>
+    <text x="150" y="305" fill="#555555" font-size="10" font-family="monospace">// rate_limit, auth, headers all default ON</text>
+    <text x="130" y="318" fill="#2c5ea0" font-size="10" font-family="monospace">}</text>
+  </g>
 </svg>
