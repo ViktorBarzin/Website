@@ -2,7 +2,6 @@
 .svg-diagram {
   margin: 1.5em 0;
   overflow-x: auto;
-  cursor: grab;
 }
 
 .svg-diagram svg {
@@ -13,11 +12,6 @@
   margin: 0 auto;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  transition: transform 0.2s ease;
-}
-
-.svg-diagram svg:hover {
-  transform: scale(1.02);
 }
 
 /* Highlight groups on hover */
@@ -36,11 +30,4 @@
 /* Tooltip via title */
 .svg-diagram svg [data-tooltip]:hover {
   cursor: help;
-}
-
-/* Click to zoom */
-.svg-diagram.zoomed svg {
-  max-width: none;
-  width: 140%;
-  margin-left: -20%;
 }

@@ -10,7 +10,7 @@ draft: true
 
 # Introduction
 
-It's been 5 years since my [Home Lab v2](/blog/17-home-lab-v2/) post. Back then I was running ~20 services on a VMware ESXi setup. Now it's 70+ services on Proxmox, managed entirely through Terragrunt, with a Tesla T4 GPU for ML workloads, a 5-layer anti-AI scraping system, and solar panels in Sofia.
+It's been 5 years since my [Home Lab v2](/blog/17-home-lab-v2/) post. Back then I was running ~20 services on a VMware ESXi setup. Now it's 70+ services on [Proxmox](https://www.proxmox.com/en/proxmox-virtual-environment/overview), managed entirely through [Terragrunt](https://terragrunt.gruntwork.io/), with a [Tesla T4](https://www.nvidia.com/en-us/data-center/tesla-t4/) GPU for ML workloads, a 5-layer anti-AI scraping system, and solar panels in Sofia.
 
 This is Part 1 of a 4-part series:
 1. **The Foundation** (this post) — hardware, network, platform
@@ -22,7 +22,7 @@ This is Part 1 of a 4-part series:
 
 {{< svg src="21-home-lab-v3-overview.svg" alt="High-level architecture" >}}
 
-Everything runs on a single Dell R730 in my flat in Sofia, Bulgaria. The WAN path goes through a double-NAT setup: pfSense → TP-Link router → ISP router (public IP `176.12.22.76`) → Internet. External traffic reaches the cluster either through Cloudflare Tunnel (bypassing the NAT entirely) or via direct port forwards through the routers. A Raspberry Pi in London runs Home Assistant for the smart home there, connected back via WireGuard.
+Everything runs on a single Dell R730 in my flat in Sofia, Bulgaria. The WAN path goes through a double-NAT setup: pfSense → TP-Link router → ISP router → Internet. External traffic reaches the cluster either through [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (bypassing the NAT entirely) or via direct port forwards through the routers. A Raspberry Pi in London runs Home Assistant for the smart home there, connected back via [WireGuard](https://www.wireguard.com/).
 
 # Hardware
 
@@ -32,14 +32,14 @@ Everything runs on a single Dell R730 in my flat in Sofia, Bulgaria. The WAN pat
 |-----------|------|
 | CPU | Intel Xeon E5-2699 v4 — 22C/44T @ 2.2GHz |
 | RAM | 142 GB DDR4 |
-| GPU | NVIDIA Tesla T4 (16GB, PCIe passthrough to k8s-node1) |
+| GPU | [NVIDIA Tesla T4](https://www.nvidia.com/en-us/data-center/tesla-t4/) (16GB, PCIe passthrough to k8s-node1) |
 | Storage | 1.1TB + 931GB local SSD, 10.7TB HDD |
 | Remote Mgmt | iDRAC Enterprise (custom Redfish exporter → Prometheus) |
 | UPS | Huawei UPS2000 2kVA (SNMP v1 → Prometheus) |
 
 Why a single beefy server instead of multiple smaller nodes? Simplicity. One machine to power on, one set of disks to worry about, one iDRAC to remote into when things go sideways at 2am. The 44 threads and 142GB RAM mean I've never hit a resource ceiling — services just slot in.
 
-The Tesla T4 was a later addition. I wanted to self-host LLMs (Ollama), run ML-based photo search (Immich), and do real-time camera inference (Frigate) without sending my data to cloud APIs. The T4's 16GB VRAM and low 70W TDP make it ideal for always-on inference in a home setting. It's PCIe-passthrough to `k8s-node1` and shared across workloads via NVIDIA's time-slicing — more on that in Part 2.
+The Tesla T4 was a later addition. I wanted to self-host LLMs ([Ollama](https://ollama.com/)), run ML-based photo search ([Immich](https://immich.app/)), and do real-time camera inference ([Frigate](https://frigate.video/)) without sending my data to cloud APIs. The T4's 16GB VRAM and low 70W TDP make it ideal for always-on inference in a home setting. It's PCIe-passthrough to `k8s-node1` and shared across workloads via [NVIDIA's time-slicing](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html) — more on that in Part 2.
 
 ## Why iDRAC Matters
 
@@ -55,7 +55,7 @@ The UPS exposes metrics via SNMP v1. I wrote a [custom SNMP exporter config](htt
 
 # Virtualization — Proxmox
 
-Moved from VMware ESXi to Proxmox in 2023. ESXi's free tier was getting more restrictive, and Broadcom's acquisition made the future uncertain. Proxmox gave me three things ESXi couldn't: no licensing cost, a proper REST API for Terraform automation, and first-class cloud-init support for VM templating.
+Moved from VMware ESXi to [Proxmox](https://www.proxmox.com/en/proxmox-virtual-environment/overview) in 2023. ESXi's free tier was getting more restrictive, and [Broadcom's acquisition](https://investors.broadcom.com/news-releases/news-release-details/broadcom-completes-acquisition-vmware) made the future uncertain. Proxmox gave me three things ESXi couldn't: no licensing cost, a proper REST API for Terraform automation, and first-class [cloud-init](https://docs.cloud-init.io/en/latest/) support for VM templating.
 
 {{< svg src="21-home-lab-v3-proxmox.svg" alt="Proxmox VM layout" >}}
 
@@ -78,7 +78,7 @@ The entire process is in [`stacks/infra/main.tf`](https://github.com/ViktorBarzi
 
 Flat networks are simple but dangerous — a compromised IoT device shouldn't be able to reach your NFS server. VLANs provide isolation without additional hardware.
 
-The WAN path has a double-NAT: pfSense's WAN interface sits on the `192.168.1.0/24` home LAN at `.2`, behind a TP-Link router (`.1`) which is itself behind the ISP router (public IP `176.12.22.76`). Cloudflare Tunnel bypasses this entirely — traffic goes straight from Cloudflare's edge into a `cloudflared` pod in the cluster.
+The WAN path has a double-NAT: pfSense's WAN interface sits on the `192.168.1.0/24` home LAN at `.2`, behind a TP-Link router (`.1`, public IP `176.12.22.76`) which is itself behind the ISP router. Cloudflare Tunnel bypasses this entirely — traffic goes straight from Cloudflare's edge into a `cloudflared` pod in the cluster.
 
 {{< svg src="21-home-lab-v3-network.svg" alt="Network topology" >}}
 
@@ -94,11 +94,11 @@ The management VLAN is the key insight — it keeps storage traffic (NFS) off th
 
 ## pfSense
 
-pfSense CE 2.7.2 runs as a VM (VMID 101). 167 firewall rules, 154 NAT rules. Why pfSense over OPNsense or a simple iptables box? The package ecosystem — I get WireGuard, Snort IDS, DHCP, and a REST API in one appliance:
+[pfSense](https://www.pfsense.org/) CE 2.7.2 runs as a VM (VMID 101). 167 firewall rules, 154 NAT rules. Why pfSense over OPNsense or a simple iptables box? The package ecosystem — I get [WireGuard](https://www.wireguard.com/), [Snort](https://github.com/snort3/snort3) IDS, DHCP, and a REST API in one appliance:
 
-- **Snort IDS** — intrusion detection on WAN. Catches port scans and known exploit attempts.
-- **WireGuard** — VPN server on 10.3.2.0/24. I can access my entire network from anywhere.
-- **Tailscale** — joins the self-hosted Headscale mesh for device-to-device connectivity.
+- **[Snort](https://github.com/snort3/snort3) IDS** — intrusion detection on WAN. Catches port scans and known exploit attempts.
+- **[WireGuard](https://www.wireguard.com/)** — VPN server on 10.3.2.0/24. I can access my entire network from anywhere.
+- **Tailscale** — joins the self-hosted [Headscale](https://github.com/juanfont/headscale) mesh for device-to-device connectivity.
 - **Kea DHCP** — serves DHCP for all 3 networks with static leases for infrastructure.
 - **FRR** — BGP/OSPF, not actively used but ready if I ever need dynamic routing.
 
@@ -108,14 +108,14 @@ Why split-horizon? External users need Cloudflare's DDoS protection and CDN. Int
 
 {{< svg src="21-home-lab-v3-dns.svg" alt="DNS split-horizon" >}}
 
-- **External**: Cloudflare manages `viktorbarzin.me`. Services are proxied through Cloudflare Tunnel or direct WAN NAT.
-- **Internal**: Technitium DNS at `10.0.20.101` handles `viktorbarzin.lan` and overrides `viktorbarzin.me` records to point to internal IPs.
+- **External**: Cloudflare manages `viktorbarzin.me`. Services are proxied through [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) or direct WAN NAT.
+- **Internal**: [Technitium DNS](https://technitium.com/dns/) at `10.0.20.101` handles `viktorbarzin.lan` and overrides `viktorbarzin.me` records to point to internal IPs.
 
 When I'm on the home network, `nextcloud.viktorbarzin.me` resolves to `10.0.20.200` (Traefik's MetalLB IP) directly — no round-trip through Cloudflare. When I'm remote, the same domain goes through Cloudflare Tunnel. Same URL, different path, zero client configuration.
 
 ## Docker Registry Pull-Through Cache
 
-This is one of the most impactful pieces of infrastructure for a homelab running Kubernetes. Without it, every pod restart pulls images from Docker Hub over the internet. With 70+ services and rolling updates, that's a lot of bandwidth and latency — and Docker Hub's rate limit (100 pulls/6h for anonymous, 200 for authenticated) becomes a real problem during cluster-wide operations.
+This is one of the most impactful pieces of infrastructure for a homelab running Kubernetes. Without it, every pod restart pulls images from Docker Hub over the internet. With 70+ services and rolling updates, that's a lot of bandwidth and latency — and [Docker Hub's rate limit](https://docs.docker.com/docker-hub/download-rate-limit/) (100 pulls/6h for anonymous, 200 for authenticated) becomes a real problem during cluster-wide operations.
 
 The cache runs on a dedicated VM (`10.0.20.10`) with 5 pull-through proxies:
 
@@ -125,7 +125,7 @@ The cache runs on a dedicated VM (`10.0.20.10`) with 5 pull-through proxies:
 | 5010 | ghcr.io | GitHub-hosted images (Hugo, etc.) |
 | 5020 | quay.io | Red Hat / CoreDNS images |
 | 5030 | registry.k8s.io | Kubernetes system images |
-| 5040 | reg.kyverno.io | Kyverno policy engine images |
+| 5040 | reg.kyverno.io | [Kyverno](https://kyverno.io/) policy engine images |
 | 5050 | Private R/W | My own built images |
 
 All fronted by nginx. Containerd on every k8s node has `hosts.toml` configured to route pulls through the cache. Benefits:
@@ -137,13 +137,13 @@ All fronted by nginx. Containerd on every k8s node has `hosts.toml` configured t
 
 ## Load Balancing — MetalLB
 
-Bare-metal Kubernetes doesn't have cloud load balancers. MetalLB fills that gap by advertising IPs from a local pool (`10.0.20.200`–`10.0.20.220`) via Layer-2 ARP. Services that need a stable external IP — Traefik ingress, Technitium DNS, the mail server — each get one from this pool. It's the glue that makes `Service type: LoadBalancer` work outside of AWS/GCP.
+Bare-metal Kubernetes doesn't have cloud load balancers. [MetalLB](https://metallb.io/concepts/layer2/) fills that gap by advertising IPs from a local pool (`10.0.20.200`–`10.0.20.220`) via Layer-2 ARP. Services that need a stable external IP — Traefik ingress, Technitium DNS, the mail server — each get one from this pool. It's the glue that makes `Service type: LoadBalancer` work outside of AWS/GCP.
 
 # Storage — TrueNAS + NFS
 
 Why NFS over local storage or a distributed filesystem like Ceph? For a single-server homelab, NFS is the right trade-off: zero overhead, trivially simple, and every pod can access the same data. Ceph would add complexity (and require 3+ nodes) for redundancy I don't need — my backup strategy is NFS snapshots + off-site rsync.
 
-TrueNAS runs as a VM (VMID 9000) with 7x 256GB + 1TB pool, serving NFS to the cluster. Every service that needs persistent storage mounts an NFS volume:
+[TrueNAS](https://www.truenas.com/) runs as a VM (VMID 9000) with 7x 256GB + 1TB pool, serving NFS to the cluster. Every service that needs persistent storage mounts an NFS volume:
 
 ```hcl
 volume {
@@ -185,7 +185,7 @@ Why per-service state? I learned this the hard way. With a monolithic state file
 - **Parallelism** — I can apply multiple stacks simultaneously
 - **Git blame** — each stack's history is clean and self-contained
 
-Shared configuration flows through `terraform.tfvars` (encrypted via `git-crypt`), which provides NFS server IP, Redis host, DB connection strings, mail config, and Cloudflare credentials to every stack. Terragrunt's root `terragrunt.hcl` handles provider setup, backend config, and variable loading — individual stacks just define resources.
+Shared configuration flows through `terraform.tfvars` (encrypted via [`git-crypt`](https://github.com/AGWA/git-crypt)), which provides NFS server IP, Redis host, DB connection strings, mail config, and Cloudflare credentials to every stack. Terragrunt's root `terragrunt.hcl` handles provider setup, backend config, and variable loading — individual stacks just define resources.
 
 ### The Ingress Factory
 
@@ -202,11 +202,11 @@ module "ingress" {
 }
 ```
 
-One module call gives a service: rate limiting, CrowdSec WAF, anti-AI bot blocking, Authentik SSO (if protected), HSTS, security headers, and analytics injection. When I add a new middleware — like the [anti-AI scraping system](https://github.com/ViktorBarzin/infra/tree/master/stacks/poison-fountain/) I built — it propagates to all services on the next `apply`. No per-service configuration drift.
+One module call gives a service: rate limiting, [CrowdSec](https://www.crowdsec.net/) WAF, anti-AI bot blocking, [Authentik](https://goauthentik.io/) SSO (if protected), HSTS, security headers, and analytics injection. When I add a new middleware — like the [anti-AI scraping system](https://github.com/ViktorBarzin/infra/tree/master/stacks/poison-fountain/) I built — it propagates to all services on the next `apply`. No per-service configuration drift.
 
 # What's Next
 
-In **Part 2**, I'll cover the Kubernetes platform in depth: Authentik SSO, CrowdSec WAF, the 5-layer anti-AI scraping system, GPU time-slicing with the Tesla T4, and the Kyverno tier-based resource governance.
+In **Part 2**, I'll cover the Kubernetes platform in depth: [Authentik](https://goauthentik.io/) SSO, [CrowdSec](https://www.crowdsec.net/) WAF, the 5-layer anti-AI scraping system, GPU time-slicing with the Tesla T4, and the [Kyverno](https://kyverno.io/) tier-based resource governance.
 
 ---
 

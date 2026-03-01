@@ -66,7 +66,7 @@
   <text x="348" y="205" fill="#a94442" font-size="12" font-weight="bold" text-anchor="middle">k8s-node1 (GPU)</text>
   <text x="348" y="221" fill="#555555" font-size="10" text-anchor="middle">VMID 201</text>
   <text x="348" y="236" fill="#555555" font-size="10" text-anchor="middle">16 CPU / 24G RAM</text>
-  <text x="348" y="251" fill="#a94442" font-size="9" text-anchor="middle">RTX 3060 PCIe Passthrough</text>
+  <text x="348" y="251" fill="#a94442" font-size="9" text-anchor="middle">Tesla T4 PCIe Passthrough</text>
 
   <!-- k8s-node2 -->
   <rect x="458" y="183" width="190" height="80" rx="6" fill="#e8f0fe" stroke="#4a90d9" stroke-width="1.5"/>
