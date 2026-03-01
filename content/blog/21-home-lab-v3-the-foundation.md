@@ -22,7 +22,7 @@ This is Part 1 of a 4-part series:
 
 {{< svg src="21-home-lab-v3-overview.svg" alt="High-level architecture" >}}
 
-Everything runs on a single Dell R730 in my flat. Internet comes in through Cloudflare (DNS + Tunnel), hits pfSense for firewall/routing, and fans out across 3 VLANs into a 5-node Kubernetes cluster. A remote Home Assistant instance in Sofia handles the solar setup and smart home there.
+Everything runs on a single Dell R730 in my flat in Sofia, Bulgaria. The WAN path goes through a double-NAT setup: pfSense → TP-Link router → ISP router (public IP `176.12.22.76`) → Internet. External traffic reaches the cluster either through Cloudflare Tunnel (bypassing the NAT entirely) or via direct port forwards through the routers. A Raspberry Pi in London runs Home Assistant for the smart home there, connected back via WireGuard.
 
 # Hardware
 
@@ -43,7 +43,7 @@ The Tesla T4 was a later addition. I wanted to self-host LLMs (Ollama), run ML-b
 
 ## Why iDRAC Matters
 
-The R730 sits in a closet. When a kernel update goes wrong or a VM freezes, iDRAC gives me a remote KVM console, power control, and hardware health monitoring without physically touching the server. I built a custom Redfish exporter (the upstream image didn't exist for ARM/AMD64) that feeds iDRAC metrics into Prometheus — CPU temps, fan speeds, power draw, event log entries.
+The R730 sits in a closet in Sofia. When a kernel update goes wrong or a VM freezes, iDRAC gives me a remote KVM console, power control, and hardware health monitoring without physically touching the server. I use an [iDRAC exporter](https://github.com/ViktorBarzin/infra/tree/master/stacks/platform/modules/monitoring/idrac.tf) that feeds metrics into Prometheus — CPU temps, fan speeds, power draw, event log entries.
 
 ## UPS Monitoring
 
@@ -51,7 +51,7 @@ The Huawei UPS2000 keeps the server alive through power cuts. Without monitoring
 
 {{< svg src="21-home-lab-v3-ups.svg" alt="UPS monitoring pipeline" >}}
 
-The UPS exposes metrics via SNMP v1. I wrote a custom SNMP exporter config that pulls Huawei-proprietary MIB OIDs (`1.3.6.1.4.1.2011.6.174`) for apparent and active power — data the standard UPS-MIB doesn't expose. Grafana shows battery charge, estimated runtime, load percentage, and input/output voltage in real-time. I get alerted if battery drops below 50% or load exceeds 80%.
+The UPS exposes metrics via SNMP v1. I wrote a [custom SNMP exporter config](https://github.com/ViktorBarzin/infra/tree/master/stacks/platform/modules/monitoring/ups_snmp_values.yaml) that pulls Huawei-proprietary MIB OIDs (`1.3.6.1.4.1.2011.6.174`) for apparent and active power — data the standard UPS-MIB doesn't expose. Grafana shows battery charge, estimated runtime, load percentage, and input/output voltage in real-time. I get alerted if battery drops below 50% or load exceeds 80%.
 
 # Virtualization — Proxmox
 
@@ -59,7 +59,7 @@ Moved from VMware ESXi to Proxmox in 2023. ESXi's free tier was getting more res
 
 {{< svg src="21-home-lab-v3-proxmox.svg" alt="Proxmox VM layout" >}}
 
-12 VMs on a single host. The k8s nodes are identical (except node1 which gets the GPU) — this makes them interchangeable and easy to rebuild.
+12 VMs on a single host. The k8s nodes are identical (except node1 which gets the GPU) — this makes them interchangeable and easy to rebuild. Note that VMID 103 is HA Sofia (Home Assistant for the Sofia smart home and solar monitoring), while HA London runs on a separate Raspberry Pi in London connected via WireGuard.
 
 ### Node Rebuild Automation
 
@@ -70,13 +70,15 @@ K8s nodes are cattle, not pets. If a node misbehaves, I don't debug it — I rep
 3. Fresh `kubeadm token create --print-join-command`
 4. Create VM from cloud-init template → auto-joins cluster
 
-The entire process is in `stacks/infra/main.tf`. Cloud-init handles OS setup, package installation, and cluster join on first boot. Tokens expire after 24h, so you generate them right before provisioning.
+The entire process is in [`stacks/infra/main.tf`](https://github.com/ViktorBarzin/infra/tree/master/stacks/infra/main.tf). Cloud-init handles OS setup, package installation, and cluster join on first boot. Tokens expire after 24h, so you generate them right before provisioning.
 
 # Network
 
 ## Why Three VLANs?
 
 Flat networks are simple but dangerous — a compromised IoT device shouldn't be able to reach your NFS server. VLANs provide isolation without additional hardware.
+
+The WAN path has a double-NAT: pfSense's WAN interface sits on the `192.168.1.0/24` home LAN at `.2`, behind a TP-Link router (`.1`) which is itself behind the ISP router (public IP `176.12.22.76`). Cloudflare Tunnel bypasses this entirely — traffic goes straight from Cloudflare's edge into a `cloudflared` pod in the cluster.
 
 {{< svg src="21-home-lab-v3-network.svg" alt="Network topology" >}}
 
@@ -85,7 +87,7 @@ Flat networks are simple but dangerous — a compromised IoT device shouldn't be
 | Home | 192.168.1.0/24 | Physical devices, Proxmox host |
 | Management (VLAN 10) | 10.0.10.0/24 | TrueNAS NFS, dev VM, out-of-band access |
 | Kubernetes (VLAN 20) | 10.0.20.0/24 | All k8s nodes, MetalLB pool (.200-.220), DNS (.101) |
-| WireGuard | 10.3.2.0/24 | Site-to-site VPN |
+| WireGuard | 10.3.0.0/16 | VPN — personal devices, London RPi, family |
 | Headscale | 100.64.x.x | Mesh VPN overlay |
 
 The management VLAN is the key insight — it keeps storage traffic (NFS) off the Kubernetes network, and gives me out-of-band access to infrastructure VMs even if the k8s network goes down. Proxmox uses two bridges: `vmbr0` on the physical NIC for the home network, and `vmbr1` as a VLAN-aware trunk carrying VLAN 10 and 20 to the VMs.
@@ -157,7 +159,7 @@ I use inline NFS volumes instead of PV/PVC resources. Why? Fewer Kubernetes obje
 
 # Infrastructure as Code — Terragrunt
 
-The entire cluster is managed through Terragrunt with **per-service state isolation**. Each of the 70+ services has its own `terraform.tfstate`. This is the single most important architectural decision in the whole setup.
+The entire cluster is managed through [Terragrunt](https://github.com/ViktorBarzin/infra) with **per-service state isolation**. Each of the 70+ services has its own `terraform.tfstate`. This is the single most important architectural decision in the whole setup.
 
 {{< svg src="21-home-lab-v3-terragrunt.svg" alt="Terragrunt structure" >}}
 
@@ -187,7 +189,7 @@ Shared configuration flows through `terraform.tfvars` (encrypted via `git-crypt`
 
 ### The Ingress Factory
 
-Every service uses a shared `ingress_factory` module that generates the full Traefik middleware chain. This is how I maintain consistent security posture across 70+ services without copy-pasting middleware config.
+Every service uses a shared [`ingress_factory`](https://github.com/ViktorBarzin/infra/tree/master/modules/kubernetes/ingress_factory/main.tf) module that generates the full Traefik middleware chain. This is how I maintain consistent security posture across 70+ services without copy-pasting middleware config.
 
 {{< svg src="21-home-lab-v3-ingress-factory.svg" alt="Ingress factory middleware chain" >}}
 
@@ -200,7 +202,7 @@ module "ingress" {
 }
 ```
 
-One module call gives a service: rate limiting, CrowdSec WAF, anti-AI bot blocking, Authentik SSO (if protected), HSTS, security headers, and analytics injection. When I add a new middleware — like the anti-AI scraping system I built — it propagates to all services on the next `apply`. No per-service configuration drift.
+One module call gives a service: rate limiting, CrowdSec WAF, anti-AI bot blocking, Authentik SSO (if protected), HSTS, security headers, and analytics injection. When I add a new middleware — like the [anti-AI scraping system](https://github.com/ViktorBarzin/infra/tree/master/stacks/poison-fountain/) I built — it propagates to all services on the next `apply`. No per-service configuration drift.
 
 # What's Next
 
