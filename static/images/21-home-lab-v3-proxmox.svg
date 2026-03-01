@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" font-family="sans-serif">
+  <!-- Background -->
+  <rect width="960" height="480" rx="8" fill="#1e1e2e"/>
+
+  <!-- Title -->
+  <text x="480" y="30" fill="#cdd6f4" font-size="16" font-weight="bold" text-anchor="middle">Proxmox VM Layout</text>
+
+  <!-- Proxmox Host box -->
+  <rect x="30" y="50" width="900" height="370" rx="8" fill="none" stroke="#6c7086" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="480" y="72" fill="#6c7086" font-size="12" font-weight="bold" text-anchor="middle">Proxmox VE 8.x -- 192.168.1.200 (64C / 128G DDR5 ECC, EPYC 9124)</text>
+
+  <!-- Row 1: Infrastructure VMs (green) -->
+  <!-- pfSense -->
+  <rect x="55" y="90" width="195" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="152" y="112" fill="#a6e3a1" font-size="12" font-weight="bold" text-anchor="middle">pfSense</text>
+  <text x="152" y="128" fill="#6c7086" font-size="10" text-anchor="middle">VMID 101</text>
+  <text x="152" y="143" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="152" y="158" fill="#a6e3a1" font-size="9" text-anchor="middle">Gateway + Firewall</text>
+
+  <!-- devvm -->
+  <rect x="265" y="90" width="195" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="362" y="112" fill="#a6e3a1" font-size="12" font-weight="bold" text-anchor="middle">devvm</text>
+  <text x="362" y="128" fill="#6c7086" font-size="10" text-anchor="middle">VMID 102</text>
+  <text x="362" y="143" fill="#6c7086" font-size="10" text-anchor="middle">16 CPU / 8G RAM</text>
+  <text x="362" y="158" fill="#a6e3a1" font-size="9" text-anchor="middle">Development</text>
+
+  <!-- Home Assistant -->
+  <rect x="475" y="90" width="195" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="572" y="112" fill="#a6e3a1" font-size="12" font-weight="bold" text-anchor="middle">home-assistant</text>
+  <text x="572" y="128" fill="#6c7086" font-size="10" text-anchor="middle">VMID 103</text>
+  <text x="572" y="143" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="572" y="158" fill="#a6e3a1" font-size="9" text-anchor="middle">Smart Home</text>
+
+  <!-- Docker Registry -->
+  <rect x="685" y="90" width="195" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="782" y="112" fill="#a6e3a1" font-size="12" font-weight="bold" text-anchor="middle">docker-registry</text>
+  <text x="782" y="128" fill="#6c7086" font-size="10" text-anchor="middle">VMID 220</text>
+  <text x="782" y="143" fill="#6c7086" font-size="10" text-anchor="middle">4 CPU / 4G RAM</text>
+  <text x="782" y="158" fill="#a6e3a1" font-size="9" text-anchor="middle">Container Images</text>
+
+  <!-- Row 2: Kubernetes VMs (blue) -->
+  <!-- k8s-master -->
+  <rect x="55" y="190" width="195" height="80" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="152" y="212" fill="#89b4fa" font-size="12" font-weight="bold" text-anchor="middle">k8s-master</text>
+  <text x="152" y="228" fill="#6c7086" font-size="10" text-anchor="middle">VMID 200</text>
+  <text x="152" y="243" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="152" y="258" fill="#89b4fa" font-size="9" text-anchor="middle">Control Plane</text>
+
+  <!-- k8s-node1 GPU -->
+  <rect x="265" y="190" width="195" height="80" rx="6" fill="#313244" stroke="#f38ba8" stroke-width="2.5"/>
+  <text x="362" y="212" fill="#f38ba8" font-size="12" font-weight="bold" text-anchor="middle">k8s-node1 (GPU)</text>
+  <text x="362" y="228" fill="#6c7086" font-size="10" text-anchor="middle">VMID 201</text>
+  <text x="362" y="243" fill="#6c7086" font-size="10" text-anchor="middle">16 CPU / 24G RAM</text>
+  <text x="362" y="258" fill="#f38ba8" font-size="9" text-anchor="middle">RTX 3060 PCIe Passthrough</text>
+
+  <!-- k8s-node2 -->
+  <rect x="475" y="190" width="195" height="80" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="572" y="212" fill="#89b4fa" font-size="12" font-weight="bold" text-anchor="middle">k8s-node2</text>
+  <text x="572" y="228" fill="#6c7086" font-size="10" text-anchor="middle">VMID 202</text>
+  <text x="572" y="243" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="572" y="258" fill="#89b4fa" font-size="9" text-anchor="middle">Worker Node</text>
+
+  <!-- k8s-node3 -->
+  <rect x="685" y="190" width="195" height="80" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="782" y="212" fill="#89b4fa" font-size="12" font-weight="bold" text-anchor="middle">k8s-node3</text>
+  <text x="782" y="228" fill="#6c7086" font-size="10" text-anchor="middle">VMID 203</text>
+  <text x="782" y="243" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="782" y="258" fill="#89b4fa" font-size="9" text-anchor="middle">Worker Node</text>
+
+  <!-- Row 3: Remaining VMs -->
+  <!-- k8s-node4 -->
+  <rect x="55" y="290" width="195" height="80" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="152" y="312" fill="#89b4fa" font-size="12" font-weight="bold" text-anchor="middle">k8s-node4</text>
+  <text x="152" y="328" fill="#6c7086" font-size="10" text-anchor="middle">VMID 204</text>
+  <text x="152" y="343" fill="#6c7086" font-size="10" text-anchor="middle">8 CPU / 16G RAM</text>
+  <text x="152" y="358" fill="#89b4fa" font-size="9" text-anchor="middle">Worker Node</text>
+
+  <!-- TrueNAS -->
+  <rect x="265" y="290" width="195" height="80" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="362" y="312" fill="#a6e3a1" font-size="12" font-weight="bold" text-anchor="middle">TrueNAS</text>
+  <text x="362" y="328" fill="#6c7086" font-size="10" text-anchor="middle">VMID 9000</text>
+  <text x="362" y="343" fill="#6c7086" font-size="10" text-anchor="middle">16 CPU / 16G RAM</text>
+  <text x="362" y="358" fill="#a6e3a1" font-size="9" text-anchor="middle">NFS + ZFS Storage</text>
+
+  <!-- Windows 10 -->
+  <rect x="475" y="290" width="195" height="80" rx="6" fill="#313244" stroke="#6c7086" stroke-width="1.5"/>
+  <text x="572" y="312" fill="#cdd6f4" font-size="12" font-weight="bold" text-anchor="middle">Windows 10</text>
+  <text x="572" y="328" fill="#6c7086" font-size="10" text-anchor="middle">VMID 300</text>
+  <text x="572" y="343" fill="#6c7086" font-size="10" text-anchor="middle">16 CPU / 8G RAM</text>
+  <text x="572" y="358" fill="#6c7086" font-size="9" text-anchor="middle">General Purpose</text>
+
+  <!-- Resource summary -->
+  <rect x="685" y="290" width="195" height="80" rx="6" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
+  <text x="782" y="312" fill="#fab387" font-size="11" font-weight="bold" text-anchor="middle">Total Allocated</text>
+  <text x="782" y="330" fill="#cdd6f4" font-size="10" text-anchor="middle">108 vCPUs / 140G RAM</text>
+  <text x="782" y="346" fill="#6c7086" font-size="9" text-anchor="middle">10 VMs across 3 VLANs</text>
+  <text x="782" y="362" fill="#6c7086" font-size="9" text-anchor="middle">ZFS + NVMe Storage</text>
+
+  <!-- Legend -->
+  <rect x="200" y="440" width="12" height="12" rx="2" fill="#89b4fa"/>
+  <text x="218" y="450" fill="#cdd6f4" font-size="10">Kubernetes</text>
+  <rect x="310" y="440" width="12" height="12" rx="2" fill="#a6e3a1"/>
+  <text x="328" y="450" fill="#cdd6f4" font-size="10">Infrastructure</text>
+  <rect x="430" y="440" width="12" height="12" rx="2" fill="#f38ba8"/>
+  <text x="448" y="450" fill="#cdd6f4" font-size="10">GPU Node</text>
+  <rect x="540" y="440" width="12" height="12" rx="2" fill="#6c7086"/>
+  <text x="558" y="450" fill="#cdd6f4" font-size="10">Other</text>
+</svg>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" font-family="sans-serif">
+  <defs>
+    <marker id="t1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#6c7086"/>
+    </marker>
+    <marker id="t-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#89b4fa"/>
+    </marker>
+    <marker id="t-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#a6e3a1"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="520" rx="8" fill="#1e1e2e"/>
+
+  <!-- Title -->
+  <text x="480" y="30" fill="#cdd6f4" font-size="16" font-weight="bold" text-anchor="middle">Terragrunt Project Structure</text>
+
+  <!-- Root terragrunt.hcl -->
+  <rect x="350" y="50" width="260" height="44" rx="6" fill="#313244" stroke="#fab387" stroke-width="2"/>
+  <text x="480" y="70" fill="#fab387" font-size="12" font-weight="bold" text-anchor="middle">terragrunt.hcl</text>
+  <text x="480" y="86" fill="#6c7086" font-size="9" text-anchor="middle">Root config (provider, backend, common vars)</text>
+
+  <!-- terraform.tfvars -->
+  <rect x="100" y="55" width="200" height="36" rx="6" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="200" y="78" fill="#a6e3a1" font-size="11" font-weight="bold" text-anchor="middle">terraform.tfvars</text>
+  <line x1="300" y1="73" x2="350" y2="73" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#t-green)"/>
+  <text x="325" y="67" fill="#6c7086" font-size="8">feeds</text>
+
+  <!-- stacks/ directory -->
+  <rect x="350" y="120" width="260" height="36" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="480" y="143" fill="#89b4fa" font-size="12" font-weight="bold" text-anchor="middle">stacks/</text>
+
+  <!-- Arrow root -> stacks -->
+  <line x1="480" y1="94" x2="480" y2="120" stroke="#6c7086" stroke-width="1.5" marker-end="url(#t1)"/>
+
+  <!-- platform/ -->
+  <rect x="80" y="185" width="180" height="36" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="170" y="208" fill="#89b4fa" font-size="11" font-weight="bold" text-anchor="middle">platform/</text>
+  <line x1="400" y1="156" x2="170" y2="185" stroke="#89b4fa" stroke-width="1" marker-end="url(#t-blue)"/>
+
+  <!-- Platform services -->
+  <rect x="30" y="240" width="130" height="30" rx="5" fill="#313244" stroke="#6c7086" stroke-width="1"/>
+  <text x="95" y="260" fill="#cdd6f4" font-size="9" text-anchor="middle">metallb/</text>
+  <line x1="130" y1="221" x2="95" y2="240" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <rect x="170" y="240" width="130" height="30" rx="5" fill="#313244" stroke="#6c7086" stroke-width="1"/>
+  <text x="235" y="260" fill="#cdd6f4" font-size="9" text-anchor="middle">traefik/</text>
+  <line x1="210" y1="221" x2="235" y2="240" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <rect x="30" y="280" width="130" height="30" rx="5" fill="#313244" stroke="#6c7086" stroke-width="1"/>
+  <text x="95" y="300" fill="#cdd6f4" font-size="9" text-anchor="middle">cert-manager/</text>
+
+  <rect x="170" y="280" width="130" height="30" rx="5" fill="#313244" stroke="#6c7086" stroke-width="1"/>
+  <text x="235" y="300" fill="#cdd6f4" font-size="9" text-anchor="middle">prometheus/</text>
+
+  <!-- Individual service stacks -->
+  <rect x="380" y="185" width="100" height="30" rx="5" fill="#313244" stroke="#fab387" stroke-width="1"/>
+  <text x="430" y="205" fill="#cdd6f4" font-size="9" text-anchor="middle">grafana/</text>
+  <line x1="460" y1="156" x2="430" y2="185" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <rect x="490" y="185" width="100" height="30" rx="5" fill="#313244" stroke="#fab387" stroke-width="1"/>
+  <text x="540" y="205" fill="#cdd6f4" font-size="9" text-anchor="middle">authentik/</text>
+  <line x1="500" y1="156" x2="540" y2="185" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <rect x="600" y="185" width="100" height="30" rx="5" fill="#313244" stroke="#fab387" stroke-width="1"/>
+  <text x="650" y="205" fill="#cdd6f4" font-size="9" text-anchor="middle">nextcloud/</text>
+  <line x1="540" y1="156" x2="650" y2="185" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <rect x="710" y="185" width="100" height="30" rx="5" fill="#313244" stroke="#fab387" stroke-width="1"/>
+  <text x="760" y="205" fill="#cdd6f4" font-size="9" text-anchor="middle">... (70+)</text>
+  <line x1="560" y1="156" x2="760" y2="185" stroke="#6c7086" stroke-width="1" marker-end="url(#t1)"/>
+
+  <!-- Expanded stack anatomy -->
+  <rect x="380" y="250" width="500" height="155" rx="8" fill="none" stroke="#6c7086" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="630" y="270" fill="#6c7086" font-size="11" font-weight="bold" text-anchor="middle">Stack Anatomy (each service)</text>
+
+  <!-- terragrunt.hcl -->
+  <rect x="400" y="285" width="140" height="36" rx="5" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
+  <text x="470" y="300" fill="#fab387" font-size="10" font-weight="bold" text-anchor="middle">terragrunt.hcl</text>
+  <text x="470" y="314" fill="#6c7086" font-size="8" text-anchor="middle">include root + deps</text>
+
+  <!-- main.tf -->
+  <rect x="560" y="285" width="140" height="36" rx="5" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+  <text x="630" y="300" fill="#89b4fa" font-size="10" font-weight="bold" text-anchor="middle">main.tf</text>
+  <text x="630" y="314" fill="#6c7086" font-size="8" text-anchor="middle">helm + k8s resources</text>
+
+  <!-- secrets/ symlink -->
+  <rect x="720" y="285" width="140" height="36" rx="5" fill="#313244" stroke="#f38ba8" stroke-width="1.5"/>
+  <text x="790" y="300" fill="#f38ba8" font-size="10" font-weight="bold" text-anchor="middle">secrets/</text>
+  <text x="790" y="314" fill="#6c7086" font-size="8" text-anchor="middle">symlink (git-crypt)</text>
+
+  <!-- ingress-factory module -->
+  <rect x="400" y="345" width="300" height="36" rx="5" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="550" y="360" fill="#a6e3a1" font-size="10" font-weight="bold" text-anchor="middle">module "ingress_factory" (shared)</text>
+  <text x="550" y="376" fill="#6c7086" font-size="8" text-anchor="middle">Traefik IngressRoute + middlewares + cert</text>
+  <line x1="630" y1="321" x2="550" y2="345" stroke="#a6e3a1" stroke-width="1" marker-end="url(#t-green)"/>
+
+  <!-- State files -->
+  <rect x="250" y="440" width="460" height="50" rx="6" fill="#313244" stroke="#6c7086" stroke-width="1.5"/>
+  <text x="480" y="460" fill="#cdd6f4" font-size="11" font-weight="bold" text-anchor="middle">State: state/stacks/{service}/terraform.tfstate</text>
+  <text x="480" y="478" fill="#6c7086" font-size="9" text-anchor="middle">Local backend -- one state file per stack -- isolated blast radius</text>
+
+  <!-- Arrow from stacks to state -->
+  <line x1="480" y1="405" x2="480" y2="440" stroke="#6c7086" stroke-width="1.5" marker-end="url(#t1)"/>
+  <text x="510" y="428" fill="#6c7086" font-size="9">state output</text>
+</svg>
