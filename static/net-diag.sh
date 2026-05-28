@@ -846,7 +846,11 @@ def main():
     aes_key = hashlib.pbkdf2_hmac("sha256", master, salt, iterations, dklen=32)
 
     pt_json = json.dumps({"paste": content}, separators=(",", ":")).encode()
-    pt_compressed = zlib.compress(pt_json)
+    # PrivateBin v2 expects RAW DEFLATE (RFC 1951, no zlib header/trailer):
+    # the bundled WASM zlib uses NO_ZLIB_HEADER=-1 in its deflate context.
+    # zlib.compress() emits the wrapper, so use compressobj with wbits=-MAX_WBITS.
+    co = zlib.compressobj(level=zlib.Z_DEFAULT_COMPRESSION, wbits=-zlib.MAX_WBITS)
+    pt_compressed = co.compress(pt_json) + co.flush()
 
     adata = [
         [
