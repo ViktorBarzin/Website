@@ -178,6 +178,65 @@ ${PROBE_DETAIL}
 ${SEP_ROW}"
 }
 
+# Per-run tempdir for parallel-probe results. Set up in main().
+RUN_TMPDIR=""
+
+# Translate a probe name into a safe tempfile path under $RUN_TMPDIR.
+_probe_tmpfile() {
+    printf '%s/%s' "$RUN_TMPDIR" "$(printf '%s' "$1" | tr -c 'A-Za-z0-9' _)"
+}
+
+# Fork a probe in a subshell. Globals set by probe_link (DETECTED_IFACE etc.)
+# are inherited via the env. The subshell writes verdict, reason, and detail
+# to a per-probe tempfile so the parent can collect them in canonical order
+# after `wait`.
+dispatch_probe() {
+    local name="$1" fn="$2"
+    local f
+    f=$(_probe_tmpfile "$name")
+    (
+        PROBE_VERDICT="PASS"
+        PROBE_REASON=""
+        PROBE_DETAIL=""
+        "$fn" || true
+        {
+            printf '%s\n' "$PROBE_VERDICT"
+            printf '%s\n' "$PROBE_REASON"
+            printf '%s' "$PROBE_DETAIL"
+        } > "$f"
+    ) &
+}
+
+# Read a dispatched probe's tempfile, print its verdict line, and append
+# it to REPORT_ROWS — exactly mirroring run_probe()'s side effects, but
+# sourced from disk instead of in-process state.
+collect_probe() {
+    local name="$1"
+    local f
+    f=$(_probe_tmpfile "$name")
+
+    local verdict reason detail
+    if [ ! -s "$f" ]; then
+        verdict="FAIL"
+        reason="probe did not finish (subshell crashed or timed out)"
+        detail=""
+    else
+        verdict=$(sed -n 1p "$f")
+        reason=$(sed -n 2p "$f")
+        detail=$(sed -n '3,$p' "$f")
+    fi
+
+    local color glyph
+    color=$(verdict_color "$verdict")
+    glyph=$(verdict_glyph "$verdict")
+    printf '%s%s %-26s%s %s\n' "$color" "$glyph" "$name" "$C_RST" \
+        "${reason:-(no detail)}"
+
+    REPORT_ROWS="${REPORT_ROWS}${name}|${verdict}|${reason}
+${detail}
+${SEP_ROW}"
+}
+
 # ---------------------------------------------------------------- probe: link
 
 probe_link() {
@@ -998,15 +1057,41 @@ main()
 
 print_banner
 
-run_probe "Link layer"          probe_link
-run_probe "DNS"                 probe_dns
-run_probe "Captive portal"      probe_captive
-run_probe "Reachability (IPv4)" probe_reach_v4
-run_probe "IPv6"                probe_v6
-run_probe "Path (traceroute)"   probe_path
-run_probe "Performance"         probe_perf
-run_probe "Homelab"             probe_homelab
-run_probe "System hints"        probe_system
+# Set up a per-run tempdir for the parallel probes. macOS mktemp wants the
+# template at the end and requires the X's at the tail of the suffix.
+RUN_TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/netdiag.XXXXXX") || {
+    printf '%snet-diag: mktemp failed%s\n' "$C_RED" "$C_RST" >&2
+    exit 3
+}
+trap 'rm -rf "$RUN_TMPDIR"' EXIT INT TERM
+
+# probe_link runs sequentially first — every other probe depends on the
+# DETECTED_IFACE / DETECTED_SSID / HAS_IPV4 / HAS_IPV6 globals it sets,
+# and a subshell can't write them back.
+run_probe "Link layer" probe_link
+
+# Fork the remaining 8 probes in parallel. Each writes its result to a
+# tempfile; we collect them in the canonical order below so the report is
+# deterministic regardless of finish order.
+printf '%sRunning 8 probes in parallel…%s\n' "$C_DIM" "$C_RST"
+dispatch_probe "DNS"                 probe_dns
+dispatch_probe "Captive portal"      probe_captive
+dispatch_probe "Reachability (IPv4)" probe_reach_v4
+dispatch_probe "IPv6"                probe_v6
+dispatch_probe "Path (traceroute)"   probe_path
+dispatch_probe "Performance"         probe_perf
+dispatch_probe "Homelab"             probe_homelab
+dispatch_probe "System hints"        probe_system
+wait
+
+collect_probe "DNS"
+collect_probe "Captive portal"
+collect_probe "Reachability (IPv4)"
+collect_probe "IPv6"
+collect_probe "Path (traceroute)"
+collect_probe "Performance"
+collect_probe "Homelab"
+collect_probe "System hints"
 
 print_summary
 print_detail_sections
