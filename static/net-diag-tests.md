@@ -7,14 +7,14 @@ purely read-only, so all probes are safe to run anywhere.
 
 | Scenario                                | Expected top-level verdict                                                    |
 |-----------------------------------------|--------------------------------------------------------------------------------|
-| Home Wi-Fi on `5G Tower`, healthy       | Link ✓ · DNS ✓ · Captive ✓ · v4 ✓ · v6 ✓ · Path ✓ · Perf ✓ · **Homelab ✓** · System ✓ |
+| Home Wi-Fi on `5G Tower / Barzini`, healthy       | Link ✓ · DNS ✓ · Captive ✓ · v4 ✓ · v6 ✓ · Path ✓ · Perf ✓ · **Homelab ✓** · System ✓ |
 | Cafe Wi-Fi, healthy                     | Link ✓ · DNS ✓ · Captive ✓ · v4 ✓ · v6 ✓/○ · Path ✓ · Perf ✓ · **Homelab ○ skipped** · System ✓ |
 | Wi-Fi before captive sign-in            | Link ✓ · DNS ✓/⚠ · **Captive ✗** · v4 ⚠ · v6 ○ · Path ⚠ · Perf ⚠ · Homelab ○ · System ✓ |
 | Airplane mode / no associated network   | **Link ✗** (no default route) · everything else skipped                       |
 | Wi-Fi up, DHCP got address but no DNS   | Link ✓ · **DNS ✗** (system broken, public ✓) · Captive ⚠ · v4 ✓ (via IP) · ... |
 | ISP DNS hijack (returns NXDOMAIN→ad page)| Link ✓ · **DNS ⚠** (slow or noanswer) · captive ✓ · …                         |
 | IPv6 black-holed (RA but no transit)    | Link ✓ · DNS ✓ · v4 ✓ · **v6 ✗** (advertised but TCP fails)                    |
-| On Headscale, off home network          | Homelab ○ (skipped — SSID ≠ `5G Tower`). Run with `--home` to force.          |
+| On Headscale, off home network          | Homelab ○ (skipped — SSID ≠ `5G Tower / Barzini`). Run with `--home` to force.          |
 | Force homelab mode off home network     | `--home` enables homelab probes; **Homelab ✗** if Traefik LB unreachable      |
 | Upload while online                     | Final line: `Report uploaded — expires in 1month` + PB URL                    |
 | Upload while truly offline              | All probes fail/skip; `Upload failed` warning; report still printed locally   |
@@ -31,7 +31,7 @@ RTT). Homelab section shows `Mode: HOME`, internal DNS resolves to
 
 ### 2. Happy path on cafe Wi-Fi
 Same command. Expected: `Homelab ○ skipped` with reason
-`SSID "<cafe>" ≠ "5G Tower"`. Everything else ✓.
+`SSID "<cafe>" ≠ "5G Tower / Barzini"`. Everything else ✓.
 
 ### 3. Captive portal active
 Connect to a hotspot whose portal hasn't been signed in yet. Expected:

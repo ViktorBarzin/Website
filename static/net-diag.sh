@@ -21,7 +21,7 @@ set -u
 # Don't set -e — probes are expected to fail; we want to capture and report.
 
 VERSION="0.1.0"
-HOMELAB_SSID="${HOMELAB_SSID:-5G Tower}"
+HOMELAB_SSIDS="${HOMELAB_SSIDS:-5G Tower|Barzini}"
 PB_BASE="${PB_BASE:-https://pb.viktorbarzin.me}"
 PB_EXPIRE="${PB_EXPIRE:-1month}"
 
@@ -664,18 +664,32 @@ probe_perf() {
 
 probe_homelab() {
     local on_home=0
+    local matched_ssid=""
     if [ "$FORCE_HOME" = "yes" ]; then
         on_home=1
+        matched_ssid="(forced via --home)"
     elif [ "$FORCE_HOME" = "no" ]; then
         on_home=0
-    elif [ "$DETECTED_SSID" = "$HOMELAB_SSID" ]; then
-        on_home=1
+    else
+        # HOMELAB_SSIDS is a pipe-delimited list of SSIDs that all count as
+        # "I'm at one of Viktor's homes" (London + Sofia). Match any.
+        local OLDIFS="$IFS"
+        IFS='|'
+        local s
+        for s in $HOMELAB_SSIDS; do
+            if [ "$DETECTED_SSID" = "$s" ]; then
+                on_home=1
+                matched_ssid="$s"
+                break
+            fi
+        done
+        IFS="$OLDIFS"
     fi
 
     if [ "$on_home" = 0 ]; then
         PROBE_VERDICT="SKIP"
         if [ -n "$DETECTED_SSID" ]; then
-            PROBE_REASON="SSID \"$DETECTED_SSID\" ≠ \"$HOMELAB_SSID\" — homelab probes skipped"
+            PROBE_REASON="SSID \"$DETECTED_SSID\" not in homelab list (${HOMELAB_SSIDS}) — skipped"
         else
             PROBE_REASON="not on Wi-Fi — homelab probes skipped"
         fi
@@ -683,7 +697,7 @@ probe_homelab() {
     fi
 
     local detail=""
-    detail="${detail}  Mode: ${C_BLD}HOME${C_RST} (SSID matches \"${HOMELAB_SSID}\")\n\n"
+    detail="${detail}  Mode: ${C_BLD}HOME${C_RST} (matched: ${matched_ssid})\n\n"
 
     # 1. Internal DNS should resolve viktorbarzin.me to 10.0.20.200 (Traefik LB).
     local internal_ip
