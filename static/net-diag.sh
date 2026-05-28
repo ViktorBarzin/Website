@@ -360,8 +360,9 @@ probe_dns() {
     # Probe each system-configured resolver directly and tag a verdict per IP.
     # Tracks how many of the resolvers in scope #1 (the default route) answered;
     # a scope-#1 outage is the actionable "DNS broken" signal — secondary scopes
-    # only matter for VPN-routed names.
-    local sys1_total=0 sys1_ok=0
+    # only matter for VPN-routed names. Also accumulates the failing IPs into
+    # sys1_failing so the verdict line can name them without re-querying.
+    local sys1_total=0 sys1_ok=0 sys1_failing=""
     local OLDIFS="$IFS"
     IFS=$'\n'
     local row
@@ -376,10 +377,14 @@ EOF
         detail="${detail}    ${scope} @${ip}${domain_hint}: $(fmt_dns_result "$ms")\n"
         if [ "$scope" = "#1" ]; then
             sys1_total=$((sys1_total + 1))
-            case "$ms" in [0-9]*) sys1_ok=$((sys1_ok + 1)) ;; esac
+            case "$ms" in
+                [0-9]*) sys1_ok=$((sys1_ok + 1)) ;;
+                *)      sys1_failing="${sys1_failing}${ip} " ;;
+            esac
         fi
     done
     IFS="$OLDIFS"
+    sys1_failing="${sys1_failing% }"
 
     # The aggregate "ask the system default and see who answers" check —
     # useful because macOS may try resolvers in an order we can't fully see.
@@ -419,14 +424,8 @@ EOF
         PROBE_VERDICT="FAIL"
         PROBE_REASON="all ${sys1_total} default-scope DNS server(s) failing; public resolvers OK — fix DHCP/local DNS"
     elif [ "$sys1_total" -gt 1 ] && [ "$sys1_ok" -lt "$sys1_total" ]; then
-        # Name the failing resolvers so the user knows which one to remove/replace.
-        local failing
-        failing=$(printf '%s\n' "$resolvers_raw" | awk -F'|' '$1=="#1"{print $3}' | while read -r ip; do
-            ms=$(time_dns_query "$ip" "$control") 2>/dev/null
-            case "$ms" in [0-9]*) : ;; *) printf '%s ' "$ip" ;; esac
-        done | sed 's/ $//')
         PROBE_VERDICT="WARN"
-        PROBE_REASON="${sys1_ok}/${sys1_total} default resolvers answering — failing: ${failing}"
+        PROBE_REASON="${sys1_ok}/${sys1_total} default resolvers answering — failing: ${sys1_failing}"
     elif [ "$public_ok" = 0 ]; then
         PROBE_VERDICT="WARN"
         PROBE_REASON="system OK but all public resolvers blocked — captive portal / UDP-53 firewall?"
@@ -442,32 +441,36 @@ EOF
 }
 
 # Time a single A-lookup. If $1 is empty, use system default; otherwise @$1.
-# Print ms (integer) on success, "fail" on failure, "timeout" on timeout.
+# Returns ms (integer) on success; "timeout" / "servfail" / "nxdomain" /
+# "fail" on each failure mode. Liveness is the metric — a resolver that
+# replies at all (even SERVFAIL) is reachable, so we only treat true UDP
+# timeouts and missing replies as outright failures.
 time_dns_query() {
     local resolver="$1" name="$2"
-    local out rc
+    local out
+    # +tries=2 gives one UDP retry; +time=3 = 3s per attempt; with_timeout
+    # 8 outer bound so we don't over-wait if dig itself wedges.
     if [ -n "$resolver" ]; then
-        out=$(with_timeout 3 dig +tries=1 +time=2 +stats "@${resolver}" "$name" A 2>/dev/null || true)
+        out=$(with_timeout 8 dig +tries=2 +time=3 +stats "@${resolver}" "$name" A 2>/dev/null || true)
     else
-        out=$(with_timeout 3 dig +tries=1 +time=2 +stats "$name" A 2>/dev/null || true)
+        out=$(with_timeout 8 dig +tries=2 +time=3 +stats "$name" A 2>/dev/null || true)
     fi
-    rc=$?
     if [ -z "$out" ]; then
         printf 'timeout'
         return 1
     fi
-    # dig prints e.g. ";; Query time: 12 msec"
+
+    case "$out" in
+        *"status: SERVFAIL"*) printf 'servfail'; return 1 ;;
+        *"status: NXDOMAIN"*) printf 'nxdomain'; return 1 ;;
+    esac
+
+    # Pull "Query time: N" from +stats. If we got a number, the resolver
+    # answered — that's enough to consider it alive.
     local ms
     ms=$(printf '%s\n' "$out" | awk -F'[: ]+' '/Query time/{print $4; exit}')
     if [ -z "$ms" ]; then
         printf 'fail'
-        return 1
-    fi
-    # Check ANSWER count was non-zero.
-    local ans
-    ans=$(printf '%s\n' "$out" | awk -F'[, ]+' '/status: NOERROR/{ for(i=1;i<=NF;i++) if($i=="ANSWER:") print $(i+1) }')
-    if [ -z "$ans" ] || [ "$ans" = "0" ]; then
-        printf 'noanswer'
         return 1
     fi
     printf '%s' "$ms"
@@ -475,10 +478,11 @@ time_dns_query() {
 
 fmt_dns_result() {
     case "$1" in
-        [0-9]*) printf '%s ms' "$1" ;;
-        timeout) printf '%stimeout%s' "$C_RED" "$C_RST" ;;
-        noanswer) printf '%sno answer%s' "$C_YEL" "$C_RST" ;;
-        *) printf '%sfail%s' "$C_RED" "$C_RST" ;;
+        [0-9]*)   printf '%s ms' "$1" ;;
+        timeout)  printf '%stimeout%s'  "$C_RED" "$C_RST" ;;
+        servfail) printf '%sSERVFAIL%s' "$C_YEL" "$C_RST" ;;
+        nxdomain) printf '%sNXDOMAIN%s' "$C_YEL" "$C_RST" ;;
+        *)        printf '%sfail%s'     "$C_RED" "$C_RST" ;;
     esac
 }
 
