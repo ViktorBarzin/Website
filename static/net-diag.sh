@@ -264,66 +264,119 @@ probe_dns() {
         return
     fi
 
-    # Pull the resolver list macOS is actually using for the default scope.
     local scutil_out
     scutil_out=$(with_timeout 3 scutil --dns 2>/dev/null || true)
-    local primary_resolvers
-    primary_resolvers=$(printf '%s\n' "$scutil_out" \
-        | awk '/^resolver #1$/,/^$/ { if ($1=="nameserver[0]" || $1=="nameserver[1]" || $1=="nameserver[2]") print $3 }')
 
+    # Parse every nameserver from every resolver scope. macOS exposes one or
+    # more "resolver #N" blocks; resolver #1 is the default scope, higher
+    # numbers route per-domain (VPN-pushed, search-domain split-horizon, etc.).
+    # We collect rows of "scope|domain|ip" so we can probe each entry.
+    local resolvers_raw
+    resolvers_raw=$(printf '%s\n' "$scutil_out" | awk '
+        /^resolver #/ {
+            scope = $2
+            domain = ""
+            next
+        }
+        /^[[:space:]]*domain[[:space:]]*:/ {
+            domain = $3
+            next
+        }
+        /^[[:space:]]*nameserver\[[0-9]+\][[:space:]]*:/ {
+            ip = $3
+            # Strip an IPv6 zone-id (e.g., fe80::1%en0) — dig handles the
+            # bare address fine; keeping %zone confuses some resolver libs.
+            sub(/%.*$/, "", ip)
+            print scope "|" domain "|" ip
+        }
+    ')
+
+    local control="cloudflare.com"
     local detail=""
-    detail="${detail}  System resolvers (resolver #1):\n"
-    if [ -z "$primary_resolvers" ]; then
+    detail="${detail}  System resolvers (from scutil --dns):\n"
+    if [ -z "$resolvers_raw" ]; then
         detail="${detail}    (none configured!)\n"
-    else
-        local r
-        for r in $primary_resolvers; do
-            detail="${detail}    $r\n"
-        done
     fi
 
-    # Time A-lookups for a control name against (a) system default and
-    # (b) public resolvers. If the system one is slow but public is fast,
-    # local DNS is broken.
-    local control="cloudflare.com"
-    local r ms rc
-    detail="${detail}\n  A lookups for ${control}:\n"
+    # Probe each system-configured resolver directly and tag a verdict per IP.
+    # Tracks how many of the resolvers in scope #1 (the default route) answered;
+    # a scope-#1 outage is the actionable "DNS broken" signal — secondary scopes
+    # only matter for VPN-routed names.
+    local sys1_total=0 sys1_ok=0
+    local OLDIFS="$IFS"
+    IFS=$'\n'
+    local row
+    for row in $resolvers_raw; do
+        IFS='|' read -r scope domain ip <<EOF
+$row
+EOF
+        local ms
+        ms=$(time_dns_query "$ip" "$control") || true
+        local domain_hint=""
+        [ -n "$domain" ] && [ "$domain" != "(null)" ] && domain_hint=" (domain=${domain})"
+        detail="${detail}    ${scope} @${ip}${domain_hint}: $(fmt_dns_result "$ms")\n"
+        if [ "$scope" = "#1" ]; then
+            sys1_total=$((sys1_total + 1))
+            case "$ms" in [0-9]*) sys1_ok=$((sys1_ok + 1)) ;; esac
+        fi
+    done
+    IFS="$OLDIFS"
 
-    local sys_ms=""
+    # The aggregate "ask the system default and see who answers" check —
+    # useful because macOS may try resolvers in an order we can't fully see.
+    detail="${detail}\n  A lookup via macOS default chain (whatever scutil picks):\n"
+    local sys_ms
     sys_ms=$(time_dns_query "" "$control") || true
     detail="${detail}    system: $(fmt_dns_result "$sys_ms")\n"
 
-    local public_ok=0
+    # Public-resolver control: tells us whether DNS-over-UDP/53 itself works
+    # past the local network, independent of the system-configured resolvers.
+    detail="${detail}\n  A lookup via public anchors (control):\n"
+    local public_ok=0 public_total=0
+    local r
     for r in 1.1.1.1 8.8.8.8 9.9.9.9; do
-        ms=$(time_dns_query "$r" "$control") || true
-        detail="${detail}    @$r: $(fmt_dns_result "$ms")\n"
-        case "$ms" in
-            [0-9]*) public_ok=1 ;;
-        esac
+        public_total=$((public_total + 1))
+        local pms
+        pms=$(time_dns_query "$r" "$control") || true
+        detail="${detail}    @${r}: $(fmt_dns_result "$pms")\n"
+        case "$pms" in [0-9]*) public_ok=$((public_ok + 1)) ;; esac
     done
 
-    # Verdict logic:
-    #  - all public resolvers fail → likely upstream gone
-    #  - system fails but public works → local DNS broken
-    #  - all work but system >> public → hijack / slow forwarder warning
+    # Verdict precedence:
+    #   1. Nothing answers at all (system + public)          → FAIL — no DNS path.
+    #   2. System resolvers all dead, public ones OK         → FAIL — local DNS broken.
+    #   3. Some scope-#1 resolvers dead, others OK           → WARN — partial outage,
+    #                                                          name the bad ones.
+    #   4. Public dead, system OK                            → WARN — captive / fw blocks 53.
+    #   5. System resolver slow (>500ms)                     → WARN — hijack/overload.
+    #   6. Everything green                                  → PASS.
     local sys_ok=0
     case "$sys_ms" in [0-9]*) sys_ok=1 ;; esac
 
-    if [ "$public_ok" = 0 ] && [ "$sys_ok" = 0 ]; then
+    if [ "$public_ok" = 0 ] && [ "$sys1_ok" = 0 ] && [ "$sys_ok" = 0 ]; then
         PROBE_VERDICT="FAIL"
-        PROBE_REASON="no DNS resolver answered — likely no internet path or all resolvers blocked"
-    elif [ "$sys_ok" = 0 ]; then
+        PROBE_REASON="no DNS resolver answered (system + public both dead)"
+    elif [ "$sys1_total" -gt 0 ] && [ "$sys1_ok" = 0 ]; then
         PROBE_VERDICT="FAIL"
-        PROBE_REASON="system resolver broken; public resolvers OK — fix DHCP/local DNS"
+        PROBE_REASON="all ${sys1_total} default-scope DNS server(s) failing; public resolvers OK — fix DHCP/local DNS"
+    elif [ "$sys1_total" -gt 1 ] && [ "$sys1_ok" -lt "$sys1_total" ]; then
+        # Name the failing resolvers so the user knows which one to remove/replace.
+        local failing
+        failing=$(printf '%s\n' "$resolvers_raw" | awk -F'|' '$1=="#1"{print $3}' | while read -r ip; do
+            ms=$(time_dns_query "$ip" "$control") 2>/dev/null
+            case "$ms" in [0-9]*) : ;; *) printf '%s ' "$ip" ;; esac
+        done | sed 's/ $//')
+        PROBE_VERDICT="WARN"
+        PROBE_REASON="${sys1_ok}/${sys1_total} default resolvers answering — failing: ${failing}"
     elif [ "$public_ok" = 0 ]; then
         PROBE_VERDICT="WARN"
-        PROBE_REASON="system OK but public resolvers blocked — captive/firewall?"
+        PROBE_REASON="system OK but all public resolvers blocked — captive portal / UDP-53 firewall?"
     elif [ "$sys_ok" = 1 ] && [ "$sys_ms" -gt 500 ] 2>/dev/null; then
         PROBE_VERDICT="WARN"
         PROBE_REASON="system resolver slow (${sys_ms} ms) — possibly hijacked or overloaded"
     else
         PROBE_VERDICT="PASS"
-        PROBE_REASON="resolvers answering normally (system: ${sys_ms} ms)"
+        PROBE_REASON="all ${sys1_total} default + ${public_ok}/${public_total} public resolvers answering"
     fi
 
     PROBE_DETAIL=$(printf '%b' "$detail")
