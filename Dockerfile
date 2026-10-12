@@ -5,7 +5,7 @@ COPY --chown=hugo:hugo . /project
 RUN hugo --minify --noBuildLock
 
 # Stage 2: Serve with NGINX
-FROM nginx:1.28-alpine
+FROM nginx:1.30-alpine
 
 COPY --from=builder /project/public/ /var/www/html/
 COPY --from=builder /project/configs/nginx.conf /etc/nginx/
