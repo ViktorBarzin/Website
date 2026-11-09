@@ -35,8 +35,8 @@ the website.
 
 The website uses self-hosted, first-party analytics (Rybbit). The analytics
 script and the data it sends go to `viktorbarzin.me` itself and are stored on
-the Operator's own servers. No third-party analytics or advertising trackers
-are loaded, and the analytics data is not shared with any third party.
+the Operator's own servers. No third-party analytics service is used, and the
+analytics data is not shared with any third party.
 
 ## How the data is used
 
