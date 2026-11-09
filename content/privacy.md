@@ -7,7 +7,7 @@ description: "Privacy policy for viktorbarzin.me and self-hosted applications op
 tags: []
 ---
 
-**Last updated:** 9 May 2026
+**Last updated:** 9 November 2026
 
 This privacy policy applies to `viktorbarzin.me` and to applications operated by
 Viktor Barzin (the "Operator") that connect to third-party services such as
@@ -27,12 +27,16 @@ the website.
 
 | Source | Data | Purpose |
 |---|---|---|
-| Website visitors (`viktorbarzin.me`) | IP address, user agent, request path, timestamp (server access logs only) | Operational diagnostics; logs rotated within 30 days |
+| Website visitors (`viktorbarzin.me`) | IP address, user agent, request path, timestamp (server access logs) | Operational diagnostics; logs rotated within 30 days |
+| Website visitors (`viktorbarzin.me`) | Pages viewed, referrer, browser and device type, approximate location, and session recordings with password fields masked (self-hosted Rybbit analytics) | Understanding which pages are read and how the site is used |
 | Meta APIs (Facebook, Instagram) | OAuth access token, IG user ID, page ID, IG handle, Page name | Allow the Operator's tools to publish content on his own social accounts |
 | Operator's own photos | Image binaries fetched from the Operator's self-hosted Immich library | Re-encoded and delivered to the Operator's own messaging or social tooling |
 | Application metrics | Aggregate request counts, latencies, error counts (Prometheus, Uptime Kuma) | Operational monitoring |
 
-No third-party analytics or advertising trackers are loaded on the website.
+The website uses self-hosted, first-party analytics (Rybbit). The analytics
+script and the data it sends go to `viktorbarzin.me` itself and are stored on
+the Operator's own servers. No third-party analytics or advertising trackers
+are loaded, and the analytics data is not shared with any third party.
 
 ## How the data is used
 
@@ -61,6 +65,7 @@ The data is not used for advertising, profiling, or sale of any kind.
 ## Data retention
 
 - Web access logs: 30 days.
+- Analytics events: kept indefinitely. Session recordings: 90 days.
 - Application monitoring metrics: up to 90 days, then aggregated.
 - Meta OAuth tokens: retained for as long as the integration is active; deleted
   when the Operator disconnects the integration in the application UI or

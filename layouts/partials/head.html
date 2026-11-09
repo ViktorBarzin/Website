@@ -39,17 +39,16 @@
   rel="stylesheet"
 />
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Self-hosted analytics (Rybbit) through the same-origin Ingest path, on the
+     production build only. The meta tag tells the edge injection plugin that
+     the page loads the script itself (infra ADR-0041). -->
+<meta name="analytics" content="sdk" />
+{{ if hugo.IsProduction }}
 <script
-  async
-  src="https://www.googletagmanager.com/gtag/js?id=UA-132992428-1"
+  src="/_t/r/script.js"
+  data-site-id="1"
+  defer
+  data-replay-mask-all-inputs="false"
+  data-replay-mask-input-options='{"password":true}'
 ></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
-
-  gtag("config", "UA-132992428-1");
-</script>
+{{ end }}

@@ -5,7 +5,6 @@ theme = "hugo-theme-nix"
 pygmentsCodeFences = true
 pygmentsstyle = "native"
 disqusShortname = "viktorbarzin"
-googleAnalytics = "UA-132992428-1"
 
 [markup]
   defaultMarkdownHandler = "goldmark"
@@ -21,7 +20,6 @@ disableKinds = ["sitemap", "categories", "taxonomy", "term"]
 Author = "Viktor Barzin"
 Name = "Viktor Barzin"
 HeaderUsername = "viktor"
-GoogleAnalytics = "UA-132992428-1" # DON'T REMOVE - used in head.html partial template
 HeaderHostname = "web"
 About = '''Hi, I'm Viktor🙂 I'm currently a <a href="https://engineering.fb.com/category/production-engineering/"> Production Engineer at Meta</a> and a self-hosting enthusiast. This is my blog which I use as a portfolio to showcase my projects as well as to share my experiences with various technologies. Read more about me <a href="/about-me"> here</a>, checkout what I'm currently self-hosting <a href="https://dashy.viktorbarzin.me/">here</a> and feel free to checkout my <a href="/blog">blog posts</a>.'''
 #ProfilePicture = "https://scontent-lhr8-1.xx.fbcdn.net/v/t39.30808-6/411035119_7058279747592137_5840445031833582462_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pxmXkovw7f8Q7kNvgFAbpqb&_nc_ht=scontent-lhr8-1.xx&oh=00_AYAqn0TKGHx02vG3pYTqXaWEXhMjx-s505HrIStQQs1Pog&oe=66B07FCD"
