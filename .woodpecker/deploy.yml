@@ -20,4 +20,4 @@ steps:
         from_secret: slack-webhook-url
       channel: general
     when:
-      - status: [success, failure]
+      - status: [failure]
