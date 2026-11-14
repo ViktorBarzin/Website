@@ -7,7 +7,7 @@ description: "Privacy policy for viktorbarzin.me and self-hosted applications op
 tags: []
 ---
 
-**Last updated:** 9 November 2026
+**Last updated:** 14 November 2026
 
 This privacy policy applies to `viktorbarzin.me` and to applications operated by
 Viktor Barzin (the "Operator") that connect to third-party services such as
@@ -18,7 +18,8 @@ it is used, and the rights of the people it relates to ("you").
 
 The `viktorbarzin.me` infrastructure is a personal home-lab. The Operator is
 the **only** end-user of the applications running on it. There is no public
-sign-up, no shared multi-tenant service, no advertising, and no data sale.
+sign-up, no shared multi-tenant service, and no data sale. Most website pages
+show Google AdSense ads, described under "Advertising" below.
 Where this policy refers to "users" or "you", it refers to the Operator and,
 incidentally, to anyone who happens to access the public marketing pages of
 the website.
@@ -38,6 +39,19 @@ script and the data it sends go to `viktorbarzin.me` itself and are stored on
 the Operator's own servers. No third-party analytics service is used, and the
 analytics data is not shared with any third party.
 
+## Advertising
+
+Most pages on `viktorbarzin.me`, including blog posts and this page, show ads
+from Google AdSense. The ad script loads from Google's servers. Google and its
+partners may set cookies or use similar identifiers in your browser to show ads
+and measure them, and may personalise ads based on your visits to this and
+other websites. This data goes to Google directly under Google's own privacy
+policy; it does not go through the Operator's servers.
+
+You can manage personalised ads at <https://adssettings.google.com>. You can
+learn more about how Google uses data for ads at
+<https://policies.google.com/technologies/ads>.
+
 ## How the data is used
 
 - Operating, maintaining, and debugging applications running for the
@@ -47,7 +61,9 @@ analytics data is not shared with any third party.
 - Providing the Operator with monitoring and alerting on his own
   infrastructure.
 
-The data is not used for advertising, profiling, or sale of any kind.
+The Operator does not use this data for advertising, profiling, or sale of
+any kind. Google's use of data for the ads it shows is covered under
+"Advertising" above.
 
 ## How the data is shared
 
@@ -58,9 +74,12 @@ The data is not used for advertising, profiling, or sale of any kind.
 - **Cloudflare:** Reverse-proxies website traffic. Cloudflare may retain
   request metadata under its own privacy policy
   (<https://www.cloudflare.com/privacypolicy/>).
-- **No other sharing.** The Operator does not share, sell, rent, or otherwise
-  disclose any personal data to advertisers, data brokers, analytics
-  vendors, or any unrelated third parties.
+- **Google (AdSense):** Serves the ads on website pages and collects data
+  from your browser for them, as described under "Advertising" above, under
+  its own privacy policy (<https://policies.google.com/privacy>).
+- **No other sharing.** Apart from the services above, the Operator does not
+  share, sell, rent, or otherwise disclose any personal data to advertisers,
+  data brokers, analytics vendors, or any unrelated third parties.
 
 ## Data retention
 
@@ -97,10 +116,12 @@ data from children, and are not used by anyone under 13.
 
 ## Cookies
 
-The website does not set tracking cookies. A small number of session and
-preference cookies may be set by self-hosted applications behind Authentik
-single-sign-on; these are first-party, are used only for session management,
-and are deleted when the session ends.
+The Operator's own code on the website does not set tracking cookies. On pages
+that show ads, Google and its partners may set advertising cookies or use
+similar identifiers, as described under "Advertising" above. A small number of
+session and preference cookies may be set by self-hosted applications behind
+Authentik single-sign-on; these are first-party, are used only for session
+management, and are deleted when the session ends.
 
 ## Changes to this policy
 
